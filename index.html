@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CodeLens: Understanding the Code | C++ Studio</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1b1f24;--mute:#66707a;--line:#dedbd2;--acc:#0b6e99;--hl:#fff3c4;--ok:#1a7f4b;--bad:#b3261e;--code:#f0eee7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--card:#1d2226;--ink:#e8e6e1;--mute:#98a2ab;--line:#30373d;--acc:#5cc2ee;--hl:#4a4217;--ok:#5fd08f;--bad:#ff8a80;--code:#161a1d}}
+:root[data-theme="dark"]{--bg:#14171a;--card:#1d2226;--ink:#e8e6e1;--mute:#98a2ab;--line:#30373d;--acc:#5cc2ee;--hl:#4a4217;--ok:#5fd08f;--bad:#ff8a80;--code:#161a1d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:20px 18px 8px;max-width:1080px;margin:auto}
+h1{margin:0;font-size:1.5rem}h1 span{color:var(--acc)}
+header p{margin:4px 0 0;color:var(--mute);font-size:.92rem}
+header p.by{display:inline-block;margin-top:8px;padding:3px 12px;border:1px solid var(--acc);border-radius:20px;color:var(--acc);font-weight:600;font-size:.85rem}
+.lv0{color:var(--ok)}.lv1{color:#b7791f}.lv2{color:var(--bad)}
+.tc{border:1px solid var(--line);border-radius:8px;padding:10px;margin:8px 0;font-size:.9rem}.tc code{display:block;background:var(--code);padding:6px 8px;border-radius:6px;font:12.5px ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;white-space:pre;margin-bottom:6px}.tc button{margin-top:6px}.tcout{margin-top:6px;color:var(--mute)}.pass{color:var(--ok)}
+.blank{background:var(--hl);padding:0 6px;border-radius:4px}.blank.fil{background:var(--code);outline:1px solid var(--acc)}.blank.okb{background:var(--ok);color:#fff}.blank.nob{background:var(--bad);color:#fff}.ctl button.sel{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+.bgi{flex:1;min-width:150px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.bar{height:10px;background:var(--line);border-radius:3px;margin-top:12px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+.wrap{max-width:1080px;margin:auto;padding:10px 18px 40px;display:grid;grid-template-columns:210px 1fr;gap:18px}
+nav{display:flex;flex-direction:column;gap:6px;align-self:start;position:sticky;top:10px}
+nav button{text-align:left;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 11px;border-radius:9px;cursor:pointer;font:inherit;font-size:.9rem}
+nav button.on{border-color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+nav button small{display:block;color:var(--mute);font-size:.75rem}
+nav button.done::after{content:" ✓";color:var(--ok)}
+main{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{margin:0 0 4px;font-size:1.25rem}h3{margin:0 0 8px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+.tag{display:inline-block;font-size:.75rem;background:var(--code);padding:2px 8px;border-radius:20px;color:var(--mute)}
+.split{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+.code{background:var(--code);border-radius:8px;padding:8px 0;overflow-x:auto;font:13.5px/1.7 ui-monospace,Menlo,Consolas,monospace}
+.code div{padding:0 12px;white-space:pre;border-left:3px solid transparent}
+.code div.on{background:var(--hl);border-left-color:var(--acc)}
+table{width:100%;border-collapse:collapse;font:13px ui-monospace,Menlo,Consolas,monospace}
+td,th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--mute);font-weight:600}
+.note{margin:10px 0 0;padding:10px 12px;border-left:3px solid var(--acc);background:var(--code);border-radius:0 8px 8px 0;min-height:3.2em}
+.ctl{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap}
+.ctl button,.opt{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit}
+.ctl button.p{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.ctl span{color:var(--mute);font-size:.85rem}
+ul{margin:0;padding-left:20px}li{margin:4px 0}
+.opt{display:block;width:100%;text-align:left;margin:6px 0}.opt.ok{border-color:var(--ok);color:var(--ok)}.opt.no{border-color:var(--bad);color:var(--bad)}
+.why{margin-top:8px;font-size:.92rem;color:var(--mute)}
+.new{animation:f .5s}@keyframes f{from{background:var(--hl)}}
+@media(max-width:760px){.wrap{grid-template-columns:1fr}nav{flex-direction:row;overflow-x:auto;position:static;padding-bottom:4px}nav button{white-space:nowrap}nav button small{display:none}.split{grid-template-columns:1fr}}
+:root{--bg:#f3f5f8;--card:#fff;--ink:#16202b;--mute:#586577;--line:#d8dee8;--acc:#1d4e89;--hl:#fdf1c9;--ok:#1a7a4c;--bad:#b42318;--code:#edf1f6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1621;--card:#16212f;--ink:#e5ebf3;--mute:#93a1b4;--line:#27364a;--acc:#6aaaf0;--hl:#4b4116;--ok:#52c98a;--bad:#ff8f84;--code:#101a27}}
+:root[data-theme="dark"]{--bg:#0e1621;--card:#16212f;--ink:#e5ebf3;--mute:#93a1b4;--line:#27364a;--acc:#6aaaf0;--hl:#4b4116;--ok:#52c98a;--bad:#ff8f84;--code:#101a27}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+header{max-width:none;background:linear-gradient(135deg,#0f2742,#1d4e89);color:#fff;padding:24px max(18px,calc((100% - 1080px)/2)) 18px;margin-bottom:8px}
+header h1 span{color:#9cc9ff}header h1 small{color:#b9d3f2!important}header p{color:#d3e2f5}
+header p.by{border-color:#9cc9ff;color:#cfe5ff;background:rgba(255,255,255,.08)}
+.bar{background:rgba(255,255,255,.22)}.bar i{background:#9cc9ff}
+.card{box-shadow:0 1px 3px rgba(15,39,66,.08)}
+nav button.on{background:color-mix(in srgb,var(--acc) 10%,var(--card))}
+nav button:hover,.opt:hover:not(:disabled),.ctl button:hover:not(:disabled){border-color:var(--acc)}
+h3{color:var(--acc)}
+.sep{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mute);margin:10px 2px 0;border-top:1px solid var(--line);padding-top:10px}
+@media(min-width:761px){nav{max-height:calc(100vh - 24px);overflow-y:auto;padding-right:4px}}
+@media(max-width:760px){.sep{display:none}}
+#acct{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:rgba(255,255,255,.08);padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.16);margin-top:10px}
+#acct .acct-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}
+#acct input{padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.3);background:#fff;color:#111;font-size:.85rem;max-width:180px}
+#acct button{padding:5px 12px;border-radius:6px;border:1px solid #9cc9ff;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:.84rem;font-weight:500;transition:all .2s}
+#acct button:hover{background:rgba(255,255,255,.25);border-color:#fff}
+#acct button.btn-pri{background:#9cc9ff;color:#0f2742;font-weight:600;border-color:#9cc9ff}
+#acct button.btn-pri:hover{background:#c3ddff}
+.acct-status{font-size:.82rem;color:#c5dcfa;margin-left:auto;display:flex;align-items:center;gap:5px}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,20,30,.72);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
+.modal-box{background:var(--card);color:var(--ink);border-radius:12px;max-width:480px;width:100%;padding:22px;box-shadow:0 12px 36px rgba(0,0,0,.35);border:1px solid var(--line)}
+.modal-box h3{margin:0 0 8px;font-size:1.25rem;color:var(--acc)}
+.modal-box p{margin:0 0 14px;font-size:.9rem;color:var(--mute);line-height:1.45}
+.modal-field{margin-bottom:12px}
+.modal-field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:4px;color:var(--ink)}
+.modal-field input{width:100%;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--code);color:var(--ink);font:inherit;font-size:.9rem;box-sizing:border-box}
+.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.modal-actions button{padding:7px 15px;border-radius:6px;border:1px solid var(--line);background:var(--code);color:var(--ink);cursor:pointer;font:inherit;font-size:.88rem}
+.modal-actions button.primary{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+</style></head><body>
+<header><h1>Code<span>Lens</span> <small style="font-size:.6em;font-weight:500;color:var(--mute)">C++ Studio</small></h1>
+<p><b>Understanding the Code:</b> step through each line, watch memory change, then test yourself.</p>
+<p class="by">Designed by Dr. Archana Chandrashekhar Magare</p>
+<div id="acct" style="margin-top:10px;font-size:.85rem;color:#d3e2f5"><span id="acs">Checking sign-in...</span></div>
+<div class="bar"><i id="pg"></i></div>
+<div id="pgt" style="font-size:.85rem;margin-top:6px;color:#d3e2f5"></div></header>
+<div class="wrap"><nav id="nav"></nav><main id="main"></main></div>
+<script>
+const T=[
+{n:"Simple Statements",s:"variables, input, output",i:"A C++ program is a sequence of statements ending in a semicolon. Declaration, assignment, input (cin) and output (cout) are the simplest ones.",
+c:["int a = 5, b = 2;","float avg;","cin >> a;","avg = (a + b) / 2.0;","cout << avg;"],
+st:[[0,"Declaration with initialisation: two int variables are created.",[["a","5"],["b","2"]]],
+[1,"avg is declared but not initialised, so it holds a garbage value.",[["a","5"],["b","2"],["avg","garbage"]]],
+[2,"cin >> a reads from the keyboard. Suppose the user types 8.",[["a","8"],["b","2"],["avg","garbage"]]],
+[3,"Assignment: right side is evaluated first. 2.0 makes it floating-point division, so (8+2)/2.0 = 5.",[["a","8"],["b","2"],["avg","5"]]],
+[4,"cout << avg sends the value to the screen.",[["a","8"],["b","2"],["avg","5"],["console","5"]]]],
+k:["Every statement ends with ;","Initialise variables when you declare them.","cin >> uses extraction, cout << uses insertion.","int / int gives int; use 2.0 for real division."],
+q:["What is 5 / 2 in C++ when both are int?","2.5","2","3",1,"Integer division truncates the fraction, so the result is 2."]},
+{n:"1. Simple if",s:"decision making",i:"The simplest decision: run a block only when the condition is true. If it is false, the block is skipped and the program continues after it.",
+c:["int age = 20;","if (age >= 18) {","  cout << \"Eligible\";","}","cout << \"Done\";"],
+st:[[0,"age is 20.",[["age","20"]]],
+[1,"Condition 20 >= 18 is evaluated. Result: true, so enter the block.",[["age","20"],["condition","true"]]],
+[2,"Block body runs.",[["age","20"],["console","Eligible"]]],
+[4,"Code after the if always runs. If age were 15, line 2 would be skipped and only Done printed.",[["age","20"],["console","Eligible, Done"]]]],
+k:["Syntax: if (condition) { statements }","Any non-zero value counts as true.","No semicolon after if (...)","Braces are optional for one statement, but use them."],
+q:["If the condition is false in a simple if, what happens?","Error","The block is skipped",
+"The block runs once",1,"Control jumps to the first statement after the block."]},
+{n:"2. if-else",s:"decision making",i:"Two-way choice: exactly one of the two blocks runs. The else block runs when the condition is false.",
+c:["int n = 7;","if (n % 2 == 0) {","  cout << \"Even\";","} else {","  cout << \"Odd\";","}"],
+st:[[0,"n is 7.",[["n","7"]]],
+[1,"7 % 2 gives 1, and 1 == 0 is false.",[["n % 2","1"],["condition","false"]]],
+[3,"Condition false, so the if block is skipped and control jumps to else.",[["path","else"]]],
+[4,"The else block runs.",[["console","Odd"]]]],
+k:["Exactly one block executes.","else has no condition.","Ternary shortcut: (n%2==0) ? \"Even\" : \"Odd\"","else belongs to the nearest unmatched if."],
+q:["How many blocks run in an if-else?","Both","Exactly one","None",1,"Either the if block or the else block runs, never both."]},
+{n:"3. else-if Ladder",s:"decision making",i:"For more than two outcomes, chain conditions. They are tested top to bottom and the first true one wins; the rest are skipped.",
+c:["int m = 72;","if (m >= 90) cout << \"A\";","else if (m >= 75) cout << \"B\";","else if (m >= 60) cout << \"C\";","else cout << \"F\";"],
+st:[[0,"m is 72.",[["m","72"]]],
+[1,"72 >= 90 is false. Go to the next test.",[["test","m >= 90"],["result","false"]]],
+[2,"72 >= 75 is false. Go to the next test.",[["test","m >= 75"],["result","false"]]],
+[3,"72 >= 60 is true. Print C. The final else is skipped.",[["test","m >= 60"],["result","true"],["console","C"]]]],
+k:["Order matters: put the most restrictive condition first.","Final else is the default case.","Only one branch ever runs.","Testing m >= 60 first would wrongly give C to 95."],
+q:["If m = 95 and the order is reversed (m>=60 first), what prints?","A","The 60 branch (wrong grade)","F",1,"The first true condition wins, so order matters."]},
+{n:"4. Nested if",s:"decision making",i:"An if inside another if. The inner condition is checked only when the outer condition is true.",
+c:["int age = 25, hasId = 1;","if (age >= 18) {","  if (hasId) {","    cout << \"Enter\";","  } else {","    cout << \"Show ID\";","  }","} else {","  cout << \"Too young\";","}"],
+st:[[0,"age = 25, hasId = 1.",[["age","25"],["hasId","1"]]],
+[1,"Outer condition 25 >= 18 is true, so enter the outer block.",[["outer","true"]]],
+[2,"Inner condition hasId (1) is true.",[["outer","true"],["inner","true"]]],
+[3,"Both true, so Enter is printed.",[["console","Enter"]]],
+[5,"If hasId were 0, this line would print Show ID. If age < 18, line 8 would print Too young.",[["other paths","Show ID / Too young"]]]],
+k:["Inner if is evaluated only if outer is true.","Indent carefully to keep it readable.","Often replaceable by &&: if (age>=18 && hasId)","Avoid more than 2-3 levels of nesting."],
+q:["When is the inner if evaluated?","Always","Only if the outer condition is true","Only if outer is false",1,"The inner statement is part of the outer block."]},
+{n:"5. switch",s:"decision making",i:"switch selects one of many fixed values of an int/char/enum. It is cleaner than a long else-if ladder for equality checks.",
+c:["int day = 3;","switch (day) {","  case 1: cout << \"Mon\"; break;","  case 3: cout << \"Wed\"; break;","  default: cout << \"Other\";","}"],
+st:[[0,"day is 3.",[["day","3"]]],
+[1,"The switch expression is evaluated once.",[["switch value","3"]]],
+[2,"case 1: does 3 equal 1? No, move on.",[["case 1","no match"]]],
+[3,"case 3: matches. Run its statements.",[["case 3","match"],["console","Wed"]]],
+[3,"break exits the switch. Without break, execution would fall through into the next case.",[["after break","exit switch"]]],
+[4,"default runs only if no case matches (for example day = 9).",[["default","not run"]]]],
+k:["Case labels must be constant integers or characters.","break prevents fall-through.","default is optional but recommended.","Cannot use ranges or float/string values."],
+q:["Which type can NOT be used in a switch?","char","float","enum",1,"switch needs integral types (int, char, enum)."]},
+{n:"6. while Loop",s:"loops",i:"An entry-controlled loop: the condition is checked BEFORE every iteration. If it is false at the start, the body never runs.",
+c:["int i = 1, sum = 0;","while (i <= 3) {","  sum += i;","  i++;","}","cout << sum;"],
+st:[[0,"Initialise the counter and accumulator.",[["i","1"],["sum","0"]]],
+[1,"Check 1 <= 3: true, so enter the body.",[["i","1"],["sum","0"],["check","true"]]],
+[3,"Body: sum = 0 + 1 = 1, then i becomes 2.",[["i","2"],["sum","1"]]],
+[1,"Check 2 <= 3: true.",[["i","2"],["sum","1"],["check","true"]]],
+[3,"Body: sum = 3, i = 3.",[["i","3"],["sum","3"]]],
+[1,"Check 3 <= 3: true.",[["i","3"],["sum","3"],["check","true"]]],
+[3,"Body: sum = 6, i = 4.",[["i","4"],["sum","6"]]],
+[1,"Check 4 <= 3: false, so exit the loop.",[["i","4"],["sum","6"],["check","false"]]],
+[5,"Print the result.",[["console","6"]]]],
+k:["Initialise before, update inside the body.","Forgetting i++ gives an infinite loop.","May execute zero times.","Use when the iteration count is unknown."],
+q:["How many times does while (false) { } run its body?","Once","Zero","Infinite",1,"The condition is checked first, so the body never runs."]},
+{n:"7. do-while Loop",s:"loops",i:"An exit-controlled loop: the body runs first, then the condition is checked. So it always runs at least once.",
+c:["int n = 10;","do {","  cout << n;","  n++;","} while (n < 5);"],
+st:[[0,"n is 10, already not less than 5.",[["n","10"]]],
+[1,"Enter the body without checking anything first.",[["check","not yet"]]],
+[2,"Prints the value.",[["n","10"],["console","10"]]],
+[3,"n becomes 11.",[["n","11"]]],
+[4,"Now check 11 < 5: false, so the loop ends. A while loop would have run 0 times here.",[["check","false"],["iterations","1"]]]],
+k:["Ends with a semicolon after while(...);","Good for menus and input validation.","Guaranteed at least one iteration."],
+q:["Minimum number of executions of a do-while body?","0","1","2",1,"The condition is tested after the body."]},
+{n:"8. for Loop",s:"loops",i:"Packs initialisation, condition and update in one line. Best when the number of iterations is known.",
+c:["for (int i = 0; i < 3; i++) {","  cout << i;","}","cout << \"end\";"],
+st:[[0,"Init runs once (i = 0), then the condition 0 < 3 is checked: true.",[["i","0"],["check","true"]]],
+[1,"Body prints 0.",[["i","0"],["console","0"]]],
+[0,"Update i++ makes i = 1. Check 1 < 3: true.",[["i","1"],["check","true"]]],
+[1,"Body prints 1.",[["i","1"],["console","0 1"]]],
+[0,"Update: i = 2. Check 2 < 3: true.",[["i","2"],["check","true"]]],
+[1,"Body prints 2.",[["i","2"],["console","0 1 2"]]],
+[0,"Update: i = 3. Check 3 < 3: false, so exit.",[["i","3"],["check","false"]]],
+[3,"Execution continues after the loop.",[["console","0 1 2 end"]]]],
+k:["Order: init, then condition, body, update, condition...","i is local to the loop when declared inside for(...).","Nested for loops are used for 2D patterns and matrices.","Range-for: for (int x : arr)"],
+q:["In for(int i=0;i<3;i++), how many times does the body run?","2","3","4",1,"i takes values 0, 1 and 2."]},
+{n:"Operators",s:"arithmetic, logical, bitwise",i:"Operators act on operands to produce values. Know their meaning, precedence and the difference between prefix and postfix forms.",
+c:["int a = 7, b = 2;","int d = a / b;","int r = a % b;","int x = a++;","int y = ++b;","bool t = (a > b) && (b != 0);","int z = a & b;"],
+st:[[0,"a = 7 and b = 2.",[["a","7"],["b","2"]]],
+[1,"Integer division: 7 / 2 = 3.",[["a","7"],["b","2"],["d","3"]]],
+[2,"Modulus gives the remainder: 7 % 2 = 1.",[["a","7"],["b","2"],["d","3"],["r","1"]]],
+[3,"Postfix: x gets the OLD value 7, then a becomes 8.",[["a","8"],["b","2"],["x","7"]]],
+[4,"Prefix: b is incremented first to 3, then y gets 3.",[["a","8"],["b","3"],["x","7"],["y","3"]]],
+[5,"Relational and logical: (8 > 3) is true AND (3 != 0) is true, so t = 1. && stops early if the left side is false.",[["a","8"],["b","3"],["t","1 (true)"]]],
+[6,"Bitwise AND: 1000 & 0011 = 0000, so z = 0.",[["a (binary)","1000"],["b (binary)","0011"],["z","0"]]]],
+k:["Logical: && || !  Bitwise: & | ^ ~ << >>","Precedence: * / % before + -, then relational, then &&, then ||.","Postfix returns old value, prefix returns new value.","Avoid modifying a variable twice in one expression."],
+q:["After int x = a++; with a = 7, what are x and a?","x=7, a=8","x=8, a=8","x=7, a=7",0,"Postfix uses the old value (7) first and then increments a to 8."]},
+{n:"Increment & Decrement",s:"prefix vs postfix",i:"++ adds 1 and -- subtracts 1. Prefix (++a) changes the variable first and then gives the NEW value. Postfix (a++) gives the OLD value first and then changes the variable.",
+c:["int a = 5;","int b = a++;","int c = ++a;","int d = a--;","int e = --a;"],
+st:[[0,"a is 5.",[["a","5"]]],
+[1,"Postfix: b takes the old value 5, then a becomes 6.",[["a","6"],["b","5"]]],
+[2,"Prefix: a becomes 7 first, then c takes 7.",[["a","7"],["b","5"],["c","7"]]],
+[3,"Postfix decrement: d takes old value 7, then a becomes 6.",[["a","6"],["b","5"],["c","7"],["d","7"]]],
+[4,"Prefix decrement: a becomes 5 first, then e takes 5.",[["a","5"],["b","5"],["c","7"],["d","7"],["e","5"]]]],
+k:["Alone on a line (a++; or ++a;) both behave the same.","Difference appears only when the value is used in an expression.","Never modify the same variable twice in one expression: result is undefined (e.g. i++ + ++i).","Prefix is slightly faster for iterators and class objects."],
+q:["int a = 5; int b = a++; What are a and b?","a=6, b=5","a=5, b=6","a=6, b=6",0,"Postfix gives the old value (5) to b and then increments a to 6."]},
+{n:"Brain Gym 1",s:"increment / decrement",i:"Practice challenge. Trace each statement carefully. Question: what is printed?",
+c:["int x = 3, y = 4, z;","z = x++ + y--;","z = z + ++x - --y;","cout << z;"],
+st:[[0,"Start: x = 3, y = 4.",[["x","3"],["y","4"]]],
+[1,"x++ contributes the old 3 and y-- the old 4. z = 3 + 4 = 7. After the statement x = 4, y = 3.",[["x","4"],["y","3"],["z","7"]]],
+[2,"++x makes x = 5 and gives 5. --y makes y = 2 and gives 2. z = 7 + 5 - 2 = 10.",[["x","5"],["y","2"],["z","10"]]],
+[3,"Output is 10.",[["console","10"]]]],
+k:["Trace one statement at a time and update every variable.","Postfix: use old value. Prefix: use new value.","Write a table of x, y, z after each line in the exam."],
+q:["What is the output?","7","10","9",1,"z = 7 after line 2, then 7 + 5 - 2 = 10."]},
+{n:"Brain Gym 2",s:"increment in a loop",i:"Practice challenge: a postfix increment inside a loop condition. The variable changes even on the check that fails. Question: what do s and i print?",
+c:["int i = 0, s = 0;","while (i++ < 3)","  s += i;","cout << s << i;"],
+st:[[0,"Start with i = 0, s = 0.",[["i","0"],["s","0"]]],
+[1,"Compare 0 < 3 (old value): true. Then i becomes 1.",[["i","1"],["s","0"],["check","0<3 true"]]],
+[2,"s = 0 + 1 = 1.",[["i","1"],["s","1"]]],
+[1,"Compare 1 < 3: true. i becomes 2.",[["i","2"],["s","1"],["check","1<3 true"]]],
+[2,"s = 1 + 2 = 3.",[["i","2"],["s","3"]]],
+[1,"Compare 2 < 3: true. i becomes 3.",[["i","3"],["s","3"],["check","2<3 true"]]],
+[2,"s = 3 + 3 = 6.",[["i","3"],["s","6"]]],
+[1,"Compare 3 < 3: false, loop ends, BUT i++ still happened, so i = 4.",[["i","4"],["s","6"],["check","3<3 false"]]],
+[3,"Output is 6 followed by 4.",[["console","64"]]]],
+k:["The ++ in the condition runs on every check, including the last false one.","So after the loop i is one more than you may expect.","Compare with while (++i < 3) to see a different result."],
+q:["What is printed (s then i)?","63","64","34",1,"s = 1+2+3 = 6 and i ends at 4 because the failed check still increments it."]},
+{n:"Brain Gym 3",s:"pointers with ++",i:"Practice challenge: *p++, (*p)++ and *++p look alike but do different things. Rule: postfix ++ binds tighter than *, and prefix ++ and * associate right to left.",
+c:["int a[] = {10, 20, 30};","int *p = a;","int x = *p++;","int y = (*p)++;","int z = *++p;"],
+st:[[0,"Array a holds 10, 20, 30.",[["a","[10, 20, 30]"]]],
+[1,"p points to a[0].",[["a","[10, 20, 30]"],["p","→ a[0]"]]],
+[2,"*p++: take the value at the old p (10), then move p. x = 10, p → a[1].",[["a","[10, 20, 30]"],["p","→ a[1]"],["x","10"]]],
+[3,"(*p)++: use the value at p (20) then increment THE VALUE. y = 20, a[1] becomes 21. p does not move.",[["a","[10, 21, 30]"],["p","→ a[1]"],["y","20"]]],
+[4,"*++p: move p first (→ a[2]), then read. z = 30.",[["a","[10, 21, 30]"],["p","→ a[2]"],["z","30"]]]],
+k:["*p++ : read then move the pointer.","(*p)++ : read then change the pointed value.","*++p : move the pointer then read.","++*p : change the value then read it."],
+q:["After all statements, what is a[1]?","20","21","30",1,"(*p)++ incremented the value at a[1] from 20 to 21."]},
+{n:"User Defined Functions",s:"four types, call by value",i:"A function is a named block of reusable code. Based on arguments and return value there are four types. Arguments are passed by value (copied) unless you use a reference or pointer.",
+c:["void hello() { cout << \"Hi\"; }","void show(int n) { cout << n; }","int readNum() { int n; cin >> n; return n; }","int add(int a, int b) { return a + b; }","hello();","show(4);","int n = readNum();","int s = add(n, 3);"],
+st:[[4,"Type 1: no arguments, no return value. It just performs an action.",[["call","hello()"],["args","none"],["returns","nothing"],["console","Hi"]]],
+[5,"Type 2: takes an argument, returns nothing. n is a copy of 4.",[["call","show(4)"],["args","4"],["returns","nothing"],["console","Hi, 4"]]],
+[6,"Type 3: no arguments but returns a value. Suppose the user types 10.",[["call","readNum()"],["args","none"],["returns","10"],["n","10"]]],
+[7,"Type 4: takes arguments and returns a value. Parameters a and b are copies, so the caller's n is unchanged.",[["call","add(10, 3)"],["args","10, 3"],["returns","13"],["s","13"]]]],
+k:["Declare a prototype before main if the function is defined after it.","Call by value: changes inside do not affect the caller; use int& to modify.","A non-void function must return a value on every path.","Default arguments: int add(int a, int b = 0)"],
+q:["Which type is int add(int a, int b)?","No args, no return","Args with return value","Args, no return",1,"It receives two arguments and returns an int."]},
+{n:"Recursion",s:"function calls itself",i:"A recursive function solves a problem by calling itself on a smaller version of the same problem. It needs a base case to stop. Each call gets its own stack frame.",
+c:["int fact(int n) {","  if (n <= 1) return 1;","  return n * fact(n - 1);","}","cout << fact(3);"],
+st:[[4,"Call fact(3). The call is placed on the stack.",[["stack","fact(3)"]]],
+[2,"3 is not the base case, so fact(3) calls fact(2) and waits.",[["stack","fact(3) > fact(2)"]]],
+[2,"fact(2) calls fact(1).",[["stack","fact(3) > fact(2) > fact(1)"]]],
+[1,"Base case: fact(1) returns 1 without calling again.",[["fact(1)","1"]]],
+[2,"Unwinding: fact(2) = 2 * 1.",[["fact(2)","2"]]],
+[2,"fact(3) = 3 * 2 = 6, printed by main.",[["fact(3)","6"],["console","6"]]]],
+k:["Every recursion needs a base case.","Each call must move toward the base case.","Too many nested calls cause stack overflow.","Many recursions can also be written as loops."],
+q:["What stops a recursion?","The base case","The return type","A semicolon",0,"Without a base case it never ends."]},
+{n:"Arrays",s:"1D arrays",i:"An array stores a fixed number of same-type values in contiguous memory. Elements are accessed by index, and the first index is 0.",
+c:["int a[4] = {10, 20, 30, 40};","a[2] = 35;","int s = 0;","for (int i = 0; i < 4; i++)","  s += a[i];","cout << a[4];"],
+st:[[0,"Four ints side by side in memory. Valid indexes are 0 to 3.",[["a[0]","10"],["a[1]","20"],["a[2]","30"],["a[3]","40"]]],
+[1,"a[2] = 35 overwrites the third element.",[["a[0]","10"],["a[1]","20"],["a[2]","35"],["a[3]","40"]]],
+[4,"The loop visits every index: 10 + 20 + 35 + 40.",[["s","105"],["last index","3"]]],
+[5,"a[4] is outside the array. C++ does no bounds check, so this is undefined behaviour.",[["a[4]","undefined!"]]]],
+k:["Index starts at 0; last index is size - 1.","No automatic bounds checking.","Size must be known at compile time.","Count of elements: sizeof(a) / sizeof(a[0])."],
+q:["In int a[5], the last valid index is?","4","5","6",0,"Indexes run 0 to 4."]},
+{n:"2D Arrays",s:"rows and columns",i:"A 2D array is an array of arrays. m[i][j] means row i, column j. C++ stores it row by row (row-major).",
+c:["int m[2][3] = {{1,2,3},{4,5,6}};","int x = m[1][2];","int sum = 0;","for (int j = 0; j < 3; j++)","  sum += m[0][j];","m[1][0] = 9;"],
+st:[[0,"2 rows and 3 columns.",[["row 0","1 2 3"],["row 1","4 5 6"]]],
+[1,"m[1][2] means row 1, column 2, which is 6.",[["row 0","1 2 3"],["row 1","4 5 6"],["x","6"]]],
+[4,"The loop walks along row 0: 1 + 2 + 3.",[["sum","6"]]],
+[5,"Write to row 1, column 0.",[["row 0","1 2 3"],["row 1","9 5 6"]]]],
+k:["First index = row, second = column.","Total elements = rows x columns.","Nested for loops traverse a 2D array.","Column size is required when passing to functions."],
+q:["In m[i][j], what is i?","Column","Row","Value",1,"The first index selects the row."]},
+{n:"C-Strings",s:"char arrays",i:"A C string is a char array that ends with the null character '\\0'. All string functions rely on this terminator to know where the string ends.",
+c:["char s[6] = \"Hello\";","s[0] = 'J';","cout << s;","int n = 0;","while (s[n] != '\\0') n++;"],
+st:[[0,"5 letters plus the null terminator use 6 bytes.",[["s","H e l l o \\0"],["size","6"]]],
+[1,"Change the first character.",[["s","J e l l o \\0"]]],
+[2,"cout prints characters until it meets \\0.",[["console","Jello"]]],
+[4,"The loop counts characters until \\0. The terminator is not counted.",[["n","5"]]]],
+k:["Always reserve one extra byte for \\0.","\"abc\" has length 3 but sizeof 4.","A string can be shorter than its array.","Missing \\0 causes runaway reads."],
+q:["char s[] = \"Hi\"; What is sizeof(s)?","2","3","4",1,"H, i and the null terminator."]},
+{n:"String Functions",s:"<cstring>",i:"The <cstring> header gives ready-made functions for C strings: strlen, strcpy, strcat and strcmp.",
+c:["char a[20] = \"Data\";","char b[] = \"Base\";","strlen(a);","strcat(a, b);","strcpy(b, \"X\");","strcmp(\"abc\", \"abd\");"],
+st:[[0,"a has room for 19 characters plus \\0.",[["a","Data"]]],
+[1,"b is exactly 5 bytes.",[["a","Data"],["b","Base"]]],
+[2,"strlen counts characters before \\0.",[["strlen(a)","4"]]],
+[3,"strcat appends b to a. a must be big enough.",[["a","DataBase"],["strlen(a)","8"]]],
+[4,"strcpy copies the text including \\0 into b.",[["b","X"]]],
+[5,"strcmp compares alphabetically: 'c' < 'd', so the result is negative (0 if equal, positive if first is greater).",[["strcmp","negative"]]]],
+k:["strlen excludes \\0.","The destination of strcpy/strcat must be large enough.","Use == only on std::string, not C strings.","strncpy and strncat limit the length."],
+q:["strcmp(\"a\", \"a\") returns?","0","1","-1",0,"Equal strings give 0."]},
+{n:"std::string",s:"C++ strings",i:"std::string manages its own memory. It grows automatically and supports +, == and many member functions.",
+c:["string s = \"Code\";","s += \"Lens\";","s.size();","s[0] = 'c';","s.substr(4, 4);","s.find(\"Le\");"],
+st:[[0,"A string object holding Code.",[["s","Code"]]],
+[1,"+= appends and grows automatically.",[["s","CodeLens"]]],
+[2,"size() returns the length.",[["s.size()","8"]]],
+[3,"Indexing works like an array.",[["s","codeLens"]]],
+[4,"substr(position, length) takes 4 characters from index 4.",[["substr","Lens"]]],
+[5,"find returns the first index of the match (string::npos if absent).",[["find","4"]]]],
+k:["No manual size management.","Compare with ==, < and >.","getline(cin, s) reads a whole line.","npos means not found."],
+q:["What does find return when the text is absent?","-1 always","string::npos","0",1,"npos is a special large unsigned value."]},
+{n:"Structures",s:"struct",i:"A structure groups related variables of different types under one name. Use . with a variable and -> with a pointer.",
+c:["struct Student {","  int roll;","  float cgpa;","};","Student s1 = {7, 8.5};","s1.cgpa = 9.0;","Student *p = &s1;","p->roll = 8;"],
+st:[[4,"s1 is created with roll 7 and cgpa 8.5.",[["s1.roll","7"],["s1.cgpa","8.5"]]],
+[5,"The dot operator reaches a member.",[["s1.roll","7"],["s1.cgpa","9.0"]]],
+[6,"p holds the address of s1.",[["p","→ s1"]]],
+[7,"p->roll is the same as (*p).roll, so s1 changes.",[["s1.roll","8"],["s1.cgpa","9.0"]]]],
+k:["Members can have different types.","s.member for variables, p->member for pointers.","Structures can be copied and passed to functions.","In C++, a struct is a class with public default access."],
+q:["Which operator accesses a member through a pointer?","->",".","::",0,"p->x is shorthand for (*p).x."]},
+{n:"Pointers",s:"memory & addresses",i:"A pointer is a variable that stores the address of another variable. It is the foundation for dynamic memory, arrays and data structures.",
+c:["int x = 10;","int *p = &x;","*p = 25;","int *q = new int(7);","delete q;","q = nullptr;"],
+st:[[0,"x is created on the stack and holds 10.",[["x","10","0x1000"]]],
+[1,"&x gives x's address. p stores 0x1000, so p 'points to' x.",[["x","10","0x1000"],["p","0x1000","0x1008"]]],
+[2,"*p dereferences: it writes through the address, so x changes to 25.",[["x","25","0x1000"],["p","0x1000","0x1008"]]],
+[3,"new allocates an int on the heap. q holds the heap address.",[["x","25","0x1000"],["p","0x1000","0x1008"],["q","0x7f20","0x1010"],["*q (heap)","7","0x7f20"]]],
+[4,"delete frees the heap block. q still holds 0x7f20: it is now a dangling pointer.",[["x","25","0x1000"],["p","0x1000","0x1008"],["q","0x7f20 (dangling!)","0x1010"]]],
+[5,"Set q = nullptr so accidental use is detectable, not undefined behaviour.",[["x","25","0x1000"],["p","0x1000","0x1008"],["q","nullptr","0x1010"]]]],
+k:["&x = address-of, *p = value-at.","Every new needs exactly one delete (or use smart pointers).","Never dereference nullptr or a dangling pointer.","Pointer arithmetic moves by sizeof(type)."],
+q:["What does *p = 25; do?","Changes p to 25","Changes the variable p points to","Allocates 25 bytes",1,"Dereferencing writes to the pointed-to variable (x)."]},
+{n:"References",s:"aliases",i:"A reference is another name for an existing variable. It must be initialised and can never be re-bound.",
+c:["int a = 5;","int &r = a;","r = 9;","int b = 1;","r = b;"],
+st:[[0,"a holds 5.",[["a","5","0x2000"]]],
+[1,"r is an alias: same object, same address. No new storage for the value.",[["a","5","0x2000"],["r (alias of a)","5","0x2000"]]],
+[2,"Assigning through r changes a.",[["a","9","0x2000"],["r (alias of a)","9","0x2000"]]],
+[3,"b is a separate variable.",[["a","9","0x2000"],["r (alias of a)","9","0x2000"],["b","1","0x2008"]]],
+[4,"r = b copies b's VALUE into a. r is not re-bound to b!",[["a","1","0x2000"],["r (alias of a)","1","0x2000"],["b","1","0x2008"]]]],
+k:["Must be initialised at declaration.","Cannot be null or re-seated.","Use const T& to pass big objects without copying.","Pass by reference lets functions modify the caller's variable."],
+q:["After 'r = b;' what is true?","r now refers to b","a gets b's value","Compile error",1,"References cannot be re-bound; assignment copies the value into the original."]},
+{n:"Classes & Objects",s:"OOP basics",i:"A class bundles data and the functions that work on it. An object is one instance of the class. Private data is hidden, and public member functions give controlled access.",
+c:["class Account {","  int bal;","public:","  Account(int b) { bal = b; }","  void deposit(int x) { bal += x; }","  int get() { return bal; }","};","Account a(100);","a.deposit(50);","cout << a.get();"],
+st:[[7,"Object a is created and the constructor sets bal = 100.",[["a.bal","100 (private)"]]],
+[8,"deposit is a member function, so it may change the private bal.",[["a.bal","150"]]],
+[9,"get() is the public way to read bal. Writing a.bal directly would not compile.",[["console","150"]]]],
+k:["A class is private by default; a struct is public by default.","Data hiding: expose behaviour, not variables.","this points to the current object.","Each object has its own copy of the data members."],
+q:["Which access level is the default in a class?","private","public","protected",0,"Members are private unless stated otherwise."]},
+{n:"Constructors & RAII",s:"object lifetime",i:"A constructor runs when an object is created; the destructor runs automatically when it goes out of scope. RAII uses this to manage resources safely.",
+c:["struct Res {","  Res()  { cout<<\"acquire\"; }","  ~Res() { cout<<\"release\"; }","};","void f() {","  Res r;","  cout<<\"working\";","}","int main(){ f(); }"],
+st:[[8,"main calls f().",[["console",""]]],
+[5,"Res r is created, so the constructor runs.",[["console","acquire"],["r","alive (stack)"]]],
+[6,"Function body runs while r is alive.",[["console","acquire, working"],["r","alive (stack)"]]],
+[7,"f ends. r goes out of scope, so the destructor runs automatically, even if an exception occurred.",[["console","acquire, working, release"],["r","destroyed"]]]],
+k:["Objects on the stack are destroyed in reverse order of creation.","Rule of Three/Five: if you write a destructor, think about copy/move.","Smart pointers and std::vector are RAII classes.","Use initializer lists: Res(): x(0) {}"],
+q:["When does ~Res() run for a local object?","When delete is called","At the end of its scope","Never automatically",1,"Stack objects are destroyed automatically at scope exit."]},
+{n:"Inheritance",s:"reusing classes",i:"Inheritance lets a derived class reuse the members of a base class (an is-a relationship). The base part is constructed first and destroyed last.",
+c:["class Animal {","public:","  void eat() { cout << \"eat \"; }","};","class Dog : public Animal {","public:","  void bark() { cout << \"bark\"; }","};","Dog d;","d.eat();","d.bark();"],
+st:[[8,"A Dog object contains an Animal part and a Dog part.",[["d","Animal part + Dog part"]]],
+[9,"eat() is inherited from Animal.",[["console","eat "]]],
+[10,"bark() belongs to Dog itself.",[["console","eat bark"]]]],
+k:["Types: single, multilevel, multiple, hierarchical, hybrid.","public inheritance keeps public members public.","Constructor order: base then derived.","Destructor order: derived then base."],
+q:["Which constructor runs first?","Base","Derived","Neither",0,"The base part is built first."]},
+{n:"Polymorphism",s:"virtual functions",i:"With virtual functions, the function called depends on the object's real (dynamic) type, not the pointer's type. This is runtime polymorphism.",
+c:["struct Shape {","  virtual double area(){return 0;}","  virtual ~Shape(){}","};","struct Circle : Shape {","  double r=2;","  double area() override {return 3.14*r*r;}","};","Shape *s = new Circle();","s->area();","delete s;"],
+st:[[8,"Static type of s is Shape*, but it points to a Circle. The Circle object holds a hidden vptr to Circle's vtable.",[["s (static type)","Shape*"],["object (dynamic type)","Circle"],["vptr","→ Circle vtable"]]],
+[9,"The call looks up area() in the vtable at runtime, finding Circle::area.",[["lookup","vtable[area] = Circle::area"],["result","12.56"]]],
+[10,"Because the destructor is virtual, Circle's destructor runs too. Without virtual: undefined behaviour.",[["destroyed","Circle then Shape"]]]],
+k:["Base classes meant for inheritance need a virtual destructor.","override catches signature mistakes at compile time.","Pure virtual (= 0) makes an abstract class.","Cost: one vptr per object and an indirect call."],
+q:["Why make Shape's destructor virtual?","Faster calls","So deleting via Shape* destroys the derived part","It is required for override",1,"Otherwise deleting through a base pointer skips the derived destructor."]},
+{n:"Templates",s:"generic programming",i:"Templates let you write code once for any type. The compiler generates a separate version for each type used (instantiation) at compile time.",
+c:["template<typename T>","T maxOf(T a, T b) {","  return a > b ? a : b;","}","maxOf(3, 7);","maxOf(2.5, 1.5);","maxOf(\"a\", \"b\");"],
+st:[[4,"T is deduced as int. The compiler generates maxOf<int>.",[["instantiated","maxOf<int>"],["result","7"]]],
+[5,"T = double, so a second, independent function maxOf<double> is generated.",[["instantiated","maxOf<int>, maxOf<double>"],["result","2.5"]]],
+[6,"T = const char*. It compiles, but compares pointer addresses, not text! Needs a specialisation.",[["instantiated","maxOf<const char*>"],["result","unreliable"]]]],
+k:["Resolved at compile time: no runtime cost.","Works for any type that supports the operations used.","STL containers and algorithms are all templates.","Class templates: template<class T> class Stack{...};"],
+q:["When are templates instantiated?","At runtime","At compile time","At link time only",1,"The compiler generates concrete code per type during compilation."]},
+{n:"STL vector",s:"containers",i:"std::vector is a dynamic array. It grows automatically; when capacity is full it allocates a bigger block (commonly 2x) and moves elements.",
+c:["vector<int> v;","v.push_back(10);","v.push_back(20);","v.push_back(30);","v.pop_back();"],
+st:[[0,"Empty vector: no heap memory yet.",[["size","0"],["capacity","0"],["data","[ ]"]]],
+[1,"Allocates capacity 1.",[["size","1"],["capacity","1"],["data","[10]"]]],
+[2,"Full, so it reallocates to capacity 2 and copies/moves 10.",[["size","2"],["capacity","2"],["data","[10,20]"]]],
+[3,"Full again, so capacity doubles to 4. push_back is amortised O(1).",[["size","3"],["capacity","4"],["data","[10,20,30,_]"]]],
+[4,"pop_back reduces size; capacity stays 4.",[["size","2"],["capacity","4"],["data","[10,20,_,_]"]]]],
+k:["Random access O(1); insert in the middle O(n).","reserve(n) avoids repeated reallocations.","Reallocation invalidates iterators and pointers.","Prefer vector as the default container."],
+q:["Why is push_back amortised O(1)?","It never reallocates","Capacity grows geometrically, so reallocations are rare","It uses a linked list",1,"Doubling means total copy work stays proportional to n."]},
+{n:"Exceptions",s:"error handling",i:"Exceptions separate error handling from normal logic. When thrown, the stack unwinds, destroying local objects, until a matching catch is found.",
+c:["try {","  vector<int> v(3);","  throw runtime_error(\"bad\");","  cout << \"skipped\";","} catch (exception &e) {","  cout << e.what();","}"],
+st:[[0,"Enter the try block.",[["status","normal"]]],
+[1,"v is constructed on the stack.",[["status","normal"],["v","alive"]]],
+[2,"throw starts stack unwinding. Normal flow stops here.",[["status","exception in flight"],["v","alive → destroying"]]],
+[3,"This line is never executed.",[["status","skipped"]]],
+[5,"catch by reference matched. v was destroyed (RAII) during unwinding.",[["status","handled"],["v","destroyed"],["console","bad"]]]],
+k:["Catch by const reference, throw by value.","Order catch blocks from specific to general.","Destructors must not throw.","RAII keeps cleanup correct during unwinding."],
+q:["What happens to local objects when an exception is thrown?","They leak","They are destroyed during stack unwinding","They stay until program ends",1,"Stack unwinding calls destructors of fully-built locals."]}
+];
+T.push(
+{n:"Nested Loops",s:"loop inside a loop",i:"A loop placed inside another loop. For every single pass of the outer loop, the inner loop runs completely from the start. Outer loops usually handle rows, inner loops handle columns.",
+c:["for (int i = 1; i <= 3; i++) {","  for (int j = 1; j <= i; j++)","    cout << \"*\";","  cout << \"\\n\";","}"],
+st:[[0,"Outer loop starts with i = 1.",[["i","1"]]],
+[2,"The inner loop runs j = 1 to i, so it prints one star.",[["i","1"],["j","1"],["row","*"]]],
+[3,"The inner loop is finished and a newline ends row 1.",[["output","*"]]],
+[0,"Outer loop moves on to i = 2. The inner loop restarts from j = 1.",[["i","2"],["j","restarts at 1"]]],
+[2,"The inner loop now runs twice.",[["i","2"],["j","1, 2"],["row","**"]]],
+[0,"i = 3: the inner loop runs three times.",[["i","3"],["j","1, 2, 3"],["row","***"]]],
+[3,"Final output, one row per outer pass.",[["row 1","*"],["row 2","**"],["row 3","***"]]]],
+k:["The inner loop completes fully for each outer pass.","Total inner passes = 1 + 2 + 3 = 6 here.","Rectangle: inner limit is fixed. Triangle: inner limit depends on i.","The inner loop variable restarts every time."],
+q:["How many times does the body run in for(i<3) for(j<4)?","12","7","3",0,"3 x 4 = 12."]},
+{n:"break & continue",s:"jump statements",i:"break leaves the nearest loop (or switch) immediately. continue skips the rest of the current pass and goes straight to the next one.",
+c:["for (int i = 1; i <= 5; i++) {","  if (i == 2) continue;","  if (i == 4) break;","  cout << i << \" \";","}","cout << \"end\";"],
+st:[[0,"i = 1: neither condition is true, so 1 is printed.",[["i","1"],["console","1"]]],
+[1,"i = 2: continue skips the print for this pass only.",[["i","2"],["console","1"]]],
+[3,"i = 3: printed normally.",[["i","3"],["console","1 3"]]],
+[2,"i = 4: break leaves the whole loop at once.",[["i","4"],["loop","exited"]]],
+[5,"Execution carries on after the loop.",[["console","1 3 end"]]]],
+k:["continue: skip to the next iteration.","break: exit the nearest loop or switch.","In nested loops, break leaves only the inner loop.","Use sparingly; they can hide the loop's logic."],
+q:["What does continue do?","Skips the rest of the current pass","Exits the loop","Ends the program",0,"It jumps to the next iteration."]},
+{n:"Data Types & Casting",s:"types and conversion",i:"Every variable has a type that decides its size and allowed values. When types are mixed, C++ converts automatically (implicit) or you can force it with a cast (explicit).",
+c:["int i = 7;","double d = 2.5;","char c = 'A';","bool b = true;","int x = (int)d;","double r = (double)i / 2;","int y = c + 1;"],
+st:[[0,"int: whole numbers, typically 4 bytes.",[["i","7"]]],
+[1,"double: decimal numbers, typically 8 bytes.",[["i","7"],["d","2.5"]]],
+[2,"char: one character, stored as its ASCII code 65.",[["c","'A' (65)"]]],
+[3,"bool holds true (1) or false (0).",[["b","true"]]],
+[4,"(int)d casts explicitly and truncates, it does not round.",[["x","2"]]],
+[5,"Casting i to double first makes the division real: 7.0 / 2.",[["r","3.5"]]],
+[6,"c is promoted to its code 65, then 1 is added.",[["y","66"]]]],
+k:["Typical sizes: char 1, int 4, float 4, double 8 bytes.","Implicit conversion happens in mixed expressions.","(int)3.9 gives 3: casting truncates.","char behaves like a small integer (ASCII)."],
+q:["What is (int)3.9?","3","4","3.9",0,"Casting truncates the fraction."]},
+{n:"Function Overloading",s:"same name, different parameters",i:"Several functions can share a name if their parameter lists differ in number or type. The compiler picks the best match at compile time.",
+c:["int area(int s) { return s * s; }","int area(int l, int w) { return l * w; }","double area(double r) { return 3.14 * r * r; }","area(4);","area(4, 5);","area(2.0);"],
+st:[[3,"One int argument selects area(int).",[["call","area(4)"],["chosen","area(int)"],["result","16"]]],
+[4,"Two arguments select area(int, int).",[["call","area(4, 5)"],["chosen","area(int,int)"],["result","20"]]],
+[5,"A double argument selects area(double): 3.14 x 2 x 2.",[["call","area(2.0)"],["chosen","area(double)"],["result","12.56"]]]],
+k:["Same name, different parameter list.","The return type alone cannot tell overloads apart.","Resolved at compile time (static polymorphism).","An ambiguous call is a compile error."],
+q:["Can two functions differ only in return type?","No","Yes","Only with templates",0,"The parameter list must differ."]},
+{n:"Operator Overloading",s:"custom meaning for operators",i:"Operator overloading lets your class define what +, -, ==, << and others mean for its objects. a + b is translated into a.operator+(b).",
+c:["class V {","public:","  int x;","  V(int a) { x = a; }","  V operator+(V o) { return V(x + o.x); }","};","V a(2), b(3);","V c = a + b;","cout << c.x;"],
+st:[[6,"Two objects are created.",[["a.x","2"],["b.x","3"]]],
+[7,"a + b is rewritten as a.operator+(b), which builds a new V.",[["call","a.operator+(b)"],["new V","x = 2 + 3"]]],
+[8,"c holds the sum.",[["c.x","5"],["console","5"]]]],
+k:["Gives user-defined meaning to existing operators.","Cannot overload ::  .  .*  ?:  sizeof.","Precedence and operand count cannot change.","Member binary operator: the left operand is the calling object."],
+q:["a + b for objects is the same as:","a.operator+(b)","operator+(a)","a.b+()",0,"The left operand calls the member."]},
+{n:"Dynamic Memory",s:"new and delete",i:"new allocates memory on the heap at run time and returns its address; delete gives it back. Heap memory stays alive until you free it.",
+c:["int *p = new int(5);","int *a = new int[3];","a[0] = 10; a[1] = 20; a[2] = 30;","delete p;","delete[] a;","p = nullptr;"],
+st:[[0,"new allocates one int on the heap and returns its address.",[["p","0x5000"],["*p","5"]]],
+[1,"new int[3] allocates an array of three ints.",[["a","0x6000"],["heap","3 ints"]]],
+[2,"Fill the array through the pointer.",[["a[0..2]","10 20 30"]]],
+[3,"delete frees the single int.",[["*p","freed"]]],
+[4,"delete[] frees the array. Mixing the two forms is undefined behaviour.",[["a","freed"]]],
+[5,"Set p to nullptr so it cannot be misused.",[["p","nullptr"]]]],
+k:["new pairs with delete; new[] pairs with delete[].","Forgetting delete causes a memory leak.","Using memory after delete is undefined behaviour.","Smart pointers can free memory automatically."],
+q:["new int[5] must be freed with:","delete[]","delete","free",0,"Arrays need delete[]."]},
+{n:"File Handling",s:"reading and writing files",i:"The <fstream> header lets a program save data to a file and read it back. ofstream writes, ifstream reads, and << and >> work just like cout and cin.",
+c:["ofstream out(\"data.txt\");","out << \"Hi 5\";","out.close();","ifstream in(\"data.txt\");","string w; int n;","in >> w >> n;","cout << w << n;"],
+st:[[0,"ofstream opens (or creates) data.txt for writing.",[["file","data.txt (write)"]]],
+[1,"The text is written into the file.",[["file content","Hi 5"]]],
+[2,"close flushes the data and releases the file.",[["file","closed"]]],
+[3,"ifstream opens the same file for reading.",[["file","data.txt (read)"]]],
+[5,"Extraction reads a word and a number, exactly like cin.",[["w","Hi"],["n","5"]]],
+[6,"Print what was read.",[["console","Hi5"]]]],
+k:["Include <fstream>: ofstream writes, ifstream reads, fstream does both.","Check if (!in) to detect that the file did not open.","Close files when finished.","while (in >> x) reads until the end of the file."],
+q:["Which class reads from a file?","ifstream","ofstream","iostream",0,"i stands for input."]}
+);
+const ORDER=["Simple Statements", "Data Types & Casting", "Operators", "Increment & Decrement", "Brain Gym 1", "1. Simple if", "2. if-else", "3. else-if Ladder", "4. Nested if", "5. switch", "6. while Loop", "7. do-while Loop", "8. for Loop", "break & continue", "Nested Loops", "Brain Gym 2", "User Defined Functions", "Function Overloading", "Recursion", "Arrays", "2D Arrays", "C-Strings", "String Functions", "std::string", "Pointers", "Brain Gym 3", "Dynamic Memory", "References", "Structures", "Classes & Objects", "Constructors & RAII", "Operator Overloading", "Inheritance", "Polymorphism", "Templates", "STL vector", "Exceptions", "File Handling"];T.sort((x,y)=>ORDER.indexOf(x.n)-ORDER.indexOf(y.n));
+const P={
+"Simple Statements":[["Which symbol ends a C++ statement?",";",":",".",0,"Statements end with a semicolon."],
+["int a = 7, b = 2; float f = a / b; What is f?","3.5","3","2",1,"7 / 2 is integer division = 3 before it is stored in the float."],
+["int x = 5; x = x + 2 * 3 % 4; What is x?","7","11","5",0,"* and % bind tighter than +: 2*3 = 6, 6 % 4 = 2, so 5 + 2 = 7."]],
+"1. Simple if":[["if (5 > 3) cout << 'Yes'; What is printed?","Yes","Nothing","Error",0,"5 > 3 is true, so the statement runs."],
+["int x = 0; if (x) cout << 'A'; cout << 'B'; Output?","AB","B","A",1,"0 means false, so A is skipped."],
+["int x = 5; if (x = 0) cout << 'A'; cout << x; Output?","A5","0","A0",1,"x = 0 assigns zero (false), so A is skipped and x prints 0."]],
+"2. if-else":[["if (4 % 2 == 0) cout << 'E'; else cout << 'O'; Output?","E","O","EO",0,"4 % 2 is 0, so the if branch runs."],
+["int n = -4; if (n % 2 == 0) cout << 'E'; else cout << 'O'; Output?","E","O","Error",0,"-4 % 2 is 0, so E."],
+["int a = 2; if (a > 3) if (a > 10) cout << 'X'; else cout << 'Y'; Output?","X","Y","Nothing",2,"else binds to the nearest if (a > 10). The outer if is false, so nothing runs."]],
+"3. else-if Ladder":[["In an else-if ladder, how many branches execute?","All true ones","Only the first true one","Always two",1,"The first true condition wins; the rest are skipped."],
+["m = 80; if (m>=50) cout<<'P'; else if (m>=75) cout<<'D'; else cout<<'F'; Output?","P","D","F",0,"m >= 50 is true first, so D is never tested."],
+["int a = 10; if (a>5) cout<<'A'; if (a>8) cout<<'B'; else cout<<'C'; Output?","A","AB","ABC",1,"These are two separate statements: the first prints A, the second prints B."]],
+"4. Nested if":[["When is the inner if evaluated?","Always","Only when the outer condition is true","Only when the outer is false",1,"The inner if is part of the outer block."],
+["int a=20,b=0; if (a>10) { if (b>0) cout<<'P'; else cout<<'Q'; } else cout<<'R'; Output?","P","Q","R",1,"Outer is true, inner b > 0 is false, so Q."],
+["int a=5,b=5; if (a>=5) if (b>5) cout<<'X'; else cout<<'Y'; else cout<<'Z'; Output?","X","Y","Z",1,"First else pairs with the inner if, second with the outer. Outer true, inner false: Y."]],
+"5. switch":[["Which keyword stops fall-through in a switch?","stop","break","exit",1,"break exits the switch."],
+["int x=2; switch(x){ case 1: cout<<'A'; case 2: cout<<'B'; case 3: cout<<'C'; break; default: cout<<'D'; } Output?","B","BC","BCD",1,"case 2 matches, falls into case 3, and break stops there."],
+["int x=5; switch(x){ default: cout<<'D'; case 1: cout<<'A'; break; case 2: cout<<'B'; } Output?","D","DA","DAB",1,"No case matches, so default runs, and without break it falls into case 1."]],
+"6. while Loop":[["How many times does while (false) { } run its body?","0","1","Infinite",0,"The condition is checked first."],
+["int i=5; while (i>0) { i -= 2; } What is i?","0","-1","1",1,"5, 3, 1, then -1 stops the loop."],
+["int i=0; while (i<5) { if (i==2) { i++; continue; } cout<<i; i++; } Output?","01234","0134","013",1,"continue skips printing when i is 2."]],
+"7. do-while Loop":[["A do-while body runs at least how many times?","0","1","2",1,"The condition is tested after the body."],
+["int n=3; do { n--; } while (n>0); cout<<n; Output?","0","-1","3",0,"n goes 2, 1, 0 and the loop stops."],
+["int i=1; do { cout<<i; i*=2; } while (i<10); Output?","124","1248","124816",1,"Prints 1, 2, 4, 8. After 8, i = 16 and the loop ends."]],
+"8. for Loop":[["for (int i=0; i<4; i++) runs the body how many times?","3","4","5",1,"i = 0, 1, 2, 3."],
+["int s=0; for (int i=1; i<=4; i++) s += i; What is s?","10","6","15",0,"1+2+3+4 = 10."],
+["for (int i=0, j=5; i<j; i++, j--) cout << i+j; Output?","555","5555","5",0,"(0,5), (1,4), (2,3) all give 5; then i=3, j=2 stops the loop."]],
+"Operators":[["What is 17 % 5?","3","2","3.4",1,"Remainder of 17 / 5 is 2."],
+["What is 2 + 3 * 4 % 5?","4","7","14",0,"3*4 = 12, 12 % 5 = 2, then 2 + 2 = 4."],
+["int a=6, b=3; cout << (a & b) << (a | b) << (a ^ b); Output?","275","257","725",0,"110 & 011 = 010 (2), | = 111 (7), ^ = 101 (5)."]],
+"Increment & Decrement":[["int a=4; int b=a++; What is b?","4","5","3",0,"Postfix gives the old value."],
+["int a=2; a++; ++a; --a; cout << a; Output?","2","3","4",1,"2 → 3 → 4 → 3."],
+["int a=3, b=5; int c = a++ * --b; Values of c, a, b?","c=12, a=4, b=4","c=15, a=4, b=4","c=12, a=3, b=5",0,"a++ gives 3, --b gives 4, so c = 12, then a = 4 and b = 4."]],
+"User Defined Functions":[["Which declaration is a function with no argument and no return value?","void f()","int f(int)","void f(int)",0,"void return and empty parameter list."],
+["void inc(int x){ x++; } int a=5; inc(a); cout << a; Output?","6","5","Error",1,"Call by value: inc changes only its own copy."],
+["void g(int &x){ x *= 2; } int a=3; g(a); g(a); What is a?","6","12","3",1,"Pass by reference modifies a: 3 → 6 → 12."]],
+"Pointers":[["Which operator gives the address of a variable?","*","&","->",1,"& is address-of."],
+["int x=10; int *p=&x; *p = *p + 5; What is x?","10","15","5",1,"*p is x itself, so x becomes 15."],
+["int a[]={1,2,3}; int *p=a; p++; *p = *p * 10; What is a[1]?","2","20","10",1,"p moves to a[1] (value 2), which becomes 20."]],
+"References":[["A reference must be:","Initialised when declared","Assigned later","Null",0,"References cannot be left uninitialised."],
+["int a=4; int &r=a; r++; What is a?","4","5","6",1,"r is another name for a."],
+["int a=1, b=2; int &r=a; r=b; r++; Values of a and b?","a=3, b=2","a=2, b=3","a=1, b=3",0,"r = b copies 2 into a; r++ makes a 3. b stays 2."]],
+"Constructors & RAII":[["When does a constructor run?","When an object is created","When it is destroyed","At program end",0,"Construction happens at creation."],
+["Two local objects A then B are in one scope. Destructor order?","A then B","B then A","Random",1,"Destruction is in reverse order of creation."],
+["Class A prints 'D' in its destructor. void f(){ A x; { A y; } cout<<'M'; } Output?","DDM","DMD","MDD",1,"y dies at the inner brace (D), M prints, then x dies at the end (D)."]],
+"Polymorphism":[["Which keyword enables runtime polymorphism?","static","virtual","inline",1,"virtual uses the vtable."],
+["A Base* points to a Derived object and f() is NOT virtual. Which f runs?","Derived's","Base's","Error",1,"Without virtual, the pointer's static type decides."],
+["struct B{virtual void f(){cout<<'B';} void g(){f();}}; struct D:B{void f(){cout<<'D';}}; D d; B* p=&d; p->g(); Output?","B","D","BD",1,"g() calls the virtual f() through the object, so D::f runs."]],
+"Templates":[["Template code is generated at:","Compile time","Runtime","Load time",0,"The compiler instantiates templates."],
+["template<class T> T add(T a, T b){return a+b;} add(2,3) uses which instance?","add<double>","add<int>","none",1,"T is deduced as int."],
+["With the same template, what does add(2, 3.5) do?","Returns 5.5","Compile error: T deduced as int and double","Returns 5",1,"T must be one type; conflicting deductions fail to compile."]],
+"STL vector":[["Which function adds an element at the end of a vector?","push_back","insert_end","add",0,"push_back appends."],
+["vector<int> v(3,7); v.push_back(1); What is v.size()?","3","4","7",1,"3 elements plus 1."],
+["vector<int> v; for(int i=0;i<5;i++) v.push_back(i); v.pop_back(); v.pop_back(); What is v[0] + v.back()?","2","4","3",0,"v = [0,1,2], so 0 + 2 = 2."]],
+"Exceptions":[["Which keyword raises an exception?","throw","raise","catch",0,"throw starts the exception."],
+["try{ throw 5; cout<<'A'; } catch(int e){ cout<<e; } Output?","A5","5","A",1,"The line after throw is skipped."],
+["try{ try{ throw 1; } catch(char c){ cout<<'C'; } } catch(int e){ cout<<'I'; } Output?","C","I","CI",1,"catch(char) does not match int, so it moves to the outer catch(int)."]]
+};
+Object.assign(P,{
+"Arrays":[["How many elements does int a[6] hold?","5","6","7",1,"Indexes 0 to 5."],
+["int a[]={3,1,4}; cout << a[1] + a[2]; Output?","5","7","4",0,"1 + 4 = 5."],
+["int a[]={1,2,3,4}; int s=0; for(int i=0;i<4;i+=2) s+=a[i]; What is s?","4","6","10",0,"a[0] + a[2] = 1 + 3."]],
+"2D Arrays":[["How many elements in int m[2][3]?","5","6","8",1,"2 x 3."],
+["int m[2][2]={{1,2},{3,4}}; What is m[1][0]?","2","3","4",1,"Row 1, column 0."],
+["For {{1,2},{3,4}}, what is the sum of m[i][i]?","5","4","10",0,"1 + 4."]],
+"C-Strings":[["Which character ends a C string?","'\\0'","'\\n'","' '",0,"The null character."],
+["char s[]=\"abc\"; What is sizeof(s)?","3","4","5",1,"Three letters plus \\0."],
+["char s[10]=\"hi\"; strlen(s) and sizeof(s)?","2 and 10","10 and 2","3 and 10",0,"strlen stops at \\0; sizeof is the array size."]],
+"String Functions":[["Which function gives the length of a C string?","strlen","strcat","strcmp",0,"strlen counts characters."],
+["char a[20]=\"Hi\"; strcat(a,\"Go\"); strlen(a)?","2","4","5",1,"HiGo has 4 characters."],
+["Sign of strcmp(\"apple\",\"apricot\")?","Negative","Zero","Positive",0,"At index 2, 'p' < 'r'."]],
+"std::string":[["Which operator joins two std::strings?","+","&","*",0,"+ concatenates."],
+["string s=\"hello\"; s.substr(1,3) is?","ell","hel","ello",0,"Start at index 1, take 3."],
+["string s=\"banana\"; s.find(\"na\") and s.size()?","2 and 6","1 and 6","2 and 5",0,"'na' first appears at index 2."]],
+"Structures":[["Which operator accesses a member of a struct variable?",".","->","&",0,"The dot operator."],
+["struct P{int x,y;}; P a={2,3}; What is a.x * a.y?","5","6","23",1,"2 x 3."],
+["P a={2,3}; P *p=&a; p->x += a.y; What is a.x?","5","2","3",0,"p->x is a.x, so 2 + 3."]]
+});
+const TC={
+"Simple Statements":[["cin >> a >> b; cout << a + b;","3 4","7","3 + 4 = 7"],["cin >> a; cout << a / 2;","9","4","Integer division: 9 / 2 = 4"]],
+"1. Simple if":[["if (n > 0) cout << 'P';","n = 5","P","5 > 0 is true"],["if (n > 0) cout << 'P';","n = -2","(nothing)","-2 > 0 is false, block skipped"]],
+"2. if-else":[["if (n%2==0) cout<<'E'; else cout<<'O';","n = 10","E","10 % 2 = 0"],["if (n%2==0) cout<<'E'; else cout<<'O';","n = 7","O","7 % 2 = 1"]],
+"3. else-if Ladder":[["if(m>=90)'A'; else if(m>=60)'B'; else 'F';","m = 95","A","95 >= 90 is true first"],["if(m>=90)'A'; else if(m>=60)'B'; else 'F';","m = 60","B","60 >= 90 false, 60 >= 60 true"]],
+"4. Nested if":[["if(a>=18){ if(id)'Enter'; else 'ShowID'; } else 'Young';","a = 20, id = 0","ShowID","Outer true, inner false"],["(same code)","a = 16, id = 1","Young","Outer false, inner never checked"]],
+"5. switch":[["switch(d){case 1:'Mon';break; case 2:'Tue';break; default:'?';}","d = 2","Tue","case 2 matches, break exits"],["(same code)","d = 7","?","No case matches, default runs"]],
+"6. while Loop":[["int s=0,i=1; while(i<=n){s+=i;i++;} cout<<s;","n = 4","10","1+2+3+4"],["(same code)","n = 0","0","Condition false at start, body never runs"]],
+"7. do-while Loop":[["do{ cout<<n; n--; }while(n>0);","n = 3","321","Prints 3, 2, 1"],["(same code)","n = 0","0","Body runs once before the check"]],
+"8. for Loop":[["for(i=1;i<=n;i++) cout<<i*i<<' ';","n = 3","1 4 9","Squares of 1, 2, 3"],["(same code)","n = 0","(nothing)","1 <= 0 is false"]],
+"Operators":[["cout << a%b << a/b;","a = 17, b = 5","23","17 % 5 = 2 and 17 / 5 = 3"],["cout << (a & b);","a = 12, b = 10","8","1100 & 1010 = 1000"]],
+"Increment & Decrement":[["b = a++; c = ++a; cout<<b<<c;","a = 1","13","b = 1 (a is 2), then ++a gives 3"],["cout<<a--; cout<<--a;","a = 5","53","Prints 5 (a=4), then --a makes 3"]],
+"User Defined Functions":[["int add(int a,int b){return a+b;} cout<<add(x,y);","x = 2, y = 9","11","Returns 2 + 9"],["void inc(int v){v++;} inc(n); cout<<n;","n = 4","4","Call by value: caller unchanged"]],
+"Arrays":[["a = {4,8,15}; cout << a[n-1];","n = 3","15","Last index is n - 1 = 2"],["m=a[0]; for(i=1;i<3;i++) if(a[i]>m) m=a[i];","a = {3,9,2}","9","m: 3, then 9, and 2 does not replace it"]],
+"2D Arrays":[["m = {{1,2},{3,4}}; cout << m[r][c];","r = 1, c = 1","4","Row 1, column 1"],["Sum of all elements of {{1,2},{3,4}}","none","10","1 + 2 + 3 + 4"]],
+"C-Strings":[["while(s[n]!='\\0') n++;","s = \"code\"","4","Stops at the terminator after 4 characters"],["s[0]='b'; cout<<s;","s = \"cat\"","bat","First character replaced"]],
+"String Functions":[["cout << strlen(s);","s = \"Hello\"","5","Counts characters before \\0"],["cout << strcmp(a, b);","a = \"cat\", b = \"cat\"","0","Identical strings give 0"]],
+"std::string":[["s += \"de\"; cout << s.size();","s = \"abc\"","5","\"abcde\" has 5 characters"],["cout << s.find(\"world\");","s = \"hello world\"","6","'world' starts at index 6"]],
+"Structures":[["cout << s.roll;","s = {7, 8.5}","7","Dot operator reads roll"],["p = &s; p->roll = 9; cout << s.roll;","s = {7, 8.5}","9","p points to s, so s changes"]],
+"Pointers":[["int *p=&x; *p=*p*2; cout<<x;","x = 6","12","*p is x itself"],["int *p=a+2; cout<<*p;","a = {5,6,7}","7","a + 2 points to a[2]"]],
+"References":[["int &r=a; r+=5; cout<<a;","a = 3","8","r is an alias of a"],["swap(a,b) with int& params; cout<<a<<b;","a = 1, b = 2","21","Values exchanged through references"]],
+"Constructors & RAII":[["{ A x('x'); }  ctor prints letter, dtor prints capital","none","xX","Created, then destroyed at scope end"],["{ A a('a'); A b('b'); }","none","abBA","Destroyed in reverse order"]],
+"Polymorphism":[["Base* p = new Derived; p->show();  (show is virtual)","none","Derived","vtable picks Derived::show"],["(same, but show is NOT virtual)","none","Base","Pointer's static type decides"]],
+"Templates":[["maxOf(a, b)  with int","a = 3, b = 8","8","T = int"],["maxOf(a, b)  with double","a = 2.5, b = 1.5","2.5","T = double"]],
+"STL vector":[["v={1,2,3}; v.push_back(4); cout<<v.size();","none","4","3 + 1"],["v={5,6,7}; v.pop_back(); cout<<v.back();","none","6","v = [5,6], back is 6"]],
+"Exceptions":[["try{ if(d==0) throw 1; cout<<10/d; } catch(int){ cout<<'E'; }","d = 2","5","No throw, 10 / 2 = 5"],["(same code)","d = 0","E","throw 1 is caught"]]
+};
+const FB={
+"Simple Statements":{s:"A shop billing program must read the price and quantity, then print the total.",c:["int price, qty;","cin >> price >> qty;","int total = @1@;","cout << @2@;"],b:[[["price + qty","price * qty","price / qty"],1],[["\"total\"","total","int total"],1]],w:"Total = price x quantity, and cout prints the variable's value; quotes would print the word."},
+"1. Simple if":{s:"Give a 10% discount only when the bill is above 1000.",c:["float bill = 1500;","if (@1@) {","  bill = bill - @2@;","}","cout << bill;"],b:[[["bill > 1000","bill = 1000","bill < 1000"],0],[["bill * 0.1","bill * 10","bill + 0.1"],0]],w:"Above 1000 means bill > 1000, and 10% of the bill is bill * 0.1."},
+"2. if-else":{s:"A lift allows at most 8 persons. Print Allowed or Overload.",c:["int n = 9;","if (@1@)","  cout << \"Allowed\";","@2@","  cout << \"Overload\";"],b:[[["n <= 8","n >= 8","n == 8"],0],[["else","else if","elif"],0]],w:"At most 8 means n <= 8, and the alternative branch is plain else."},
+"3. else-if Ladder":{s:"Ticket price: under 5 free, under 18 half, otherwise full.",c:["int age = 12;","if (age < 5) cout << \"Free\";","@1@ (@2@) cout << \"Half\";","else cout << \"Full\";"],b:[[["else if","if else","elseif"],0],[["age < 18","age > 18","age == 18"],0]],w:"C++ spells it else if, and the second tier is age < 18."},
+"4. Nested if":{s:"ATM: dispense only if the card is valid AND the balance is enough.",c:["if (valid) {","  if (@1@)","    cout << \"Dispense\";","  @2@","    cout << \"Low balance\";","} else cout << \"Invalid card\";"],b:[[["balance >= amount","balance < amount","amount = balance"],0],[["else","else;","then"],0]],w:"Inner check is balance >= amount; its alternative is else."},
+"5. switch":{s:"Menu: 1 = Add, 2 = Delete, anything else = Invalid.",c:["switch (choice) {","  case 1: cout << \"Add\"; @1@","  case 2: cout << \"Delete\"; break;","  @2@: cout << \"Invalid\";","}"],b:[[["break;","continue;","exit"],0],[["default","else","otherwise"],0]],w:"break prevents fall-through; default handles all other values."},
+"6. while Loop":{s:"Add numbers until the user enters 0 (sentinel value).",c:["int x, sum = 0;","cin >> x;","while (@1@) {","  sum += x;","  @2@;","}"],b:[[["x != 0","x == 0","x = 0"],0],[["cin >> x","cin << x","x++"],0]],w:"Keep looping while x != 0, and read the next value inside the loop."},
+"7. do-while Loop":{s:"Show a menu at least once and repeat until the user enters 0.",c:["int ch;","do {","  cout << \"Menu\"; cin >> ch;","} while (@1@)@2@"],b:[[["ch != 0","ch == 0","ch = 0"],0],[[";",":",","],0]],w:"Repeat while ch != 0; a do-while must end with a semicolon."},
+"8. for Loop":{s:"Print the multiplication table of 5 from 5 x 1 to 5 x 10.",c:["for (int i = @1@; i <= 10; @2@)","  cout << 5 * i << \" \";"],b:[[["1","0","10"],0],[["i++","i--","i == 1"],0]],w:"Start at 1 and increase i by one each pass."},
+"Operators":{s:"A year is a leap year if divisible by 4 and not by 100, or divisible by 400.",c:["if ((y % 4 == 0 @1@ y % 100 != 0) @2@ y % 400 == 0)","  cout << \"Leap\";"],b:[[["&&","||","%"],0],[["||","&&","!"],0]],w:"Both conditions in the bracket must hold (&&); the 400 rule is an alternative (||)."},
+"Increment & Decrement":{s:"Print the current token number (7) and then move to the next token, so the counter becomes 8.",c:["int token = 7;","cout << @1@;","// token is now 8"],b:[[["token++","++token","token--"],0]],w:"Postfix prints the old value 7 first, then increments."},
+"User Defined Functions":{s:"Write a function that returns the area of a rectangle.",c:["@1@ area(int l, int w) {","  @2@ l * w;","}"],b:[[["int","void","string"],0],[["return","print","cout"],0]],w:"A function that gives back a number has an int return type and uses return."},
+"Arrays":{s:"Find the sum of the marks of 5 students stored in an array.",c:["int marks[5] = {70, 80, 90, 60, 50};","int sum = 0;","for (int i = 0; i < @1@; i++)","  sum += @2@;"],b:[[["5","6","4"],0],[["marks[i]","marks[5]","marks"],0]],w:"Loop i = 0..4 (i < 5) and add marks[i]."},
+"2D Arrays":{s:"Print the sum of each row of a 2 x 3 matrix m.",c:["for (int i = 0; i < 2; i++) {","  int rs = 0;","  for (int j = 0; j < 3; j++)","    rs += m[@1@][@2@];","  cout << rs;","}"],b:[[["i","j","2"],0],[["j","i","3"],0]],w:"Row is fixed by the outer loop (i) while the inner loop moves across columns (j)."},
+"C-Strings":{s:"Count the characters of a name without using strlen.",c:["char name[] = \"Asha\";","int n = 0;","while (name[n] @1@ @2@)","  n++;"],b:[[["!=","==","="],0],[["'\\0'","'0'","' '"],0]],w:"Keep counting while the character is not the null terminator '\\0'."},
+"String Functions":{s:"Join first and last name in one array and print the length of the full name.",c:["char full[30] = \"Ravi \";","@1@(full, \"Sharma\");","cout << @2@(full);"],b:[[["strcat","strcpy","strcmp"],0],[["strlen","sizeof","strcmp"],0]],w:"strcat appends; strlen gives 11 while sizeof would give the array size 30."},
+"std::string":{s:"Print the user part (before @) of an email address.",c:["string e = \"amit@mail.com\";","int pos = e.@1@(\"@\");","if (pos != string::npos)","  cout << e.@2@(0, pos);"],b:[[["find","size","substr"],0],[["substr","find","erase"],0]],w:"find locates the @; substr(0, pos) takes the text before it."},
+"Structures":{s:"Store a book's details and update its price through a pointer.",c:["struct Book { int id; float price; };","Book b = {101, 250};","Book *p = @1@;","p@2@price = 300;"],b:[[["&b","b","*b"],0],[["->",".","::"],0]],w:"p holds the address (&b) and a pointer uses -> to reach members."},
+"Pointers":{s:"Swap two numbers using pointers.",c:["void swapv(int *a, int *b) {","  int t = @1@;","  *a = *b;","  @2@ = t;","}"],b:[[["*a","a","&a"],0],[["*b","b","&b"],0]],w:"Save the value at a, copy b's value into a, then put the saved value into b."},
+"References":{s:"A function must double the caller's variable.",c:["void twice(int @1@ x) {","  x = x * 2;","}","int n = 4; twice(n); // n becomes @2@"],b:[[["&","*","&&"],0],[["8","4","2"],0]],w:"A reference parameter (&) changes the caller's variable, so n becomes 8."},
+"Constructors & RAII":{s:"A file class opens in the constructor and closes automatically when the object dies.",c:["class File {","public:","  @1@() { cout << \"open\"; }","  @2@File() { cout << \"close\"; }","};"],b:[[["File","void File","~File"],0],[["~","!","void "],0]],w:"The constructor has the class name; the destructor adds ~ in front."},
+"Polymorphism":{s:"Different shapes must compute their own area through a base-class pointer.",c:["struct Shape { @1@ double area() { return 0; } };","struct Sq : Shape { double s=2; double area() @2@ { return s*s; } };"],b:[[["virtual","static","inline"],0],[["override","overload","overwrite"],0]],w:"virtual enables runtime dispatch; override confirms the derived function replaces it."},
+"Templates":{s:"One function should swap values of any type.",c:["@1@","void swapAny(T &a, T &b) {","  @2@ t = a; a = b; b = t;","}"],b:[[["template<typename T>","template(T)","typename<T>"],0],[["T","int","void"],0]],w:"Declare the type parameter with template<typename T> and use T for the temporary."},
+"STL vector":{s:"Store marks entered by a user and print the highest.",c:["vector<int> v;","v.@1@(85); v.@1@(92);","cout << *@2@(v.begin(), v.end());"],b:[[["push_back","add","append"],0],[["max_element","sort","size"],0]],w:"push_back adds at the end; max_element returns an iterator to the largest value."},
+"Exceptions":{s:"Divide two numbers and warn when the divisor is zero.",c:["try {","  if (d == 0) @1@ \"zero\";","  cout << a / d;","} @2@ (const char* m) {","  cout << m;","}"],b:[[["throw","return","raise"],0],[["catch","except","handle"],0]],w:"throw raises the exception and catch handles it."}
+};
+const FB2={
+"Simple Statements":[{s:"Convert Celsius to Fahrenheit: F = C x 9/5 + 32.",c:["float c = 100;","float f = c * @1@ + 32;","cout << f;"],b:[["9.0 / 5","9 / 5","5 / 9"]],w:"9 / 5 with ints is 1, so write 9.0 / 5 to keep the fraction."},
+{s:"Swap two numbers using a temporary variable.",c:["int a = 3, b = 8, t;","t = a;","a = @1@;","b = @2@;"],b:[["b","t","a"],["t","a","b"]],w:"Save a in t, copy b into a, then put the saved value in b."},
+{s:"Read two integers and print their average with decimals.",c:["int a, b;","cin >> a >> b;","float avg = (a + b) / @1@;","cout << avg;"],b:[["2.0","2","0.2"]],w:"Dividing by 2.0 keeps the decimal part (7 / 2 would give 3)."}],
+"1. Simple if":[{s:"Print Pass only if marks are at least 40.",c:["int marks = 55;","if (marks @1@ 40)","  cout << \"Pass\";"],b:[[">=","<=","=="]],w:"At least 40 means >= 40."},
+{s:"Show a warning when the battery level is below 20.",c:["int level = 15;","if (level @1@ 20) {","  cout << @2@;","}"],b:[["<",">","<="],["\"Low battery\"","Low battery","'Low battery'"]],w:"Below 20 is < 20, and text needs double quotes."},
+{s:"Print Even for even numbers (no else).",c:["int n = 6;","if (n @1@ 2 @2@ 0)","  cout << \"Even\";"],b:[["%","/","*"],["==","=","!="]],w:"n % 2 == 0 means no remainder."}],
+"2. if-else":[{s:"A person can vote at 18 or above.",c:["int age = 17;","if (age @1@ 18)","  cout << \"Vote\";","@2@","  cout << \"Wait\";"],b:[[">=",">","<="],["else","else if","otherwise"]],w:"18 or above is >= 18; the alternative is else."},
+{s:"Print the larger of two numbers.",c:["int a = 4, b = 9;","if (a @1@ b) cout << a;","else cout << @2@;"],b:[[">","<","=="],["b","a","a + b"]],w:"If a > b print a, otherwise b."},
+{s:"Classify a number as Negative or Non-negative.",c:["if (n @1@ 0)","  cout << \"Negative\";","@2@","  cout << \"Non-negative\";"],b:[["<",">","<="],["else","else if","elseif"]],w:"Negative means n < 0; zero belongs to the else branch."}],
+"3. else-if Ladder":[{s:"Traffic light: red = Stop, yellow = Wait, otherwise Go.",c:["char c = 'y';","if (c == 'r') cout << \"Stop\";","@1@ (c == 'y') cout << \"Wait\";","@2@ cout << \"Go\";"],b:[["else if","if","elseif"],["else","else if","default"]],w:"Chain with else if and finish with a plain else."},
+{s:"Grade: 80 or more is A, 60 or more is B, otherwise C.",c:["if (m >= @1@) cout << \"A\";","else if (m >= @2@) cout << \"B\";","else cout << \"C\";"],b:[["80","60","40"],["60","80","40"]],w:"Test the highest threshold first."},
+{s:"Electricity slab: up to 100 units Rs 2, up to 200 Rs 3, above that Rs 4.",c:["if (u <= 100) rate = 2;","else if (u @1@ 200) rate = 3;","else rate = @2@;"],b:[["<=","<",">"],["4","3","2"]],w:"200 units still belongs to the Rs 3 slab, so use <=."}],
+"4. Nested if":[{s:"Login: check the username first, then the password.",c:["if (user == \"admin\") {","  if (pass @1@ \"123\")","    cout << \"Welcome\";","} @2@ cout << \"Unknown user\";"],b:[["==","=","!="],["else","else if","elif"]],w:"Compare with == and use else for the outer failure."},
+{s:"Largest of three numbers using nested if.",c:["if (a > b) {","  if (a > c) cout << a;","  else cout << @1@;","} else {","  if (b > c) cout << @2@;","  else cout << c;","}"],b:[["c","b","a"],["b","a","c"]],w:"If a loses to c, c is largest; in the else branch b competes with c."},
+{s:"Movie ticket: children under 12 get a discount only before 6 pm.",c:["if (age < 12) {","  if (hour @1@ 18) cout << \"Discount\";","  else cout << \"Full price\";","} else cout << @2@;"],b:[["<",">","=="],["\"Full price\"","\"Discount\"","Full price"]],w:"Before 6 pm means hour < 18; adults pay full price."}],
+"5. switch":[{s:"Calculator: the operator character selects the operation.",c:["switch (op) {","  case '+': cout << a + b; @1@","  case '-': cout << a - b; break;","  @2@: cout << \"Bad op\";","}"],b:[["break;","return","stop;"],["default","case","else"]],w:"break stops fall-through and default catches everything else."},
+{s:"Show the day name from a day number.",c:["switch (@1@) {","  case 1: cout << \"Mon\"; break;","  case 2: cout << \"Tue\"; break;","}"],b:[["day","day == 1","\"day\""]],w:"switch takes an integer expression, not a condition."},
+{s:"Grouped cases: a, e and i should all print Vowel.",c:["switch (ch) {","  case 'a':","  case 'e':","  case @2@: cout << \"Vowel\"; @1@","  default: cout << \"Other\";","}"],b:[["break;","continue;","return"],["'i'","\"i\"","i"]],w:"Character constants use single quotes; break ends the group."}],
+"6. while Loop":[{s:"Find the sum of the digits of 123.",c:["int n = 123, s = 0;","while (n @1@ 0) {","  s += n % 10;","  n = n @2@ 10;","}"],b:[[">","<","=="],["/","%","*"]],w:"n % 10 is the last digit; n / 10 removes it."},
+{s:"Count down from 3 to 1.",c:["int i = 3;","while (i @2@ 1) {","  cout << i << \" \";","  @1@;","}"],b:[["i--","i++","i = 3"],[">=","<=","=="]],w:"Decrease i and keep going while i >= 1."},
+{s:"Reverse the digits of 45 to get 54.",c:["int n = 45, rev = 0;","while (n > 0) {","  rev = rev * @1@ + n % 10;","  n @2@ 10;","}"],b:[["10","2","n"],["/=","%=","*="]],w:"Shift rev left by a decimal place (x10) and drop the digit from n (/= 10)."}],
+"7. do-while Loop":[{s:"Keep asking until the user enters a positive number.",c:["int n;","do {","  cin >> n;","} while (n @1@ 0)@2@"],b:[["<=","<",">"],[";",":","."]],w:"Repeat while n <= 0; end do-while with a semicolon."},
+{s:"Print 1 to 3 using do-while.",c:["int i = 1;","do {","  cout << i;","  @1@;","} while (i @2@ 3);"],b:[["i++","i--","i == 3"],["<=","<",">"]],w:"Increase i and continue while i <= 3."},
+{s:"Ask for the password again while it is wrong.",c:["do {","  cin >> pw;","} while (pw @1@ 1234);"],b:[["!=","==","="]],w:"Loop while pw is NOT equal to 1234."}],
+"8. for Loop":[{s:"Print the even numbers from 2 to 10.",c:["for (int i = 2; i <= 10; i @1@ 2)","  cout << i << \" \";"],b:[["+=","++","*="]],w:"Step by 2 with i += 2."},
+{s:"Compute 5 factorial.",c:["int f = @2@;","for (int i = 1; i <= 5; i++)","  f @1@ i;","cout << f;"],b:[["*=","+=","="],["1","0","5"]],w:"Start the product at 1 and multiply with *=."},
+{s:"Print a triangle of stars.",c:["for (int i = 1; i <= 3; i++) {","  for (int j = 1; j <= @1@; j++)","    cout << \"*\";","  cout << @2@;","}"],b:[["i","3","j"],["endl","\"\"","i"]],w:"Row i has i stars; endl starts a new row."}],
+"Operators":[{s:"Check whether a number is odd.",c:["if (n @1@ 2 != 0)","  cout << \"Odd\";"],b:[["%","/","&&"]],w:"An odd number leaves a remainder when divided by 2."},
+{s:"A person is eligible if age is 18 to 60 inclusive.",c:["if (age @2@ 18 @1@ age <= 60)","  cout << \"Eligible\";"],b:[["&&","||","!"],[">=",">","=="]],w:"Both limits must hold: use && with >= 18."},
+{s:"Check whether n is a power of two (n > 0).",c:["if (n > 0 && (n @1@ (n - 1)) == 0)","  cout << \"Power of 2\";"],b:[["&","&&","|"]],w:"Powers of two have one set bit, so n & (n-1) is 0."}],
+"Increment & Decrement":[{s:"Print 1 2 3 using a pre-increment inside the loop.",c:["int i = 0;","while (i < 3)","  cout << @1@ << \" \";"],b:[["++i","i++","i--"]],w:"++i increments first and then prints the new value."},
+{s:"Show the stock before a sale (10) and then after (9).",c:["int stock = 10;","cout << stock@1@;","cout << \" \" << stock;"],b:[["--","++","-1"]],w:"Postfix prints the old value 10 and then reduces stock to 9."},
+{s:"Pre and post forms starting from x = 5.",c:["int x = 5;","int y = @1@;  // y = 6, x = 6","int z = x@2@;  // z = 6, x = 5"],b:[["++x","x++","x--"],["--","++","-1"]],w:"++x gives 6 and keeps x = 6; x-- gives 6 and then makes x = 5."}],
+"User Defined Functions":[{s:"A function that tells whether a number is even.",c:["@1@ isEven(int n) {","  return n % 2 @2@ 0;","}"],b:[["bool","void","even"],["==","=","!="]],w:"It returns true or false (bool) using =="},
+{s:"A price function with a default tax rate of 10%.",c:["float price(float p, float tax @1@ 0.1) {","  return p + p * tax;","}"],b:[["=","==",":"]],w:"Default arguments use = in the parameter list."},
+{s:"A function that sums the first n elements of an array.",c:["int sum(int a[], int @1@) {","  int s = 0;","  for (int i = 0; i < n; i++) s += a[i];","  return @2@;","}"],b:[["n","a","s"],["s","n","a"]],w:"Name the size parameter n and return the accumulator s."}],
+"Arrays":[{s:"Find the largest of 5 numbers.",c:["int a[5] = {4, 9, 2, 7, 5};","int max = a[0];","for (int i = 1; i < 5; i++)","  if (a[i] @1@ max) max = @2@;"],b:[[">","<","=="],["a[i]","i","max"]],w:"Replace max when a bigger element appears."},
+{s:"Print an array of size n in reverse.",c:["for (int i = @1@; i >= 0; @2@)","  cout << a[i];"],b:[["n - 1","n","n + 1"],["i--","i++","i = 0"]],w:"Start at the last index n - 1 and move down."},
+{s:"Count the even values in an array.",c:["int c = 0;","for (int i = 0; i < n; i++)","  if (a[i] @1@ 2 == 0) @2@;"],b:[["%","/","&"],["c++","c--","a[i]++"]],w:"a[i] % 2 == 0 is even, so increase the counter."}],
+"2D Arrays":[{s:"Print the main diagonal of a 3 x 3 matrix.",c:["for (int i = 0; i < 3; i++)","  cout << m[@1@][@2@];"],b:[["i","0","2"],["i","1","3"]],w:"The diagonal has equal row and column index."},
+{s:"Add two 2 x 2 matrices into c.",c:["for (int i = 0; i < 2; i++)","  for (int j = 0; j < 2; j++)","    c[i][j] = a[i][j] @1@ b[@2@][j];"],b:[["+","*","-"],["i","j","0"]],w:"Add matching elements: same row i, same column j."},
+{s:"Transpose a 2 x 3 matrix m into t (3 x 2).",c:["for (int i = 0; i < 2; i++)","  for (int j = 0; j < 3; j++)","    t[@1@][@2@] = m[i][j];"],b:[["j","i","0"],["i","j","1"]],w:"Transpose swaps row and column indexes."}],
+"C-Strings":[{s:"Copy a string character by character.",c:["char s[] = \"hi\", d[3];","int i;","for (i = 0; s[i] != '\\0'; i++)","  d[i] = s[i];","d[@1@] = '\\0';"],b:[["i","0","3"]],w:"After the loop i = 2, so the terminator goes at d[i]."},
+{s:"Count the letter a in a word.",c:["char w[] = \"banana\"; int c = 0;","for (int i = 0; w[i] != '\\0'; i++)","  if (w[i] @1@ @2@) c++;"],b:[["==","=","!="],["'a'","\"a\"","a"]],w:"Compare a char with == against a char constant 'a'."},
+{s:"Convert lowercase letters to uppercase.",c:["for (int i = 0; s[i]; i++)","  if (s[i] >= 'a' && s[i] <= 'z')","    s[i] = s[i] @1@ 32;"],b:[["-","+","*"]],w:"Uppercase ASCII codes are 32 less than lowercase."}],
+"String Functions":[{s:"Check whether two passwords are equal.",c:["if (@1@(p1, p2) == 0)","  cout << \"Match\";"],b:[["strcmp","strcpy","strcat"]],w:"strcmp returns 0 for equal strings."},
+{s:"Copy a name into an array and print its length.",c:["char n[20];","@1@(n, \"Kiran\");","cout << @2@(n);"],b:[["strcpy","strcat","strcmp"],["strlen","sizeof","strcmp"]],w:"strcpy copies; strlen gives the 5 characters."},
+{s:"Copy at most 5 characters into an array of size 6.",c:["char d[6];","@1@(d, src, 5);","d[5] = '\\0';"],b:[["strncpy","strcpy","strcat"]],w:"strncpy limits how many characters are copied."}],
+"std::string":[{s:"Join first and last name with a space.",c:["string f = \"Anu\", l = \"Rao\";","string full = f @1@ \" \" @1@ l;"],b:[["+","&","*"]],w:"std::string joins with +."},
+{s:"Check for a palindrome by reversing a copy.",c:["string w = \"level\";","string r = w;","@1@(r.begin(), r.end());","if (w == r) cout << \"Palindrome\";"],b:[["reverse","sort","find"]],w:"std::reverse reverses the range in place."},
+{s:"Read a full line with spaces and print how many characters it has.",c:["string line;","@1@(cin, line);","cout << line.@2@();"],b:[["getline","getchar","cin.get"],["length","empty","clear"]],w:"getline reads a whole line; length() counts characters."}],
+"Structures":[{s:"Store a student's marks and print them.",c:["struct Stu { int roll; int marks; };","Stu s;","s@1@marks = 90;","cout << s@1@marks;"],b:[[".","->","::"]],w:"A normal struct variable uses the dot operator."},
+{s:"Print the second student's roll from an array of structures.",c:["Stu a[3];","a[1].roll = 5;","cout << a[@1@]@2@roll;"],b:[["1","2","0"],[".","->","::"]],w:"The second element has index 1, and a[1] is a struct, so use the dot."},
+{s:"A function adds bonus marks to the caller's structure.",c:["void bonus(Stu @1@ s) {","  s.marks += 5;","}","bonus(@2@);"],b:[["&","*","&&"],["x","&x","*x"]],w:"Pass by reference (&) so the caller's x changes."}],
+"Pointers":[{s:"Print array elements using pointer arithmetic.",c:["int a[3] = {1,2,3}; int *p = a;","for (int i = 0; i < 3; i++)","  cout << *(p @1@ i);"],b:[["+","*","-"]],w:"p + i points to the i-th element."},
+{s:"Create one int on the heap, set it to 5 and free it.",c:["int *p = @1@ int;","*p = 5;","@2@ p;"],b:[["new","malloc","alloc"],["delete","free","remove"]],w:"new pairs with delete."},
+{s:"Avoid dereferencing a null pointer.",c:["int *p = nullptr;","if (p @1@ nullptr)","  cout << *p;"],b:[["!=","==","="]],w:"Only dereference when the pointer is not null."}],
+"References":[{s:"Create an alias for an int.",c:["int a = 5;","int @1@ r = a;","r = 9; // a is now @2@"],b:[["&","*","&&"],["9","5","0"]],w:"& declares a reference, so changing r changes a."},
+{s:"Swap two ints using references.",c:["void swapv(int @1@ x, int @1@ y) {","  int t = x; x = y; y = t;","}","swapv(@2@);"],b:[["&","*","#"],["a, b","&a, &b","*a, *b"]],w:"Reference parameters need no special syntax at the call."},
+{s:"Pass a big string without copying and without modifying it.",c:["void show(@1@ string& s) {","  cout << s;","}"],b:[["const","static","extern"]],w:"const T& avoids a copy and forbids changes."}],
+"Constructors & RAII":[{s:"Initialise a member in the constructor's initialiser list.",c:["class P {","  int x;","public:","  P(int v) : x(@1@) {}","};"],b:[["v","x","int"]],w:"Initialise x from the parameter v."},
+{s:"Count live objects: constructor adds, destructor subtracts.",c:["class C { public: static int n;","  C() { n@1@; }","  ~C() { n@2@; }","};"],b:[["++","--","+"],["--","++","-"]],w:"Increment on creation, decrement on destruction."},
+{s:"Write the copy constructor header.",c:["class A {","public:","  A(@1@ A& o) { /* copy */ }","};"],b:[["const","static","friend"]],w:"A copy constructor takes const A&."}],
+"Polymorphism":[{s:"Make Shape an abstract class.",c:["struct Shape {","  virtual double area() @1@;","};"],b:[["= 0","{ }","= null"]],w:"A pure virtual function ends with = 0."},
+{s:"Safe deletion through a base-class pointer.",c:["struct B { @1@ ~B() {} };","B *p = new D;","@2@ p;"],b:[["virtual","static","explicit"],["delete","free","remove"]],w:"A virtual destructor makes delete call the derived destructor too."},
+{s:"The derived class also calls the base version.",c:["struct D : B {","  void show() { B@1@show(); cout << \"D\"; }","};"],b:[["::",".","->"]],w:"Use the scope operator B::show()."}],
+"Templates":[{s:"A template function returning the square of any type.",c:["template<typename T>","T sq(T x) { return x * @1@; }"],b:[["x","2","T"]],w:"Square means x * x."},
+{s:"A class template for a Box holding any type.",c:["@1@ <class T>","class Box { T v; public: Box(T x) : v(x) {} };","Box<@2@> b(3);"],b:[["template","typename","generic"],["int","T","3"]],w:"Start with template and instantiate with a real type such as int."},
+{s:"Explicitly choose T when calling maxOf.",c:["template<class T> T maxOf(T a, T b);","cout << maxOf<@1@>(3, 4.5);"],b:[["double","string","void"]],w:"T = double lets both 3 and 4.5 be used."}],
+"STL vector":[{s:"Print every element using a range-based for.",c:["vector<int> v = {1,2,3};","for (int @1@ : v)","  cout << @1@;"],b:[["x","v","int"]],w:"Name a loop variable (x) that takes each element."},
+{s:"Insert 99 at the front and remove the last element.",c:["v.insert(v.@1@(), 99);","v.@2@();"],b:[["begin","end","front"],["pop_back","pop_front","erase"]],w:"begin() is the front position; vector has pop_back, not pop_front."},
+{s:"Sort in descending order.",c:["sort(v.begin(), v.end(), @1@<int>());"],b:[["greater","less","plus"]],w:"greater<int> orders from large to small."}],
+"Exceptions":[{s:"Catch any other exception type as a fallback.",c:["try { throw 3.5; }","catch (int e) { cout << \"int\"; }","catch (@1@) { cout << \"other\"; }"],b:[["...","*","void"]],w:"catch (...) matches anything."},
+{s:"Catch by const reference and throw a standard exception.",c:["try { throw @2@(\"bad\"); }","catch (const exception@1@ e) {","  cout << e.what();","}"],b:[["&","*","#"],["runtime_error","error","exception_msg"]],w:"Throw runtime_error and catch by reference."},
+{s:"Log and then pass the exception on to the caller.",c:["catch (...) {","  cout << \"log\";","  @1@;","}"],b:[["throw","catch","finally"]],w:"A bare throw; rethrows the current exception."}]
+};
+Object.keys(FB).forEach(k=>{FB[k]=[FB[k]].concat((FB2[k]||[]).map(f=>({...f,b:f.b.map(x=>[x,0])})))});
+Object.values(FB).flat().forEach(f=>f.b.forEach(B=>{const ans=B[0][B[1]];const a=B[0];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}B[1]=a.indexOf(ans)}));
+const BG={
+"Simple Statements":[["int a = 7, b = 2;\ncout << a / b << a % b;","31","7/2 is 3 and 7%2 is 1, printed side by side."],["float f = 5 / 2;\ncout << f;","2","5 / 2 is integer division (2) before it becomes float."],["int a = 10, b = 3;\ndouble d = (double)a / b;\ncout << (int)(d * 10);","33","d is 3.33..., times 10 is 33.3..., and the cast to int drops .3"]],
+"1. Simple if":[["int x = 1;\nif (x > 2)\n  cout << 'A';\n  cout << 'B';","B","Only the first statement belongs to the if; B always prints."],["int a = 5;\nif (a > 3) if (a > 4) cout << 'X';\ncout << 'Y';","XY","Both conditions are true, then Y always prints."],["int x = 0;\nif (x == 0) cout << 'Z';\nif (x = 5) cout << 'W';\ncout << x;","ZW5","x = 5 assigns (true), so W prints and x is 5."]],
+"2. if-else":[["int n = 5;\nif (n > 3) cout << 'A'; else cout << 'B';\ncout << 'C';","AC","The if branch runs, then C always runs."],["int a=3, b=3;\nif (a > b) cout << 1;\nelse if (a == b) cout << 2;\nelse cout << 3;","2","a > b is false, a == b is true."],["int x = 4;\nif (x % 2) cout << 'O'; else cout << 'E';\ncout << x % 2;","E0","4 % 2 is 0 (false), so else prints E, then 0."]],
+"3. else-if Ladder":[["int m = 55;\nif (m >= 50) cout << 'P';\nelse if (m >= 40) cout << 'Q';\nelse cout << 'R';","P","The first true condition wins."],["int m = 55;\nif (m >= 50) cout << 'P';\nif (m >= 40) cout << 'Q';\nelse cout << 'R';","PQ","Two separate ifs: both P and Q print."],["int a = 2;\nif (a == 1) cout << 'A';\nelse if (a == 2) cout << 'B';\nelse if (a >= 2) cout << 'C';\nelse cout << 'D';","B","B matches first; later branches are skipped."]],
+"4. Nested if":[["int a=1, b=0;\nif (a) { if (b) cout << 'X'; else cout << 'Y'; }\ncout << 'Z';","YZ","Outer true, inner false gives Y, then Z."],["int a=0, b=1;\nif (a) { if (b) cout << 'X'; else cout << 'Y'; }\nelse cout << 'W';","W","The outer condition is false, so only the outer else runs."],["int x = 7;\nif (x > 5) { if (x > 10) cout << 'A'; else if (x > 6) cout << 'B'; else cout << 'C'; }","B","7 > 5, not > 10, but > 6."]],
+"5. switch":[["int x = 1;\nswitch (x) { case 1: cout << 'A'; case 2: cout << 'B'; break; case 3: cout << 'C'; }","AB","No break after case 1, so it falls into case 2."],["int x = 4;\nswitch (x) { case 1: cout << 'A'; break; default: cout << 'D'; case 2: cout << 'B'; }","DB","default runs and falls through into case 2."],["char c = 'b';\nswitch (c) { case 'a': cout << 1; case 'b': cout << 2; case 'c': cout << 3; break; default: cout << 4; }","23","Starts at case 'b' and falls into 'c'."]],
+"6. while Loop":[["int i = 0;\nwhile (i < 3) cout << i++;","012","Postfix prints the old value each time."],["int i = 5;\nwhile (i--) cout << i;","43210","The test uses the old value, the body sees the decremented one."],["int n = 10, c = 0;\nwhile (n > 1) { n /= 2; c++; }\ncout << c;","3","10 → 5 → 2 → 1 takes three halvings."]],
+"7. do-while Loop":[["int i = 5;\ndo { cout << i; } while (i < 3);","5","The body runs once before the first check."],["int i = 0;\ndo { cout << i; i += 2; } while (i < 5);","024","Prints 0, 2, 4; then i = 6 stops it."],["int n = 3;\ndo cout << n; while (--n);","321","--n reaches 0 after printing 1, which ends the loop."]],
+"8. for Loop":[["for (int i = 0; i < 3; i++);\n  cout << 'X';","X","The stray semicolon is the loop body; X prints once."],["int s = 0;\nfor (int i = 1; i <= 5; i += 2) s += i;\ncout << s;","9","1 + 3 + 5."],["for (int i = 0; i < 3; i++)\n  for (int j = 0; j < i; j++)\n    cout << '*';","***","Inner loop runs 0, 1 and 2 times."]],
+"Operators":[["cout << 7/2 << ' ' << 7%2 << ' ' << 7/2.0;","3 1 3.5","Integer division, remainder, then real division."],["int a=5, b=3;\ncout << (a>b && b>5) << (a>b || b>5);","01","AND is false (0), OR is true (1)."],["cout << (6&3) << (6|3) << (6^3) << (1<<3);","2758","110&011=2, |=7, ^=5, and 1<<3=8."]],
+"Increment & Decrement":[["int a = 5;\ncout << a++;\ncout << a;","56","Postfix prints 5, then a is 6."],["int a = 5;\ncout << ++a;\ncout << a--;\ncout << a;","665","++a prints 6; a-- prints 6 then a is 5."],["int x = 2, y = 3;\nint z = x++ * ++y;\ncout << x << y << z;","348","2 * 4 = 8, x becomes 3, y is 4."]],
+"User Defined Functions":[["int f(int x) { return x * 2; }\ncout << f(f(3));","12","f(3) = 6 and f(6) = 12."],["void g(int a) { a = 10; }\nint n = 1; g(n);\ncout << n;","1","Call by value leaves n unchanged."],["int f(int n) { if (n <= 1) return 1; return n + f(n - 1); }\ncout << f(4);","10","4 + 3 + 2 + 1."]],
+"Arrays":[["int a[] = {1, 2, 3};\ncout << a[0] + a[2];","4","1 + 3."],["int a[5] = {1, 2};\ncout << a[1] << a[2] << a[4];","200","Unlisted elements are initialised to 0."],["int a[] = {5, 3, 8};\nint m = a[0];\nfor (int i = 1; i < 3; i++) if (a[i] < m) m = a[i];\ncout << m;","3","This finds the minimum."]],
+"2D Arrays":[["int m[2][2] = {{1,2},{3,4}};\ncout << m[0][1] + m[1][0];","5","2 + 3."],["int m[2][3] = {{1,2,3},{4,5,6}};\nint s = 0;\nfor (int j = 0; j < 3; j++) s += m[1][j];\ncout << s;","15","Sum of row 1: 4 + 5 + 6."],["int m[3][3] = {{1,2,3},{4,5,6},{7,8,9}};\nint s = 0;\nfor (int i = 0; i < 3; i++) s += m[i][2-i];\ncout << s;","15","Anti-diagonal: 3 + 5 + 7."]],
+"C-Strings":[["char s[] = \"abc\";\ncout << s[1] << sizeof(s);","b4","s[1] is b; sizeof counts the null terminator."],["char s[] = \"hello\";\ns[2] = '\\0';\ncout << s;","he","Printing stops at the new terminator."],["char s[] = \"code\";\nint n = 0;\nwhile (s[n]) n++;\ncout << n;","4","The loop stops at \\0 (value 0)."]],
+"String Functions":[["cout << strlen(\"hello\");","5","strlen excludes the terminator."],["char a[20] = \"Hi\";\nstrcat(a, \" All\");\ncout << strlen(a);","6","\"Hi All\" has 6 characters."],["cout << (strcmp(\"ab\",\"ab\")==0) << (strcmp(\"a\",\"b\")<0);","11","Equal gives 0; 'a' < 'b' gives a negative value."]],
+"std::string":[["string s = \"abc\";\ns += \"de\";\ncout << s.size() << s[3];","5d","\"abcde\" has 5 characters; index 3 is d."],["string s = \"hello\";\ncout << s.substr(1, 3);","ell","Start at index 1, length 3."],["string a = \"ab\", b = \"ab\";\ncout << (a == b) << (a < \"b\");","11","Equal strings; \"ab\" sorts before \"b\"."]],
+"Structures":[["struct P { int x, y; };\nP p = {3, 4};\ncout << p.x * p.y;","12","3 x 4."],["struct P { int x; };\nP a = {1}; P b = a; b.x = 9;\ncout << a.x << b.x;","19","b is a copy, so a is unchanged."],["struct P { int x; };\nP a = {1}; P *q = &a;\nq->x++;\ncout << a.x;","2","q points to a, so a.x changes."]],
+"Pointers":[["int x = 5; int *p = &x;\n*p += 3;\ncout << x;","8","*p is x itself."],["int a[] = {10, 20, 30};\nint *p = a;\ncout << *(p + 1) << *(a + 2);","2030","a[1] and a[2]."],["int a[] = {1, 2, 3};\nint *p = a;\np++;\n(*p)++;\ncout << a[0] << a[1];","13","p moves to a[1], then its value becomes 3."]],
+"References":[["int a = 1; int &r = a;\nr++;\ncout << a;","2","r is another name for a."],["void f(int &x) { x += 5; }\nint n = 1; f(n); f(n);\ncout << n;","11","1 + 5 + 5."],["int a = 1, b = 2; int &r = a;\nr = b; b = 7;\ncout << a << r;","22","r = b copied 2 into a; later changes to b do not matter."]],
+"Constructors & RAII":[["struct A { A(){cout<<'c';} ~A(){cout<<'d';} };\nint main(){ A x; cout << 'm'; }","cmd","Construct, body, then destroy at scope end."],["struct A { A(){cout<<'1';} ~A(){cout<<'2';} };\nint main(){ A a; { A b; } }","1122","b dies at the inner brace, a at the end."],["struct A { int v; A(int x):v(x){} };\nint main(){ A a(3); A b = a; b.v = 8; cout << a.v << b.v; }","38","The copy is independent."]],
+"Polymorphism":[["struct B { virtual void f(){cout<<'B';} };\nstruct D : B { void f(){cout<<'D';} };\nB* p = new D; p->f();","D","virtual dispatch uses the real object type."],["struct B { void f(){cout<<'B';} };\nstruct D : B { void f(){cout<<'D';} };\nB* p = new D; p->f();","B","Without virtual, the pointer type decides."],["struct B { void f(){cout<<'B';} };\nstruct D : B { void f(){cout<<'D';} };\nD d; B* p = &d; p->f(); d.f();","BD","Through the base pointer B runs; on d itself D runs."]],
+"Templates":[["template<class T> T add(T a, T b){ return a+b; }\ncout << add(2,3) << add(1.5,2.5);","54","Ints give 5 and doubles give 4."],["template<class T> T mx(T a, T b){ return a>b?a:b; }\ncout << mx('a','b');","b","T is char and 'b' > 'a'."],["template<class T> void f(T x){ cout << sizeof(x); }\nf(1); f(1.0);","48","Typical sizes: int 4 bytes, double 8 bytes."]],
+"STL vector":[["vector<int> v = {1,2,3};\nv.push_back(4);\ncout << v.size() << v[3];","44","Size becomes 4 and v[3] is 4."],["vector<int> v(3, 5);\nv[1] = 9;\nint s = 0; for (int x : v) s += x;\ncout << s;","19","5 + 9 + 5."],["vector<int> v = {4, 1, 3};\nsort(v.begin(), v.end());\ncout << v[0] << v.back();","14","Sorted is 1 3 4."]],
+"Exceptions":[["try { cout << 'A'; throw 1; cout << 'B'; }\ncatch (int) { cout << 'C'; }\ncout << 'D';","ACD","B is skipped by the throw."],["try { throw 2.5; }\ncatch (int) { cout << 'I'; }\ncatch (double) { cout << 'D'; }","D","2.5 is a double, so the double handler runs."],["void f(){ throw 1; }\nint main(){ try { f(); cout << 'X'; } catch (...) { cout << 'Y'; } cout << 'Z'; }","YZ","X is skipped; catch (...) prints Y; Z follows."]],
+"Brain Gym 1":[["int a = 2, b = 3;\nint c = a++ + b--;\ncout << c << a << b;","532","2 + 3 = 5, then a = 3 and b = 2."],["int a = 4;\nint b = --a * 2;\ncout << a << b;","36","a becomes 3 first, so b = 6."],["int i = 3, j = 0;\nj = i-- - 1;\ncout << i << j;","22","i-- gives 3, so j = 2, and i is 2."]],
+"Brain Gym 2":[["int i = 0;\nwhile (i++ < 2);\ncout << i;","3","The final failed check still increments i."],["int i = 0, s = 0;\nwhile (++i < 4) s += i;\ncout << s << i;","64","s = 1 + 2 + 3 = 6; the last check leaves i at 4."],["int c = 0;\nfor (int i = 10; i > 0; i /= 2) c++;\ncout << c;","4","i = 10, 5, 2, 1."]],
+"Brain Gym 3":[["int a[] = {5, 6, 7};\nint *p = a;\ncout << *p++;\ncout << *p;","56","Reads 5, then p moves to 6."],["int a[] = {5, 6, 7};\nint *p = a;\ncout << *++p;\ncout << *p;","66","p moves first, then reads."],["int a[] = {5, 6, 7};\nint *p = a + 1;\n++*p;\ncout << a[1] << *p;","77","++*p increments the pointed value."]]
+};
+Object.assign(P,{
+"Recursion":[["Which part stops a recursion?","Base case","Parameter","Header",0,"The base case ends the calls."],["int f(int n){ return n==0 ? 0 : n + f(n-1); } What is f(3)?","6","3","0",0,"3 + 2 + 1 + 0."],["int f(int n){ if(n<=1) return n; return f(n-1)+f(n-2); } What is f(5)?","5","8","3",0,"Fibonacci: 0,1,1,2,3,5."]],
+"Classes & Objects":[["Which operator calls a member function on an object?",".","::","&",0,"The dot operator."],["class C{ int v; public: C(int x):v(x){} int get(){return v;} }; C c(4); cout<<c.get(); Output?","4","0","Error",0,"The constructor stores 4."],["class C{ public: int v; C(){v=1;} void inc(){v++;} }; C a,b; a.inc(); a.inc(); b.inc(); cout<<a.v<<b.v; Output?","32","33","22",0,"Each object has its own v: a = 3, b = 2."]],
+"Inheritance":[["class Dog : public Animal makes Dog a:","Derived class","Base class","Template",0,"Dog derives from Animal."],["Constructor order for D derived from B?","B then D","D then B","Random",0,"Base first."],["class A{public:A(){cout<<'a';}~A(){cout<<'x';}}; class B:public A{public:B(){cout<<'b';}~B(){cout<<'y';}}; B o; Output?","abyx","abxy","bayx",0,"Construct a, b; destroy y (B) then x (A)."]]
+});
+Object.assign(BG,{
+"Recursion":[["int f(int n){ if(n==0) return 0; cout<<n; return f(n-1); }\nf(3);","321","Prints before recursing."],["int f(int n){ if(n==0) return 0; f(n-1); cout<<n; return 0; }\nf(3);","123","Prints after the inner call returns."],["int g(int n){ return n<=1 ? 1 : 2*g(n-1); }\ncout<<g(4);","8","2 x 2 x 2 x 1."]],
+"Classes & Objects":[["class C{ public: int v=0; void add(){ v+=2; } };\nC a; a.add(); a.add();\ncout<<a.v;","4","Two calls add 2 each."],["class C{ public: int v=1; };\nC a, b=a;\nb.v=5;\ncout<<a.v<<b.v;","15","b is a copy."],["class C{ int v; public: C(int x):v(x){} C& inc(){ v++; return *this; } int get(){return v;} };\nC c(1); c.inc().inc();\ncout<<c.get();","3","inc returns *this so calls chain on one object."]],
+"Inheritance":[["class A{public:A(){cout<<'A';}};\nclass B:public A{public:B(){cout<<'B';}};\nB b;","AB","Base first."],["class A{public:void f(){cout<<'A';}};\nclass B:public A{};\nB b; b.f();","A","f is inherited."],["class A{public:~A(){cout<<'a';}};\nclass B:public A{public:~B(){cout<<'b';}};\n{ B x; }","ba","Derived destroyed first, then base."]]
+});
+Object.assign(TC,{
+"Recursion":[["fact(n)","n = 5","120","5*4*3*2*1"],["sum(n) = n + sum(n-1), sum(0) = 0","n = 4","10","4+3+2+1"]],
+"Classes & Objects":[["Account a(100); a.deposit(50); cout << a.get();","none","150","100 + 50"],["a.deposit(0); cout << a.get();","a starts at 100","100","Adding 0 changes nothing"]],
+"Inheritance":[["Dog d; d.eat();","none","eat","Inherited from Animal"],["Dog d; d.bark();","none","bark","Dog's own method"]]
+});
+const BUGS=[
+["Wrong operator",["int n = 5;","if (n = 5)","  cout << \"Five\";"],1,["if (n == 5)","if (n != 5)","if (n > 5)"],"= assigns; == compares."],
+["Missing break",["switch (d) {","  case 1: cout << \"Mon\";","  case 2: cout << \"Tue\"; break;","}"],1,["case 1: cout << \"Mon\"; break;","case 1: cout << \"Mon\", break;","case 1; cout << \"Mon\";"],"Without break, case 1 falls into case 2."],
+["Off by one",["int a[5] = {1,2,3,4,5};","int s = 0;","for (int i = 0; i <= 5; i++)","  s += a[i];"],2,["for (int i = 0; i < 5; i++)","for (int i = 1; i <= 5; i++)","for (int i = 0; i < 6; i++)"],"Valid indexes are 0 to 4; a[5] is out of bounds."],
+["Loop never ends",["int i = 10;","while (i > 0) {","  cout << i;","  i++;","}"],3,["i--;","i += 0;","i *= 2;"],"i must move toward 0 to end the loop."],
+["Stray semicolon",["for (int i = 0; i < 3; i++);","  cout << \"Hi\";"],0,["for (int i = 0; i < 3; i++)","for (int i = 0; i < 3; i++);;","for (int i = 0, i < 3, i++)"],"The semicolon makes the loop body empty, so Hi prints once."],
+["Comparing C strings",["char a[] = \"hi\", b[] = \"hi\";","if (a == b)","  cout << \"Same\";"],1,["if (strcmp(a, b) == 0)","if (a = b)","if (strlen(a) == b)"],"== compares addresses, not text."],
+["Memory leak",["int *p = new int[3];","p[0] = 1;","cout << p[0];","return 0;"],3,["delete[] p; return 0;","delete p; return 0;","free(p); return 0;"],"Memory from new[] must be freed with delete[]."],
+["Base destructor",["struct B { ~B() {} };","struct D : B { ~D() {} };","B *p = new D;","delete p;"],0,["struct B { virtual ~B() {} };","struct B { ~B() = 0; };","struct B { static ~B() {} };"],"A virtual destructor makes delete call ~D() as well."],
+["Uninitialised reference",["int &r;","r = 5;"],0,["int x = 1; int &r = x;","int &r = 0;","int *r;"],"A reference must be bound to a variable when declared."],
+["No base case",["int fact(int n) {","  return n * fact(n - 1);","}"],1,["if (n <= 1) return 1; return n * fact(n - 1);","return n * fact(n);","return fact(n - 1);"],"Without a base case the recursion never stops."]
+];
+const sv=()=>{try{localStorage.setItem("cl_done",JSON.stringify([...done].map(i=>T[i].n)))}catch(e){}cs()};
+function mixed(){const c=el("div","card");c.append(el("h2","","Mixed Test"),el("p","","10 random questions from all topics. Your score and weak topics appear at the end."));
+const pool=[];Object.keys(P).forEach(k=>P[k].forEach(q=>pool.push([k,q])));
+const qs=pool.sort(()=>Math.random()-.5).slice(0,10);let i=0,sc=0;const miss={};const box=el("div");c.append(box);main.append(c);
+const fin=()=>{let best=sc;try{best=Math.max(sc,+localStorage.getItem("cl_best")||0);localStorage.setItem("cl_best",best)}catch(e){}cs({best});
+box.append(el("h2","",sc+" / "+qs.length),el("p","","Best score on this device: "+best));const w=Object.keys(miss);
+box.append(el("p","",w.length?"Revise these topics: "+w.join(", "):"No weak topics. Excellent!"));
+const r=el("button","opt","Take a new test");r.style.width="auto";r.onclick=()=>{main.innerHTML="";mixed()};box.append(r)};
+const show=()=>{box.innerHTML="";if(i==qs.length){fin();return}const [k,Q]=qs[i];box.append(el("span","tag",(i+1)+" / "+qs.length+" | "+k),el("p","",Q[0]));
+const why=el("div","why");for(let j=1;j<=3;j++){const o=el("button","opt",Q[j]);o.onclick=()=>{const ok=j-1==Q[4];[...box.querySelectorAll(".opt")].forEach((x,n)=>{x.disabled=true;if(n==Q[4])x.classList.add("ok")});if(ok)sc++;else{o.classList.add("no");miss[k]=1;wrong(k)}
+why.textContent=(ok?"Correct. ":"Not quite. ")+Q[5];const cb=el("div","ctl"),nx=el("button","p",i==qs.length-1?"Finish":"Next");nx.onclick=()=>{i++;show()};cb.append(nx);why.append(cb)};box.append(o)}box.append(why)};show()}
+function bugs(){const h=el("div","card");h.append(el("h2","","Spot the Bug"),el("p","","Each program has one mistake. Tap the faulty line, then choose the correct fix."));main.append(h);
+BUGS.forEach((B,n)=>{const c=el("div","card");c.append(el("span","tag","Bug "+(n+1)+": "+B[0]));const cd=el("div","code"),fx=el("div"),msg=el("div","why");let found=false;
+B[1].forEach((l,i)=>{const d=el("div","",l||" ");d.style.cursor="pointer";d.onclick=()=>{if(found)return;if(i==B[2]){found=true;d.classList.add("on");msg.textContent="Right line! Now choose the fix.";
+B[3].map((o,j)=>[o,j]).sort(()=>Math.random()-.5).forEach(([o,j])=>{const b=el("button","opt",o);b.onclick=()=>{[...fx.querySelectorAll(".opt")].forEach(x=>x.disabled=true);if(j==0){b.classList.add("ok");msg.textContent="Correct. "+B[4]}else{b.classList.add("no");msg.textContent="Not quite. Correct fix: "+B[3][0]+". "+B[4]}};fx.append(b)})}else{d.style.background="rgba(180,35,24,.2)";msg.textContent="That line is fine. Look again."}};cd.append(d)});
+c.append(cd,fx,msg);main.append(c)})}
+const q=(t,c,i,f,a,b,w)=>({t,c:c.split("\n"),i,o:[f,a,b],w});
+const SB={
+"Simple Statements":[q("S",`int a = 5\ncout << a;`,0,`int a = 5;`,`int a = 5:`,`int a == 5;`,`Every statement ends with a semicolon.`),q("S",`int x;\ncin << x;`,1,`cin >> x;`,`cin = x;`,`cin >> &x;`,`cin uses the extraction operator >>.`),q("L",`int a = 7, b = 2;\nfloat avg = (a + b) / 2;`,1,`float avg = (a + b) / 2.0;`,`float avg = (a + b) * 2;`,`float avg = a + b / 2;`,`int / int drops the decimal part; use 2.0.`)],
+"1. Simple if":[q("S",`if x > 0\n  cout << "Pos";`,0,`if (x > 0)`,`if x > 0:`,`if [x > 0]`,`The condition must be in parentheses.`),q("S",`if (x > 0) {\n  cout << Pos;\n}`,1,`  cout << "Pos";`,`  cout << 'Pos';`,`  cout << Pos();`,`Text needs double quotes.`),q("L",`// pass if marks are at least 40\nif (marks > 40)\n  cout << "Pass";`,1,`if (marks >= 40)`,`if (marks == 40)`,`if (marks < 40)`,`At least 40 includes 40, so use >=.`)],
+"2. if-else":[q("S",`if (a > b)\n  cout << a;\nelse (a <= b)\n  cout << b;`,2,`else`,`elseif (a <= b)`,`else: (a <= b)`,`else takes no condition.`),q("S",`if (n % 2 == 0)\n  cout << "E";\nelse\n  cout << "O"`,3,`  cout << "O";`,`  cout << "O":`,`  cout << O;`,`Missing semicolon.`),q("L",`if (n % 2 == 1)\n  cout << "Even";\nelse\n  cout << "Odd";`,0,`if (n % 2 == 0)`,`if (n % 2 != 0)`,`if (n / 2 == 0)`,`Even numbers leave remainder 0.`)],
+"3. else-if Ladder":[q("S",`if (m >= 90) cout << "A";\nelseif (m >= 60) cout << "B";`,1,`else if (m >= 60) cout << "B";`,`else-if (m >= 60) cout << "B";`,`elif (m >= 60) cout << "B";`,`It is two words: else if.`),q("S",`if (m >= 90) cout << "A"\nelse cout << "B";`,0,`if (m >= 90) cout << "A";`,`if (m >= 90) cout << "A",`,`if (m >= 90): cout << "A";`,`The statement before else needs a semicolon.`),q("L",`// 60 or more is B\nif (m >= 90) cout << "A";\nelse if (m > 60) cout << "B";\nelse cout << "F";`,2,`else if (m >= 60) cout << "B";`,`else if (m == 60) cout << "B";`,`else if (m < 60) cout << "B";`,`m = 60 should still be B, so use >=.`)],
+"4. Nested if":[q("S",`if (a > 0) {\n  if (b > 0)\n    cout << "Both";\n}}`,3,`}`,`}}}`,`{`,`One closing brace too many.`),q("S",`if (a > b) {\n  if (a > c) cout << a;\n  else cout << c;\n} else {\n  if (b > c) cout << b\n  else cout << c;\n}`,4,`  if (b > c) cout << b;`,`  if (b > c) cout << b:`,`  if (b > c) { cout << b`,`Missing semicolon before else.`),q("L",`if (age >= 18)\n  if (hasId)\n    cout << "Enter";\nelse\n  cout << "Too young";`,3,`Put braces around the inner if`,`Delete the else`,`Change else to else if`,`else pairs with the nearest if, so "Too young" prints for adults without ID.`)],
+"5. switch":[q("S",`switch (d) {\n  case 1 cout << "Mon"; break;\n}`,1,`  case 1: cout << "Mon"; break;`,`  case 1; cout << "Mon"; break;`,`  case (1) cout << "Mon"; break;`,`A case label ends with a colon.`),q("S",`float f = 2;\nswitch (f) {\n  case 2: cout << "Two";\n}`,1,`switch ((int)f) {`,`switch (f.int) {`,`switch (f > 0) {`,`switch needs an integer-type expression, not float.`),q("L",`switch (m) {\n  case 1: cout << "Add";\n  case 2: cout << "Sub"; break;\n}`,1,`  case 1: cout << "Add"; break;`,`  case 1: cout << "Add"; continue;`,`  case 1: cout << "Add"; stop;`,`Without break, case 1 falls through into case 2.`)],
+"6. while Loop":[q("S",`int i = 0;\nwhile (i < 3) {\n  cout << i\n  i++;\n}`,2,`  cout << i;`,`  cout << i:`,`  cout << i,`,`Missing semicolon.`),q("L",`int i = 1;\nwhile (i <= 3) {\n  cout << i;\n}`,2,`  cout << i; i++;`,`  cout << i; i--;`,`  cout << i; i = 1;`,`i never changes, so the loop never ends.`),q("L",`// add 1 to 5\nint i = 1, s = 0;\nwhile (i < 5) {\n  s += i; i++;\n}`,2,`while (i <= 5) {`,`while (i == 5) {`,`while (i > 5) {`,`With i < 5 the value 5 is skipped.`)],
+"7. do-while Loop":[q("S",`do {\n  cout << i;\n  i++;\n} while (i < 3)`,3,`} while (i < 3);`,`} while (i < 3):`,`} while i < 3;`,`do-while ends with a semicolon.`),q("L",`// count down 3 2 1\nint i = 3;\ndo {\n  cout << i;\n  i++;\n} while (i > 0);`,4,`  i--;`,`  i += 2;`,`  i = 3;`,`i must decrease; otherwise the loop never ends.`),q("L",`// read until the user enters a positive number\nint n;\ndo {\n  cin >> n;\n} while (n > 0);`,4,`} while (n <= 0);`,`} while (n == 0);`,`} while (n < 0);`,`Repeat while the input is NOT positive (n <= 0).`)],
+"8. for Loop":[q("S",`for (int i = 0, i < 3, i++)\n  cout << i;`,0,`for (int i = 0; i < 3; i++)`,`for (int i = 0: i < 3: i++)`,`for (int i = 0; i < 3, i++)`,`for uses semicolons between its three parts.`),q("L",`for (int i = 1; i <= 5; i++);\n  cout << i;`,0,`for (int i = 1; i <= 5; i++)`,`for (int i = 1; i <= 5; i--)`,`for (int i = 1; i <= 5; i++);;`,`The stray semicolon is an empty loop body.`),q("L",`int a[4] = {1,2,3,4}; int s = 0;\nfor (int i = 0; i <= 4; i++)\n  s += a[i];`,1,`for (int i = 0; i < 4; i++)`,`for (int i = 1; i <= 4; i++)`,`for (int i = 0; i < 5; i++)`,`a[4] is out of bounds; indexes are 0 to 3.`)],
+"Operators":[q("S",`int x = 5;\nint y = x +* 2;`,1,`int y = x * 2;`,`int y = x ** 2;`,`int y = x x 2;`,`+* is not an operator, and C++ has no ** either.`),q("L",`// average of a and b\nint avg = a + b / 2;`,1,`int avg = (a + b) / 2;`,`int avg = a + (b / 2);`,`int avg = a + b * 2;`,`/ binds tighter than +, so brackets are needed.`),q("L",`// x between 5 and 10\nif (x > 5 || x < 10)\n  cout << "Between";`,1,`if (x > 5 && x < 10)`,`if (x > 5 & x > 10)`,`if (x > 5 ! x < 10)`,`Both conditions must hold, so use &&.`)],
+"Increment & Decrement":[q("S",`int a = 5;\nint b = a+++;`,1,`int b = a++;`,`int b = ++a++;`,`int b = a+;`,`a+++ is not a valid expression.`),q("L",`// show 1, then increase n\nint n = 1;\ncout << ++n;`,2,`cout << n++;`,`cout << --n;`,`cout << n + 1;`,`Postfix prints the old value first.`),q("L",`// countdown 3 2 1\nint i = 3;\nwhile (i > 0)\n  cout << i++;`,3,`  cout << i--;`,`  cout << ++i;`,`  cout << i;`,`Use postfix decrement to print and then reduce.`)],
+"User Defined Functions":[q("S",`int add(int a, int b) {\n  a + b;\n}`,1,`  return a + b;`,`  a + b`,`  print a + b;`,`A non-void function must return a value.`),q("S",`void show(int n) {\n  cout << n;\n}\nint r = show(5);`,3,`show(5);`,`int r = show;`,`show(int 5);`,`A void function gives back no value to store.`),q("L",`// make n become 2\nvoid inc(int x) { x++; }\nint n = 1;\ninc(n);`,1,`void inc(int &x) { x++; }`,`void inc(int x) { x += 0; }`,`void inc(int *x) { x++; }`,`Call by value changes only a copy; use a reference.`)],
+"Recursion":[q("S",`int f(int n) {\n  if (n == 0) return 1\n  return n * f(n - 1);\n}`,1,`  if (n == 0) return 1;`,`  if (n == 0) return 1:`,`  if (n == 0) return;`,`Missing semicolon.`),q("L",`int sum(int n) {\n  if (n == 0) return 0;\n  return n + sum(n);\n}`,2,`  return n + sum(n - 1);`,`  return n + sum(n + 1);`,`  return sum(n) - n;`,`The argument must shrink toward the base case.`),q("L",`// f(0) must also stop\nint f(int n) {\n  if (n == 1) return 1;\n  return n * f(n - 1);\n}`,2,`  if (n <= 1) return 1;`,`  if (n >= 1) return 1;`,`  if (n == 2) return 1;`,`f(0) skips n == 1 and recurses forever; use n <= 1.`)],
+"Arrays":[q("S",`int a[3] = {1, 2, 3, 4};`,0,`int a[4] = {1, 2, 3, 4};`,`int a(3) = {1, 2, 3, 4};`,`int a[3] = {1, 2, 3, 4,};`,`Four values do not fit in an array of size 3.`),q("S",`int a[3] = {1, 2, 3};\ncout << a(1);`,1,`cout << a[1];`,`cout << a{1};`,`cout << a.1;`,`Array elements use square brackets.`),q("L",`int a[5] = {1,2,3,4,5};\ncout << a[5];`,1,`cout << a[4];`,`cout << a[6];`,`cout << a[-1];`,`The last index is 4; a[5] is out of bounds.`)],
+"2D Arrays":[q("S",`int m[2][2] = {{1,2},{3,4}};\ncout << m[1](0);`,1,`cout << m[1][0];`,`cout << m{1}{0};`,`cout << m[1.0];`,`Each dimension uses its own [ ].`),q("L",`int m[2][3];\nfor (int i = 0; i < 2; i++)\n  for (int j = 0; j <= 3; j++)\n    m[i][j] = 0;`,2,`  for (int j = 0; j < 3; j++)`,`  for (int j = 1; j <= 3; j++)`,`  for (int j = 0; j < 4; j++)`,`Columns are 0 to 2, so j <= 3 goes out of bounds.`),q("L",`// sum of the main diagonal\nint s = 0;\nfor (int i = 0; i < 3; i++)\n  s += m[i][i + 1];`,3,`  s += m[i][i];`,`  s += m[i + 1][i];`,`  s += m[i][2 - i];`,`The main diagonal has equal row and column indexes.`)],
+"C-Strings":[q("S",`char s[] = 'Hello';`,0,`char s[] = "Hello";`,`char s[] = Hello;`,`char s = "Hello";`,`Strings use double quotes; single quotes are for one char.`),q("S",`char s[5];\ns = "abc";`,1,`strcpy(s, "abc");`,`s[] = "abc";`,`s := "abc";`,`An array cannot be assigned; copy with strcpy.`),q("L",`char s[5] = "Hello";`,0,`char s[6] = "Hello";`,`char s[4] = "Hello";`,`char s[5] = "Hello\\0";`,`Five letters need 6 bytes including the terminator.`)],
+"String Functions":[q("S",`char a[10];\nstrcpy(a);`,1,`strcpy(a, "Hi");`,`strcpy("Hi");`,`strcpy(a = "Hi");`,`strcpy needs a destination and a source.`),q("L",`char a[3] = "Hi";\nstrcat(a, " there");`,0,`char a[20] = "Hi";`,`char a[5] = "Hi!";`,`char a[2] = "Hi";`,`The destination must be big enough for the joined text.`),q("L",`// are the strings equal?\nif (strcmp(a, b))\n  cout << "Equal";`,1,`if (strcmp(a, b) == 0)`,`if (strcmp(a, b) == 1)`,`if (!strcmp(a, b) == 0)`,`strcmp returns 0 when strings are equal.`)],
+"std::string":[q("S",`string s = "abc";\ncout << s.length;`,1,`cout << s.length();`,`cout << length(s);`,`cout << s->length;`,`length is a function, so it needs ().`),q("S",`string s;\ncin >> s\ncout << s;`,1,`cin >> s;`,`cin << s;`,`cin >> s:`,`Missing semicolon.`),q("L",`string s = "hello";\nif (s.find("z"))\n  cout << "Found";`,1,`if (s.find("z") != string::npos)`,`if (s.find("z") == 0)`,`if (s.find("z") > 0)`,`find returns npos (non-zero) when absent, so the if is true.`)],
+"Structures":[q("S",`struct P { int x; int y; }\nP p;`,0,`struct P { int x; int y; };`,`struct P { int x; int y; },`,`struct P { int x, y }`,`A struct definition ends with a semicolon.`),q("S",`P a = {1, 2};\nP *q = &a;\ncout << q.x;`,2,`cout << q->x;`,`cout << q::x;`,`cout << *q->x;`,`Use -> with a pointer.`),q("L",`// make a.x become 9\nstruct P { int x; };\nvoid set(P p) { p.x = 9; }\nP a = {1}; set(a);`,2,`void set(P &p) { p.x = 9; }`,`void set(P p) { p.x == 9; }`,`void set(P *p) { p.x = 9; }`,`Passing by value changes a copy; use a reference.`)],
+"Pointers":[q("S",`int x = 5;\nint *p = x;`,1,`int *p = &x;`,`int *p = *x;`,`int p = &x;`,`A pointer stores an address, so use &x.`),q("L",`int *p;\n*p = 10;`,0,`int x; int *p = &x;`,`int *p = 10;`,`int *p = nullptr;`,`p is uninitialised; point it at a valid variable before using *p.`),q("L",`int *p = new int(5);\ndelete p;\ncout << *p;`,2,`Print before delete, then set p = nullptr`,`Delete p twice`,`Use free(p) instead`,`Using memory after delete is undefined behaviour.`)],
+"References":[q("S",`int a = 1;\nint &r;\nr = a;`,1,`int &r = a;`,`int &r == a;`,`int r& = a;`,`A reference must be initialised when declared.`),q("L",`int a = 1, b = 2;\nint &r = a;\nr = b; // want r to refer to b`,2,`Use a pointer: int *p = &a; p = &b;`,`&r = b;`,`r& = b;`,`References cannot be re-bound; r = b copies b into a.`),q("L",`void swapv(int x, int y) {\n  int t = x; x = y; y = t;\n}`,0,`void swapv(int &x, int &y) {`,`void swapv(int x, int y) const {`,`void swapv(int x&, int y&) {`,`By value swaps only copies; use references.`)],
+"Classes & Objects":[q("S",`class A {\n  int x;\n}\nA a;`,2,`};`,`},`,`}:`,`A class definition ends with a semicolon.`),q("L",`class A { int x;\npublic:\n  A() { x = 0; } };\nA a;\ncout << a.x;`,4,`cout << a.get();  // after adding int get()`,`cout << A::x;`,`cout << a->x;`,`x is private; read it through a public function.`),q("L",`class C { int v; public:\n  void set(int v) { v = v; } };`,1,`  void set(int v) { this->v = v; }`,`  void set(int v) { v == v; }`,`  void set(int v) { this.v = v; }`,`The parameter hides the member, so use this->v.`)],
+"Constructors & RAII":[q("S",`class A {\npublic:\n  void A() { }\n};`,2,`  A() { }`,`  int A() { }`,`  A() = void { }`,`A constructor has no return type, not even void.`),q("L",`class A {\n  A() { }\n};\nA a;`,1,`public:\n  A() { }`,`private: A() { }`,`static A() { }`,`class members are private by default, so A a; cannot construct.`),q("L",`class A { int *p;\npublic:\n  A() { p = new int[5]; }\n  ~A() { }\n};`,3,`  ~A() { delete[] p; }`,`  ~A() { delete p; }`,`  ~A() { free(p); }`,`The destructor must release memory taken with new[].`)],
+"Inheritance":[q("S",`class B extends A {};`,0,`class B : public A {};`,`class B -> A {};`,`class B inherits A {};`,`C++ uses : and an access specifier.`),q("S",`class D : public B {\npublic:\n  D() : B() { }\n}`,3,`};`,`},`,`};;`,`The class definition ends with a semicolon.`),q("L",`class A { public: void f(); };\nclass B : A { };\nB b; b.f();`,1,`class B : public A { };`,`class B :: A { };`,`class B public A { };`,`Inheritance is private by default, so f is not accessible.`)],
+"Polymorphism":[q("S",`struct B { virtual void f() = 0 };`,0,`struct B { virtual void f() = 0; };`,`struct B { virtual void f() = 0, };`,`struct B { virtual void f() == 0; };`,`Missing semicolon after = 0.`),q("L",`struct B { void f(); };\nstruct D : B { void f(); };\n// B *p = new D; p->f() must call D::f`,0,`struct B { virtual void f(); };`,`struct B { static void f(); };`,`struct B { void f() const; };`,`Without virtual, the pointer type decides which f runs.`),q("L",`struct B { virtual void f() {} };\nstruct D : B { void f(int x) override {} };`,1,`struct D : B { void f() override {} };`,`struct D : B { void f(int x) {} };`,`struct D : B { virtual void f(int x) {} };`,`override must match the base signature exactly.`)],
+"Templates":[q("S",`template<typename T>\nT sq(T x) { return x * x }`,1,`T sq(T x) { return x * x; }`,`T sq(T x) { return x * x: }`,`T sq(T x) { return x ** 2; }`,`Missing semicolon after the return expression.`),q("S",`template<T>\nT add(T a, T b) { return a + b; }`,0,`template<typename T>`,`template T`,`template<class>`,`The parameter needs typename or class.`),q("L",`// return the larger value\ntemplate<typename T>\nT mx(T a, T b) { return a > b ? b : a; }`,2,`T mx(T a, T b) { return a > b ? a : b; }`,`T mx(T a, T b) { return a < b ? a : b; }`,`T mx(T a, T b) { return a > b; }`,`The ternary branches are swapped, so it returns the smaller value.`)],
+"STL vector":[q("S",`vector<int> v;\nv.push(5);`,1,`v.push_back(5);`,`v.add(5);`,`v.append(5);`,`The vector member is push_back.`),q("L",`vector<int> v = {1, 2, 3};\ncout << v[3];`,1,`cout << v[2];`,`cout << v[-1];`,`cout << v(3);`,`Valid indexes are 0 to 2.`),q("L",`vector<int> v;\nv[0] = 5;`,1,`v.push_back(5);`,`v[1] = 5;`,`v.size() = 5;`,`An empty vector has no elements; add one with push_back.`)],
+"Exceptions":[q("S",`try {\n  throw 1;\n}\ncout << "x";`,2,`} catch (int e) { }`,`} except (int e) { }`,`} catch { }`,`A try block must be followed by a catch.`),q("L",`try { throw 1; }\ncatch (...) { cout << "any"; }\ncatch (int e) { cout << "int"; }`,1,`Put catch (int e) before catch (...)`,`Change int to double`,`Remove try`,`catch (...) first hides the specific handler.`),q("L",`try { cout << 10 / d; }\ncatch (int e) { cout << "div0"; }`,0,`try { if (d == 0) throw 1; cout << 10 / d; }`,`try { cout << 10 / d; throw 1; }`,`try { throw d; cout << 10 / d; }`,`Division by zero does not throw; check and throw yourself.`)]
+};
+function bugCard(B,tag,tp){const c=el("div","card");c.append(el("span","tag",tag));const cd=el("div","code"),fx=el("div"),msg=el("div","why");let found=false;
+B.c.forEach((l,i)=>{const d=el("div","",l||" ");d.style.cursor="pointer";d.onclick=()=>{if(found)return;if(i==B.i){found=true;d.classList.add("on");msg.textContent="Right line! Now choose the fix.";
+B.o.map((o,j)=>[o,j]).sort(()=>Math.random()-.5).forEach(([o,j])=>{const b=el("button","opt",o);b.onclick=()=>{[...fx.querySelectorAll(".opt")].forEach(x=>x.disabled=true);if(j==0){b.classList.add("ok");msg.textContent="Correct. "+B.w}else{b.classList.add("no");wrong(tp);msg.textContent="Not quite. Correct fix: "+B.o[0]+". "+B.w}};fx.append(b)})}else{d.style.background="rgba(180,35,24,.2)";msg.textContent="That line is fine. Look again."}};cd.append(d)});
+c.append(cd,fx,msg);return c}
+Object.assign(P,{
+"Nested Loops":[["for(i=0;i<2;i++) for(j=0;j<3;j++) cout<<'*'; How many stars?","6","5","2",0,"2 x 3 = 6."],["for(i=1;i<=3;i++){ for(j=1;j<=3;j++) cout<<i*j<<' '; } What is the last number printed?","9","6","3",0,"3 x 3 = 9."],["int c=0; for(i=0;i<4;i++) for(j=i;j<4;j++) c++; cout<<c;","10","16","6",0,"4 + 3 + 2 + 1 = 10."]],
+"break & continue":[["Which statement exits a loop immediately?","break","continue","skip",0,"break ends the loop."],["for(i=1;i<=4;i++){ if(i==3) continue; cout<<i; } Output?","124","12","1234",0,"3 is skipped."],["for(i=0;i<3;i++){ for(j=0;j<3;j++){ if(j==1) break; cout<<i<<j<<' '; } } Output?","00 10 20","00 01 02","0 1 2",0,"The inner break fires at j == 1 each time."]],
+"Data Types & Casting":[["Which type stores true or false?","bool","int","char",0,"bool."],["int a = 'A' + 2; cout << a;","67","A2","65",0,"'A' is 65, so 65 + 2 = 67."],["cout << (5/2) << ' ' << (5/2.0) << ' ' << (int)2.99;","2 2.5 2","2.5 2.5 3","2 2 2",0,"int/int = 2, int/double = 2.5, the cast truncates to 2."]],
+"Function Overloading":[["Overloaded functions must differ in:","Parameters","Return type only","Name",0,"The parameter list."],["void f(int){cout<<'I';} void f(double){cout<<'D';} f(3.5); Output?","D","I","Error",0,"3.5 is a double."],["void f(int){cout<<'I';} void f(double){cout<<'D';} f('a'); Output?","I","D","Error",0,"char is promoted to int."]],
+"Operator Overloading":[["Which keyword is used to overload an operator?","operator","overload","friend only",0,"For example operator+."],["Can :: be overloaded?","No","Yes","Only in classes",0,"Scope resolution cannot be overloaded."],["class V{public:int x;V(int a):x(a){} V operator-(V o){return V(x-o.x);}}; V a(9),b(4); cout<<(a-b).x<<(b-a).x;","5-5","55","50",0,"9-4 = 5 and 4-9 = -5."]],
+"Dynamic Memory":[["Which operator allocates memory in C++?","new","alloc","make",0,"new."],["int *a = new int[3]{1,2,3}; cout << a[2]; delete[] a; Output?","3","2","1",0,"a[2] is 3."],["int *p = new int(4); int *q = p; delete p; Which pointers are dangling?","Both p and q","Only p","Neither",0,"Both hold the freed address."]],
+"File Handling":[["Which header provides file streams?","<fstream>","<iostream>","<cstdio>",0,"fstream."],["Which class writes to a file?","ofstream","ifstream","istream",0,"o stands for output."],["File holds 4 7 9. int x,s=0; while(in>>x) s+=x; cout<<s; Output?","20","16","4",0,"4 + 7 + 9 = 20."]]
+});
+Object.assign(TC,{
+"Nested Loops":[["Triangle of stars with n rows","n = 3","* ** ***","1, 2, 3 stars per row"],["Table row: cout << i*j << ' ';","i = 2, j = 1..3","2 4 6","2x1, 2x2, 2x3"]],
+"break & continue":[["while(cin>>x){ if(x<0) break; s+=x; } cout<<s;","1 2 -1 5","3","Stops at -1"],["if(i%3==0) continue; s+=i;  (i = 1..5)","none","12","1+2+4+5"]],
+"Data Types & Casting":[["cout << (int)d;","d = 7.8","7","Truncation"],["cout << (char)(c + 1);","c = 'a'","b","'a' is 97, so 98 is 'b'"]],
+"Function Overloading":[["area(5)","none","25","area(int)"],["area(3, 4)","none","12","area(int,int)"]],
+"Operator Overloading":[["V c = a + b; cout << c.x;","a = 2, b = 3","5","operator+ adds x"],["V c = a + a; cout << c.x;","a = 4","8","4 + 4"]],
+"Dynamic Memory":[["int *p = new int(7); cout << *p; delete p;","none","7","The heap int holds 7"],["a = new int[3]; a[i] = i*2; cout << a[2];","none","4","a[2] = 2 x 2"]],
+"File Handling":[["while(in >> x) s += x;","file: 4 7 9","20","Reads until end of file"],["getline(in, line); cout << line;","file: Hello C++","Hello C++","Whole first line"]]
+});
+Object.assign(BG,{
+"Nested Loops":[["for(int i=1;i<=3;i++){ for(int j=1;j<=i;j++) cout<<j; cout<<' '; }","1 12 123","Row i prints 1 up to i."],["int c=0;\nfor(int i=0;i<3;i++)\n  for(int j=0;j<2;j++) c++;\ncout<<c;","6","3 x 2."],["for(int i=1;i<=2;i++)\n  for(int j=1;j<=2;j++)\n    cout<<i+j;","2334","i=1: 2,3 and i=2: 3,4."]],
+"break & continue":[["for(int i=1;i<=5;i++){ if(i%2==0) continue; cout<<i; }","135","Even numbers are skipped."],["for(int i=1;i<=5;i++){ cout<<i; if(i==3) break; }","123","break comes after printing 3."],["int c=0;\nfor(int i=0;i<3;i++)\n  for(int j=0;j<3;j++){ if(j==i) break; c++; }\ncout<<c;","3","0 + 1 + 2 passes."]],
+"Data Types & Casting":[["cout << 7/2 << 7/2.0 << (double)7/2;","33.53.5","Integer division, then two real divisions."],["char c = 'a';\nc++;\ncout << c;","b","Next ASCII code."],["int x = 3.99;\ncout << x;","3","Conversion to int truncates."]],
+"Function Overloading":[["void p(int x){cout<<1;} void p(int x,int y){cout<<2;}\np(5); p(1,2);","12","Chosen by argument count."],["void p(int){cout<<'i';} void p(double){cout<<'d';}\np(2); p(2.0);","id","Exact type match."],["void p(int){cout<<'i';} void p(double){cout<<'d';}\np('A'); p(1.5f);","id","char promotes to int; float promotes to double."]],
+"Operator Overloading":[["struct V{int x; V operator+(V o){return V{x+o.x};}};\nV a{1}, b{2}, c{3};\ncout << (a+b+c).x;","6","Evaluated left to right."],["struct V{int x; bool operator==(V o){return x==o.x;}};\nV a{1}, b{1};\ncout << (a==b);","1","Equal x gives true."],["struct V{int x; V& operator++(){ ++x; return *this; }};\nV a{5}; ++a; ++a;\ncout << a.x;","7","Each ++ adds 1."]],
+"Dynamic Memory":[["int *p = new int(3);\n*p += 2;\ncout << *p;\ndelete p;","5","The heap value changes."],["int *a = new int[3]{1,2,3};\nint s = 0;\nfor(int i=0;i<3;i++) s += a[i];\ncout << s;\ndelete[] a;","6","1 + 2 + 3."],["int *p = new int(1);\nint *q = p;\n*q = 9;\ncout << *p;\ndelete p;","9","p and q hold the same address."]],
+"File Handling":[["// file holds: 3 5\nint a,b; in>>a>>b; cout<<a*b;","15","3 x 5."],["// file holds: 1 2 3 4\nint x,c=0; while(in>>x) c++; cout<<c;","4","Four numbers."],["// file holds: 2 4 6\nint x,s=0; while(in>>x) if(x>2) s+=x; cout<<s;","10","4 + 6."]]
+});
+Object.assign(SB,{
+"Nested Loops":[q("S",`for (int i = 0; i < 3; i++)\n  for (int j = 0; j < 3 j++)\n    cout << "*";`,1,`  for (int j = 0; j < 3; j++)`,`  for (int j = 0, j < 3, j++)`,`  for (int j = 0; j < 3, j++)`,`Missing semicolon in the for header.`),q("L",`// row i has i stars\nfor (int i = 1; i <= 3; i++) {\n  for (int j = 1; j <= 3; j++)\n    cout << "*";\n  cout << "\\n";\n}`,2,`  for (int j = 1; j <= i; j++)`,`  for (int j = 1; j < i; j++)`,`  for (int j = i; j <= 3; j++)`,`The inner limit must depend on i for a triangle.`),q("L",`// total of each row\nint s = 0;\nfor (int i = 0; i < 2; i++) {\n  for (int j = 0; j < 3; j++)\n    s += m[i][j];\n  cout << s;\n}`,1,`Declare int s = 0; inside the outer loop`,`Declare s after both loops`,`Make s a static variable`,`Without resetting, row 2's total includes row 1.`)],
+"break & continue":[q("S",`for (int i = 0; i < 5; i++) {\n  if (i == 3) break\n}`,1,`  if (i == 3) break;`,`  if (i == 3) break:`,`  if (i == 3) { break }`,`break needs a semicolon.`),q("L",`// skip 3 but print the rest\nfor (int i = 1; i <= 5; i++) {\n  if (i == 3) break;\n  cout << i;\n}`,2,`  if (i == 3) continue;`,`  if (i == 3) return;`,`  if (i != 3) break;`,`break ends the loop; continue skips only 3.`),q("L",`// stop at the first negative\nfor (int i = 0; i < n; i++) {\n  if (a[i] < 0) continue;\n  s += a[i];\n}`,2,`  if (a[i] < 0) break;`,`  if (a[i] < 0) exit;`,`  if (a[i] > 0) break;`,`continue only skips one value; break stops the loop.`)],
+"Data Types & Casting":[q("S",`double d = 2.5;\nint x = (int d);`,1,`int x = (int)d;`,`int x = int[d];`,`int x = (d)int;`,`A cast is written (type)value.`),q("L",`// average of 7 and 2\nint a = 7, b = 2;\ndouble avg = (a + b) / 2;`,2,`double avg = (a + b) / 2.0;`,`double avg = (double)(a + b) * 2;`,`double avg = a + b / 2;`,`Integer division happens before the conversion to double.`),q("L",`// round 2.7 to the nearest int\ndouble d = 2.7;\nint r = (int)d;`,2,`int r = (int)(d + 0.5);`,`int r = (int)d + 1;`,`int r = int(d - 0.5);`,`A cast truncates; add 0.5 first to round.`)],
+"Function Overloading":[q("S",`int add(int a, int b);\nint add(int a, int b, int c);\nint add(int a, int b) { return a + b }`,2,`int add(int a, int b) { return a + b; }`,`int add(int a, int b) { return a + b: }`,`int add(a, b) { return a + b; }`,`Missing semicolon after the return expression.`),q("L",`int f(int a);\ndouble f(int a);`,1,`double f(double a);`,`double f(int a) const;`,`void f(int a);`,`Overloads must differ in parameters, not only in return type.`),q("L",`void f(int a, double b);\nvoid f(double a, int b);\nf(1, 2);`,2,`f(1, 2.0);`,`f(1.0, 2.0);`,`f(1);`,`f(1, 2) is ambiguous; pass types that match one overload exactly.`)],
+"Operator Overloading":[q("S",`class V {\npublic:\n  int x;\n  V operator+(V o) { return V(x + o.x) }\n};`,3,`  V operator+(V o) { return V(x + o.x); }`,`  V operator+(V o) { return V(x + o.x): }`,`  V operator+(V o) return V(x + o.x);`,`Missing semicolon.`),q("L",`V operator+(V o) {\n  x = x + o.x;\n  return *this;\n}`,1,`Build a new V(x + o.x) and return it`,`Return o instead`,`Make x static`,`+ must not modify its left operand.`),q("L",`// cout << v must print x\nostream& operator<<(ostream &o, V v) {\n  o << v.x;\n}`,2,`  return o;`,`  return v;`,`  return 0;`,`Return the stream so << can be chained.`)],
+"Dynamic Memory":[q("S",`int *a = new int[3];\ndelete a[];`,1,`delete[] a;`,`delete(a[]);`,`delete a[3];`,`The array form is delete[] a;`),q("L",`int *a = new int[3];\na[0] = 1;\ndelete a;`,2,`delete[] a;`,`free(a);`,`delete a[0];`,`Memory from new[] must be freed with delete[].`),q("L",`int *p = new int(5);\ndelete p;\ndelete p;`,2,`Remove the second delete`,`Replace it with free(p);`,`Replace it with delete[] p;`,`Deleting twice is undefined behaviour; set p = nullptr after the first delete.`)],
+"File Handling":[q("S",`ofstream out("a.txt")\nout << "Hi";`,0,`ofstream out("a.txt");`,`ofstream out("a.txt":`,`ofstream out = "a.txt";`,`Missing semicolon.`),q("L",`// read numbers from a file\nofstream in("a.txt");\nin >> x;`,1,`ifstream in("a.txt");`,`fstream out("a.txt");`,`ofstream in("a.txt", "r");`,`Reading needs an input stream (ifstream).`),q("L",`ifstream in("a.txt");\nint x;\nwhile (!in.eof()) {\n  in >> x; cout << x;\n}`,2,`while (in >> x) cout << x;`,`while (in.eof()) cout << x;`,`while (in) cout << x;`,`eof() turns true only after a failed read, so the last value can repeat; test the read itself.`)]
+});
+const done=new Set();try{JSON.parse(localStorage.getItem("cl_done")||"[]").forEach(n=>{const i=T.findIndex(t=>t.n==n);if(i>=0)done.add(i)})}catch(e){}let cur=0,step=0;
+const nav=document.getElementById("nav"),main=document.getElementById("main");
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+let isT=true,unsub=null;
+const TEACHER_EMAIL = "archanamagare.cse@charusat.ac.in";
+const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwE4xvfVF6ss33k0YmmNk790WcK6mbV1QpL5rm1-Y8HyiHmdvt6kHV2Bw1OHKkdT_mN/exec";
+let GOOGLE_SHEET_URL = localStorage.getItem("cl_sheet_url") || DEFAULT_GOOGLE_SHEET_URL;
+
+const cloud = {
+  ref: null,
+  d: {
+    best: 0,
+    roll: localStorage.getItem("cl_user_roll") || "",
+    name: localStorage.getItem("cl_user_name") || ""
+  }
+};
+
+const st = m => {
+  const e = document.getElementById("acs");
+  if (e) e.textContent = m;
+};
+
+let weak = {};
+try { weak = JSON.parse(localStorage.getItem("cl_weak") || "{}"); } catch(e){}
+
+function wrong(tp) {
+  if (!tp) return;
+  weak[tp] = (weak[tp] || 0) + 1;
+  try { localStorage.setItem("cl_weak", JSON.stringify(weak)); } catch(e){}
+  cs();
+}
+
+const lb = () => {
+  try { return +localStorage.getItem("cl_best") || 0; } catch(e) { return 0; }
+};
+
+function cs(x) {
+  Object.assign(cloud.d, x || {});
+  clearTimeout(cs.tm);
+  cs.tm = setTimeout(cs0, 1200);
+}
+
+function getSheetUrl() {
+  const custom = (localStorage.getItem("cl_sheet_url") || "").trim();
+  return custom || DEFAULT_GOOGLE_SHEET_URL;
+}
+
+// Send login or progress data to Dr. Archana Magare's Google Sheet
+async function sendToGoogleSheet(data) {
+  const url = getSheetUrl();
+  if (!url) {
+    st("Saved on device (Google Sheet URL not configured yet)");
+    return false;
+  }
+  st("Saving to Google Sheet...");
+  try {
+    await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data)
+    });
+    const timeStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    st("✓ Saved to Google Sheet (" + timeStr + ")");
+    return true;
+  } catch (err) {
+    console.error("Google Sheet save error:", err);
+    st("Saved on device (sync error: check internet/sheet)");
+    return false;
+  }
+}
+
+function cs0() {
+  if (!cloud.d.roll && !cloud.d.name) {
+    st("Enter enrollment number & name to sync progress.");
+    return;
+  }
+  const d = {
+    action: "PROGRESS_UPDATE",
+    enrollmentNo: cloud.d.roll || "",
+    name: cloud.d.name || "",
+    bestScore: cloud.d.best || lb(),
+    done: [...done].map(i => T[i].n),
+    topicsCompleted: done.size,
+    totalTopics: T.length,
+    weakTopics: Object.keys(weak).join(", ") || "None",
+    timestamp: new Date().toLocaleString(),
+    userAgent: navigator.userAgent
+  };
+  sendToGoogleSheet(d);
+}
+
+function loginStudent(rollVal, nameVal) {
+  const roll = (rollVal || "").trim().toUpperCase();
+  const name = (nameVal || "").trim();
+  if (!/^[A-Z0-9\/-]{3,25}$/.test(roll)) {
+    alert("Please enter a valid Enrollment Number (3 to 25 characters, e.g. 21IT001).");
+    return false;
+  }
+  if (!name || name.length < 2) {
+    alert("Please enter the Student Name.");
+    return false;
+  }
+  cloud.d.roll = roll;
+  cloud.d.name = name;
+  try {
+    localStorage.setItem("cl_user_roll", roll);
+    localStorage.setItem("cl_user_name", name);
+    localStorage.setItem("cl_last_active", new Date().toISOString());
+  } catch(e){}
+  
+  const loginPayload = {
+    action: "STUDENT_LOGIN",
+    enrollmentNo: roll,
+    name: name,
+    topicsCompleted: done.size,
+    bestScore: lb(),
+    totalTopics: T.length,
+    weakTopics: Object.keys(weak).join(", ") || "None",
+    timestamp: new Date().toLocaleString(),
+    userAgent: navigator.userAgent
+  };
+  sendToGoogleSheet(loginPayload);
+  acct();
+  return true;
+}
+
+function openSheetConfigModal() {
+  const ex = document.getElementById("sheetConfigModal");
+  if (ex) ex.remove();
+  const ov = el("div", "modal-overlay");
+  ov.id = "sheetConfigModal";
+  const box = el("div", "modal-box");
+  box.innerHTML = `
+    <h3>Google Sheet Integration Setup</h3>
+    <p>Target Account: <strong>${TEACHER_EMAIL}</strong></p>
+    <p style="font-size:0.85rem">All student logins (Enrollment No, Name, Timestamp) and quiz progress are automatically logged to your Google Sheet via Google Apps Script.</p>
+    <div class="modal-field">
+      <label for="cfgSheetUrl">Google Apps Script Web App URL:</label>
+      <input id="cfgSheetUrl" placeholder="https://script.google.com/macros/s/.../exec" value="${getSheetUrl()}">
+    </div>
+    <div style="font-size:0.8rem;color:var(--mute);margin-bottom:12px">
+      📌 Need to create the Web App? See <code>INSTRUCTIONS_GOOGLE_SHEET_SETUP.md</code> or <code>GoogleAppsScript_CodeLens.js</code>.
+    </div>
+    <div class="modal-actions">
+      <button id="cfgTestBtn" type="button">⚡ Send Test Row</button>
+      <button id="cfgCloseBtn" type="button">Close</button>
+      <button id="cfgSaveBtn" type="button" class="primary">Save URL</button>
+    </div>
+  `;
+  ov.append(box);
+  document.body.append(ov);
+  
+  document.getElementById("cfgCloseBtn").onclick = () => ov.remove();
+  document.getElementById("cfgSaveBtn").onclick = () => {
+    const val = document.getElementById("cfgSheetUrl").value.trim();
+    localStorage.setItem("cl_sheet_url", val);
+    GOOGLE_SHEET_URL = val;
+    ov.remove();
+    st(val ? "Google Sheet Web App URL saved." : "Google Sheet URL cleared.");
+    acct();
+  };
+  document.getElementById("cfgTestBtn").onclick = async () => {
+    const val = document.getElementById("cfgSheetUrl").value.trim();
+    if (!val) {
+      alert("Please enter your Web App URL first.");
+      return;
+    }
+    localStorage.setItem("cl_sheet_url", val);
+    GOOGLE_SHEET_URL = val;
+    const testPayload = {
+      action: "TEST_CONNECTION",
+      enrollmentNo: cloud.d.roll || "TEST-01",
+      name: cloud.d.name || "Test Student",
+      topicsCompleted: done.size,
+      bestScore: lb(),
+      totalTopics: T.length,
+      weakTopics: "None",
+      timestamp: new Date().toLocaleString(),
+      userAgent: navigator.userAgent
+    };
+    st("Sending test row to Google Sheet...");
+    await sendToGoogleSheet(testPayload);
+    alert("Test row sent! Check your Google Sheet under archanamagare.cse@charusat.ac.in.");
+  };
+}
+
+function checkLoginPrompt() {
+  if (cloud.d.roll && cloud.d.name) return;
+  const ex = document.getElementById("studentLoginModal");
+  if (ex) ex.remove();
+  const ov = el("div", "modal-overlay");
+  ov.id = "studentLoginModal";
+  const box = el("div", "modal-box");
+  box.innerHTML = `
+    <h3>Welcome to CodeLens C++ Studio</h3>
+    <p>Please enter your <strong>Enrollment Number</strong> and <strong>Full Name</strong>. Your login and learning progress will be saved to Dr. Archana Magare's class sheet (<code>${TEACHER_EMAIL}</code>).</p>
+    <div class="modal-field">
+      <label for="promptRoll">Enrollment Number <span style="color:var(--bad)">*</span></label>
+      <input id="promptRoll" placeholder="e.g. 21IT001 or 22CE050" value="${cloud.d.roll||''}">
+    </div>
+    <div class="modal-field">
+      <label for="promptName">Full Name <span style="color:var(--bad)">*</span></label>
+      <input id="promptName" placeholder="e.g. Rahul Patel" value="${cloud.d.name||''}">
+    </div>
+    <div class="modal-actions">
+      <button id="promptGuestBtn" type="button">Explore as Guest</button>
+      <button id="promptSubmitBtn" type="button" class="primary">Login & Start</button>
+    </div>
+  `;
+  ov.append(box);
+  document.body.append(ov);
+  
+  document.getElementById("promptGuestBtn").onclick = () => ov.remove();
+  document.getElementById("promptSubmitBtn").onclick = () => {
+    const r = document.getElementById("promptRoll").value;
+    const n = document.getElementById("promptName").value;
+    if (loginStudent(r, n)) {
+      ov.remove();
+    }
+  };
+}
+
+function promptEditUser() {
+  const newRoll = prompt("Enter Enrollment Number:", cloud.d.roll || "");
+  if (newRoll === null) return;
+  const newName = prompt("Enter Student Full Name:", cloud.d.name || "");
+  if (newName === null) return;
+  loginStudent(newRoll, newName);
+}
+
+function acct() {
+  const a = document.getElementById("acct");
+  if (!a) return;
+  a.innerHTML = "";
+  
+  if (cloud.d.roll && cloud.d.name) {
+    const row = el("div", "acct-row");
+    const info = el("span", "", "");
+    info.innerHTML = `👤 Signed in: <strong>${cloud.d.name}</strong> (<code style="background:rgba(255,255,255,0.18);padding:2px 6px;border-radius:4px">${cloud.d.roll}</code>)`;
+    
+    const btnSwitch = el("button", "", "Switch / Edit");
+    btnSwitch.onclick = promptEditUser;
+    
+    const btnCfg = el("button", "", "⚙️ Sheet Config");
+    btnCfg.onclick = openSheetConfigModal;
+    
+    const stat = el("span", "acct-status", "");
+    stat.id = "acs";
+    
+    row.append(info, btnSwitch, btnCfg, stat);
+    a.append(row);
+    st(getSheetUrl() ? "✓ Google Sheet Connected" : "Local mode (Click 'Sheet Config' to connect Google Sheet)");
+  } else {
+    const row = el("div", "acct-row");
+    row.append(el("span", "", "Student Sign-In: "));
+    
+    const inRoll = el("input", "");
+    inRoll.placeholder = "Enrollment No.";
+    inRoll.value = cloud.d.roll || "";
+    
+    const inName = el("input", "");
+    inName.placeholder = "Full Name";
+    inName.value = cloud.d.name || "";
+    
+    const btnSave = el("button", "btn-pri", "Login & Save");
+    btnSave.onclick = () => {
+      loginStudent(inRoll.value, inName.value);
+    };
+    
+    const btnCfg = el("button", "", "⚙️ Sheet Config");
+    btnCfg.onclick = openSheetConfigModal;
+    
+    const stat = el("span", "acct-status", "Enter Enrollment No & Name to save progress");
+    stat.id = "acs";
+    
+    row.append(inRoll, inName, btnSave, btnCfg, stat);
+    a.append(row);
+  }
+}
+
+function initCloud() {
+  cloud.d.best = lb();
+  acct();
+  checkLoginPrompt();
+  if (cloud.d.roll && cloud.d.name) {
+    const sessionData = {
+      action: "SESSION_ACTIVE",
+      enrollmentNo: cloud.d.roll,
+      name: cloud.d.name,
+      topicsCompleted: done.size,
+      bestScore: lb(),
+      totalTopics: T.length,
+      weakTopics: Object.keys(weak).join(", ") || "None",
+      timestamp: new Date().toLocaleString(),
+      userAgent: navigator.userAgent
+    };
+    sendToGoogleSheet(sessionData);
+  }
+}
+
+async function dash() {
+  const c = el("div", "card");
+  c.append(
+    el("h2", "", "Teacher Dashboard & Progress Management"),
+    el("p", "", "Student logins and progress tracking connected to Dr. Archana Magare's Google Sheet (" + TEACHER_EMAIL + ").")
+  );
+  main.append(c);
+  
+  const setupCard = el("div", "card");
+  setupCard.innerHTML = `
+    <h3>Google Sheet Integration</h3>
+    <p>All student logins (Enrollment No, Name, Timestamp) and quiz progress are recorded directly in Dr. Archana Magare's Google Sheet.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0">
+      <button class="opt" style="width:auto;background:var(--acc);color:#fff" id="dashOpenSheetBtn">📊 Open Google Sheets</button>
+      <button class="opt" style="width:auto" id="dashCfgBtn">⚙️ Configure Web App URL</button>
+      <button class="opt" style="width:auto" id="dashTestPingBtn">⚡ Test Google Sheet Ping</button>
+    </div>
+    <div id="dashSheetStatus" style="font-size:0.9rem;color:var(--mute)">
+      Status: ${getSheetUrl() ? "<strong>Connected</strong> (" + getSheetUrl() + ")" : "<em>Not connected yet. Click 'Configure Web App URL' to paste your deployed Google Apps Script URL.</em>"}
+    </div>
+  `;
+  main.append(setupCard);
+  
+  document.getElementById("dashOpenSheetBtn").onclick = () => {
+    window.open("https://docs.google.com/spreadsheets/d/1SsQm1YplU8fJulrBbsU-70p5q8J4SwpW0vW-5u_2nDY/edit?gid=1988170360#gid=1988170360", "_blank");
+  };
+  document.getElementById("dashCfgBtn").onclick = openSheetConfigModal;
+  document.getElementById("dashTestPingBtn").onclick = () => {
+    openSheetConfigModal();
+    const btn = document.getElementById("cfgTestBtn");
+    if (btn) btn.click();
+  };
+  
+  const studentCard = el("div", "card");
+  studentCard.append(el("h3", "", "Active Student Record (This Device)"));
+  const tb = el("table");
+  tb.innerHTML = "<tr><th>Enrollment No.</th><th>Student Name</th><th>Topics Done</th><th>Best Test</th><th>Weak Topics</th><th>Last Active</th></tr>";
+  const tr = el("tr");
+  const wkStr = Object.entries(weak).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>dn(e[0])+" ("+e[1]+")").join(", ") || "None";
+  [
+    cloud.d.roll || "Not logged in",
+    cloud.d.name || "Guest",
+    done.size + " / " + T.length + " (" + Math.round(100 * done.size / T.length) + "%)",
+    lb() + " / 10",
+    wkStr,
+    new Date().toLocaleString()
+  ].forEach(v => tr.append(el("td", "", v)));
+  tb.append(tr);
+  
+  const wr = el("div");
+  wr.style.overflowX = "auto";
+  wr.append(tb);
+  studentCard.append(wr);
+  
+  const dl = el("button", "p", "Download Local CSV");
+  dl.style.marginTop = "14px";
+  dl.onclick = () => {
+    const q2 = v => '"' + String(v).replace(/"/g, '""') + '"';
+    const csv = "Enrollment,Name,TopicsDone,Total,BestTest,WeakTopics,LastActive\n" +
+      [cloud.d.roll||"-", cloud.d.name||"-", done.size, T.length, lb(), wkStr, new Date().toISOString()].map(q2).join(",");
+    try {
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `codelens-${cloud.d.roll || 'student'}-progress.csv`;
+      link.click();
+    } catch(e) {
+      alert("CSV export error: " + e.message);
+    }
+  };
+  studentCard.append(dl);
+  main.append(studentCard);
+}
+
+const dn=n=>n.replace(/^\d+\.\s*/,"");
+function build(){
+  nav.innerHTML="";
+  T.forEach((t,i)=>{
+    const b=el("button",(i==cur?"on ":"")+(done.has(i)?"done":""),(i+1)+". "+dn(t.n));
+    b.append(el("small","",t.s));
+    b.onclick=()=>{cur=i;step=0;build();draw()};
+    nav.append(b);
+  });
+  nav.append(el("div","sep","Tests & practice"));
+  [[-1,"Mixed Test","all topics"],[-2,"Spot the Bug","find and fix"],[-3,"Teacher Dashboard & Setup","sync & records"]].forEach(([v,n,sb])=>{
+    const x=el("button",v==cur?"on":"",n);
+    x.append(el("small","",sb));
+    x.onclick=()=>{cur=v;step=0;build();draw()};
+    nav.append(x);
+  });
+  document.getElementById("pg").style.width=(done.size/T.length*100)+"%";
+  document.getElementById("pgt").textContent="Progress: "+done.size+" of "+T.length+" topics completed ("+Math.round(done.size/T.length*100)+"%)";
+}
+function draw(){if(unsub){unsub();unsub=null}main.innerHTML="";if(cur<0)return cur==-1?mixed():cur==-3?dash():bugs();const t=T[cur];
+const a=el("div","card");a.append(el("span","tag","Topic "+(cur+1)+" of "+T.length));a.append(el("h2","",dn(t.n)));a.append(el("p","",t.i));main.append(a);
+const b=el("div","card");b.append(el("h3","","Step through the code"));const sp=el("div","split");
+const code=el("div","code");t.c.forEach(l=>code.append(el("div","",l)));
+const right=el("div");const tb=el("table");right.append(tb);sp.append(code,right);b.append(sp);
+const note=el("div","note");b.append(note);
+const ctl=el("div","ctl");const pv=el("button","","◀ Back"),nx=el("button","p","Next ▶"),rs=el("button","","Reset"),ct=el("span");ctl.append(pv,nx,rs,ct);b.append(ctl);main.append(b);
+function show(){const s=t.st[step];[...code.children].forEach((d,i)=>d.className=i==s[0]?"on":"");
+tb.innerHTML="<tr><th>Name</th><th>Value</th>"+(s[2][0].length>2?"<th>Address</th>":"")+"</tr>";
+s[2].forEach(r=>{const tr=el("tr","new");r.forEach(c=>tr.append(el("td","",c)));tb.append(tr)});
+note.textContent=s[1];ct.textContent="Step "+(step+1)+" / "+t.st.length;pv.disabled=step==0;nx.disabled=step==t.st.length-1}
+pv.onclick=()=>{step--;show()};nx.onclick=()=>{step++;show()};rs.onclick=()=>{step=0;show()};show();
+const k=el("div","card");k.append(el("h3","","Key points"));const u=el("ul");t.k.forEach(x=>u.append(el("li","",x)));k.append(u);main.append(k);
+const Qs=P[t.n]||[t.q],pr=!!P[t.n],lab=["Simple","Moderate","Difficult"];
+const q=el("div","card");q.append(el("h3","",pr?"Practice questions: answer all 3 to complete this topic":"Check yourself (answer to complete this topic)"));let ans=0;
+Qs.forEach((Q,n)=>{const bx=el("div");bx.style.marginTop="12px";if(pr)bx.append(el("span","tag lv"+n,lab[n]));
+bx.append(el("p","",(n+1)+". "+Q[0]));const why=el("div","why");
+for(let i=1;i<=3;i++){const o=el("button","opt",Q[i]);o.onclick=()=>{const ok=i-1==Q[4];[...bx.querySelectorAll(".opt")].forEach((x,j)=>{x.disabled=true;if(j==Q[4])x.classList.add("ok")});if(!ok){o.classList.add("no");wrong(t.n)}why.textContent=(ok?"Correct. ":"Not quite. ")+Q[5];if(++ans==Qs.length){done.add(cur);sv();build()}};bx.append(o)}
+bx.append(why);q.append(bx)});main.append(q);(FB[t.n]||[]).forEach((fb,fi)=>{const c=el("div","card");c.append(el("h3","","Scenario "+(fi+1)+" of "+FB[t.n].length+": fill in the blanks"));c.append(el("p","",fb.s));
+const pk=fb.b.map(()=>null);let chk=false;const cd=el("div","code");const res=el("div","why");
+const paint=()=>{cd.innerHTML="";fb.c.forEach(l=>{const d=el("div");d.append(" ");l.split(/(@\d@)/).forEach(p=>{const m=p.match(/^@(\d)@$/);if(m){const i=m[1]-1,v=pk[i];d.append(el("span","blank"+(v==null?"":chk?(v==fb.b[i][1]?" okb":" nob"):" fil"),v==null?"_____":fb.b[i][0][v]))}else d.append(p)});cd.append(d)})};
+c.append(cd);
+fb.b.forEach((B,i)=>{const row=el("div","ctl");row.append(el("span","","Blank "+(i+1)+":"));B[0].forEach((o,j)=>{const b=el("button","",o);b.onclick=()=>{pk[i]=j;chk=false;res.textContent="";[...row.querySelectorAll("button")].forEach(x=>x.classList.remove("sel"));b.classList.add("sel");paint()};row.append(b)});c.append(row)});
+const bar=el("div","ctl");const ck=el("button","p","Check answers"),rs=el("button","","Reset");
+ck.onclick=()=>{if(pk.includes(null)){res.textContent="Fill every blank first.";return}chk=true;paint();const n=pk.filter((v,i)=>v==fb.b[i][1]).length;res.textContent=n+"/"+pk.length+" correct. "+fb.w};
+rs.onclick=()=>{pk.fill(null);chk=false;res.textContent="";c.querySelectorAll("button.sel").forEach(x=>x.classList.remove("sel"));paint()};
+bar.append(ck,rs);c.append(bar,res);paint();main.append(c)});
+const bg=BG[t.n];if(bg){const c=el("div","card");c.append(el("h3","","Brain Gym: predict the output (type it, then check)"));
+bg.forEach((x,i)=>{const r=el("div","tc");r.append(el("b","","Puzzle "+(i+1)),el("code","",x[0]));
+const inp=el("input","bgi");inp.placeholder="Type the output";const b=el("button","","Check"),h=el("button","","Show answer"),o=el("div","tcout");
+const nm=v=>v.replace(/\s+/g,"");
+b.onclick=()=>{if(!inp.value.trim()){o.textContent="Type your answer first.";return}o.textContent=nm(inp.value)==nm(x[1])?"Correct! "+x[2]:"Not quite. Trace it again, or press Show answer."};
+h.onclick=()=>{o.textContent="Answer: "+x[1]+". "+x[2]};
+const row=el("div","ctl");row.append(inp,b,h);r.append(row,o);c.append(r)});main.append(c)}
+const sb=SB[t.n];if(sb){const w=el("div","card");w.append(el("h3","","Spot the Bug: 3 questions (syntax and logical errors)"),el("p","","Tap the faulty line, then choose the correct fix."));main.append(w);sb.forEach((B,n)=>main.append(bugCard(B,(n+1)+". "+(B.t=="S"?"Syntax error":"Logical error"),t.n)))}
+const tc=TC[t.n];if(tc){const c=el("div","card");c.append(el("h3","","Test cases: run each one"));const runs=[];
+tc.forEach((x,i)=>{const r=el("div","tc");r.append(el("code","",x[0]),el("div","","Input: "+x[1]),el("div","","Expected: "+x[2]));
+const o=el("div","tcout");const b=el("button","","Run test "+(i+1));
+const run=()=>{o.textContent="Running...";setTimeout(()=>{o.textContent="";const v=el("b","pass","PASS ");o.append(v,"Output: "+x[2]+" | Trace: "+x[3])},400)};
+b.onclick=run;runs.push(run);r.append(b,o);c.append(r)});
+const ra=el("button","p","Run all tests");ra.onclick=()=>runs.forEach((f,i)=>setTimeout(f,i*600));
+const ctl2=el("div","ctl");ctl2.append(ra,el("span","","Pre-traced results, not a live compiler."));c.append(ctl2);main.append(c)}
+}
+build();draw();initCloud();
+</script></body></html>
