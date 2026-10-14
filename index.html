@@ -707,11 +707,11 @@ const BUGS=[
 ["Uninitialised reference",["int &r;","r = 5;"],0,["int x = 1; int &r = x;","int &r = 0;","int *r;"],"A reference must be bound to a variable when declared."],
 ["No base case",["int fact(int n) {","  return n * fact(n - 1);","}"],1,["if (n <= 1) return 1; return n * fact(n - 1);","return n * fact(n);","return fact(n - 1);"],"Without a base case the recursion never stops."]
 ];
-const sv=()=>{try{localStorage.setItem("cl_done",JSON.stringify([...done].map(i=>T[i].n)))}catch(e){}cs()};
+const sv=()=>{if(typeof saveStudentData==='function')saveStudentData();else{try{localStorage.setItem("cl_done",JSON.stringify([...done].map(i=>T[i].n)))}catch(e){}}cs()};
 function mixed(){const c=el("div","card");c.append(el("h2","","Mixed Test"),el("p","","10 random questions from all topics. Your score and weak topics appear at the end."));
 const pool=[];Object.keys(P).forEach(k=>P[k].forEach(q=>pool.push([k,q])));
 const qs=pool.sort(()=>Math.random()-.5).slice(0,10);let i=0,sc=0;const miss={};const box=el("div");c.append(box);main.append(c);
-const fin=()=>{let best=sc;try{best=Math.max(sc,+localStorage.getItem("cl_best")||0);localStorage.setItem("cl_best",best)}catch(e){}cs({best});
+const fin=()=>{let best=sc;try{best=Math.max(sc,cloud.d.best||0,+localStorage.getItem("cl_best")||0);cloud.d.best=best;localStorage.setItem("cl_best",best)}catch(e){}if(typeof saveStudentData==='function')saveStudentData();cs({best});
 box.append(el("h2","",sc+" / "+qs.length),el("p","","Best score on this device: "+best));const w=Object.keys(miss);
 box.append(el("p","",w.length?"Revise these topics: "+w.join(", "):"No weak topics. Excellent!"));
 const r=el("button","opt","Take a new test");r.style.width="auto";r.onclick=()=>{main.innerHTML="";mixed()};box.append(r)};
@@ -794,10 +794,11 @@ Object.assign(SB,{
 "Dynamic Memory":[q("S",`int *a = new int[3];\ndelete a[];`,1,`delete[] a;`,`delete(a[]);`,`delete a[3];`,`The array form is delete[] a;`),q("L",`int *a = new int[3];\na[0] = 1;\ndelete a;`,2,`delete[] a;`,`free(a);`,`delete a[0];`,`Memory from new[] must be freed with delete[].`),q("L",`int *p = new int(5);\ndelete p;\ndelete p;`,2,`Remove the second delete`,`Replace it with free(p);`,`Replace it with delete[] p;`,`Deleting twice is undefined behaviour; set p = nullptr after the first delete.`)],
 "File Handling":[q("S",`ofstream out("a.txt")\nout << "Hi";`,0,`ofstream out("a.txt");`,`ofstream out("a.txt":`,`ofstream out = "a.txt";`,`Missing semicolon.`),q("L",`// read numbers from a file\nofstream in("a.txt");\nin >> x;`,1,`ifstream in("a.txt");`,`fstream out("a.txt");`,`ofstream in("a.txt", "r");`,`Reading needs an input stream (ifstream).`),q("L",`ifstream in("a.txt");\nint x;\nwhile (!in.eof()) {\n  in >> x; cout << x;\n}`,2,`while (in >> x) cout << x;`,`while (in.eof()) cout << x;`,`while (in) cout << x;`,`eof() turns true only after a failed read, so the last value can repeat; test the read itself.`)]
 });
-const done=new Set();try{JSON.parse(localStorage.getItem("cl_done")||"[]").forEach(n=>{const i=T.findIndex(t=>t.n==n);if(i>=0)done.add(i)})}catch(e){}let cur=0,step=0;
-const nav=document.getElementById("nav"),main=document.getElementById("main");
-function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
-let isT=true,unsub=null;
+const done = new Set();
+let cur = 0, step = 0;
+const nav = document.getElementById("nav"), main = document.getElementById("main");
+function el(t, c, x) { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+let isT = true, unsub = null;
 const TEACHER_EMAIL = "archanamagare.cse@charusat.ac.in";
 const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwE4xvfVF6ss33k0YmmNk790WcK6mbV1QpL5rm1-Y8HyiHmdvt6kHV2Bw1OHKkdT_mN/exec";
 let GOOGLE_SHEET_URL = localStorage.getItem("cl_sheet_url") || DEFAULT_GOOGLE_SHEET_URL;
@@ -817,17 +818,106 @@ const st = m => {
 };
 
 let weak = {};
-try { weak = JSON.parse(localStorage.getItem("cl_weak") || "{}"); } catch(e){}
+
+// Save active student's state and last updated topic
+function saveStudentData() {
+  const roll = cloud.d.roll;
+  if (!roll) return;
+  const data = {
+    roll: roll,
+    name: cloud.d.name,
+    done: [...done].map(i => T[i].n),
+    cur: cur,
+    step: step,
+    weak: weak,
+    best: cloud.d.best || lb(),
+    lastUpdated: Date.now()
+  };
+  try {
+    localStorage.setItem("cl_stu_" + roll, JSON.stringify(data));
+    localStorage.setItem("cl_user_roll", roll);
+    localStorage.setItem("cl_user_name", cloud.d.name || "");
+    localStorage.setItem("cl_done", JSON.stringify(data.done));
+    localStorage.setItem("cl_weak", JSON.stringify(weak));
+    localStorage.setItem("cl_best", data.best);
+    localStorage.setItem("cl_cur", cur);
+  } catch(e){}
+}
+
+// Load a student's data:
+// - If NEW user: progress bar resets to zero, starts at topic 0
+// - If EXISTING user: restores progress bar and jumps to last updated topic
+function loadStudentData(roll, name) {
+  if (!roll) {
+    done.clear();
+    cur = 0;
+    step = 0;
+    weak = {};
+    cloud.d.best = 0;
+    return false;
+  }
+  roll = roll.trim().toUpperCase();
+  const raw = localStorage.getItem("cl_stu_" + roll);
+  if (raw) {
+    try {
+      const data = JSON.parse(raw);
+      done.clear();
+      (data.done || []).forEach(n => {
+        const i = T.findIndex(t => t.n == n);
+        if (i >= 0) done.add(i);
+      });
+      cur = (typeof data.cur === "number" && data.cur >= -3 && data.cur < T.length) ? data.cur : 0;
+      step = 0;
+      weak = data.weak || {};
+      cloud.d.best = data.best || 0;
+      if (data.name && !name) cloud.d.name = data.name;
+      else if (name) cloud.d.name = name;
+      return true; // Existing user restored
+    } catch(e){}
+  }
+  
+  // Migration check: if this student was the active user before per-user storage
+  if (localStorage.getItem("cl_user_roll") === roll && localStorage.getItem("cl_done")) {
+    try {
+      const legacyDone = JSON.parse(localStorage.getItem("cl_done") || "[]");
+      if (legacyDone.length > 0) {
+        done.clear();
+        legacyDone.forEach(n => {
+          const i = T.findIndex(t => t.n == n);
+          if (i >= 0) done.add(i);
+        });
+        cur = +(localStorage.getItem("cl_cur") || 0);
+        step = 0;
+        weak = JSON.parse(localStorage.getItem("cl_weak") || "{}");
+        cloud.d.best = +(localStorage.getItem("cl_best") || 0);
+        if (name) cloud.d.name = name;
+        saveStudentData();
+        return true;
+      }
+    } catch(e){}
+  }
+  
+  // BRAND NEW USER with this enrollment number:
+  // Reset progress bar to zero (0%) and start at Topic 1 (cur = 0)
+  done.clear();
+  cur = 0;
+  step = 0;
+  weak = {};
+  cloud.d.best = 0;
+  if (name) cloud.d.name = name;
+  saveStudentData();
+  return false; // New user initialized at 0
+}
 
 function wrong(tp) {
   if (!tp) return;
   weak[tp] = (weak[tp] || 0) + 1;
-  try { localStorage.setItem("cl_weak", JSON.stringify(weak)); } catch(e){}
+  saveStudentData();
   cs();
 }
 
 const lb = () => {
-  try { return +localStorage.getItem("cl_best") || 0; } catch(e) { return 0; }
+  return cloud.d.best || (+localStorage.getItem("cl_best") || 0);
 };
 
 function cs(x) {
@@ -879,6 +969,8 @@ function cs0() {
     done: [...done].map(i => T[i].n),
     topicsCompleted: done.size,
     totalTopics: T.length,
+    lastTopicIndex: cur,
+    lastTopicName: (cur >= 0 && cur < T.length) ? T[cur].n : (cur == -1 ? "Mixed Test" : cur == -2 ? "Spot the Bug" : "Teacher Dashboard"),
     weakTopics: Object.keys(weak).join(", ") || "None",
     timestamp: new Date().toLocaleString(),
     userAgent: navigator.userAgent
@@ -897,8 +989,13 @@ function loginStudent(rollVal, nameVal) {
     alert("Please enter the Student Name.");
     return false;
   }
+  
   cloud.d.roll = roll;
   cloud.d.name = name;
+  
+  // Load data for this student (restores if existing user, resets to zero if new user)
+  const isExisting = loadStudentData(roll, name);
+  
   try {
     localStorage.setItem("cl_user_roll", roll);
     localStorage.setItem("cl_user_name", name);
@@ -906,18 +1003,23 @@ function loginStudent(rollVal, nameVal) {
   } catch(e){}
   
   const loginPayload = {
-    action: "STUDENT_LOGIN",
+    action: isExisting ? "STUDENT_LOGIN_RESUME" : "STUDENT_LOGIN_NEW",
     enrollmentNo: roll,
     name: name,
     topicsCompleted: done.size,
-    bestScore: lb(),
+    bestScore: cloud.d.best || lb(),
     totalTopics: T.length,
+    lastTopicIndex: cur,
+    lastTopicName: (cur >= 0 && cur < T.length) ? T[cur].n : "Topic 1",
     weakTopics: Object.keys(weak).join(", ") || "None",
     timestamp: new Date().toLocaleString(),
     userAgent: navigator.userAgent
   };
   sendToGoogleSheet(loginPayload);
+  
   acct();
+  build();
+  draw();
   return true;
 }
 
@@ -1076,7 +1178,17 @@ function acct() {
 }
 
 function initCloud() {
-  cloud.d.best = lb();
+  const savedRoll = localStorage.getItem("cl_user_roll");
+  const savedName = localStorage.getItem("cl_user_name");
+  if (savedRoll) {
+    loadStudentData(savedRoll, savedName);
+  } else {
+    done.clear();
+    cur = 0;
+    step = 0;
+  }
+  build();
+  draw();
   acct();
   checkLoginPrompt();
   if (cloud.d.roll && cloud.d.name) {
@@ -1085,8 +1197,10 @@ function initCloud() {
       enrollmentNo: cloud.d.roll,
       name: cloud.d.name,
       topicsCompleted: done.size,
-      bestScore: lb(),
+      bestScore: cloud.d.best || lb(),
       totalTopics: T.length,
+      lastTopicIndex: cur,
+      lastTopicName: (cur >= 0 && cur < T.length) ? T[cur].n : "Topic 1",
       weakTopics: Object.keys(weak).join(", ") || "None",
       timestamp: new Date().toLocaleString(),
       userAgent: navigator.userAgent
@@ -1129,21 +1243,49 @@ async function dash() {
   };
   
   const studentCard = el("div", "card");
-  studentCard.append(el("h3", "", "Active Student Record (This Device)"));
+  studentCard.append(el("h3", "", "Students on this Device"));
   const tb = el("table");
-  tb.innerHTML = "<tr><th>Enrollment No.</th><th>Student Name</th><th>Topics Done</th><th>Best Test</th><th>Weak Topics</th><th>Last Active</th></tr>";
-  const tr = el("tr");
-  const wkStr = Object.entries(weak).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>dn(e[0])+" ("+e[1]+")").join(", ") || "None";
-  [
-    cloud.d.roll || "Not logged in",
-    cloud.d.name || "Guest",
-    done.size + " / " + T.length + " (" + Math.round(100 * done.size / T.length) + "%)",
-    lb() + " / 10",
-    wkStr,
-    new Date().toLocaleString()
-  ].forEach(v => tr.append(el("td", "", v)));
-  tb.append(tr);
+  tb.innerHTML = "<tr><th>Enrollment No.</th><th>Student Name</th><th>Topics Done</th><th>Last Topic</th><th>Best Test</th><th>Weak Topics</th></tr>";
+  const stuList = [];
+  for (let k = 0; k < localStorage.length; k++) {
+    const key = localStorage.key(k);
+    if (key && key.startsWith("cl_stu_")) {
+      try { stuList.push(JSON.parse(localStorage.getItem(key))); } catch(e){}
+    }
+  }
+  if (!stuList.length && cloud.d.roll) {
+    stuList.push({
+      roll: cloud.d.roll,
+      name: cloud.d.name,
+      done: [...done].map(i => T[i].n),
+      cur: cur,
+      best: lb(),
+      weak: weak
+    });
+  }
+  stuList.sort((a,b) => (a.roll||"").localeCompare(b.roll||""));
   
+  if (stuList.length) {
+    stuList.forEach(s => {
+      const tr = el("tr");
+      const sDone = (s.done || []).length;
+      const sLast = (typeof s.cur === "number" && s.cur >= 0 && s.cur < T.length) ? ((s.cur+1) + ". " + dn(T[s.cur].n)) : (s.cur == -1 ? "Mixed Test" : s.cur == -2 ? "Spot the Bug" : "Topic 1");
+      const sWeak = Object.entries(s.weak || {}).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>dn(e[0])+" ("+e[1]+")").join(", ") || "None";
+      [
+        (s.roll || "-") + (s.roll === cloud.d.roll ? " (Active)" : ""),
+        s.name || "Student",
+        sDone + " / " + T.length + " (" + Math.round(100 * sDone / T.length) + "%)",
+        sLast,
+        (s.best || 0) + " / 10",
+        sWeak
+      ].forEach(v => tr.append(el("td", "", v)));
+      tb.append(tr);
+    });
+  } else {
+    const tr = el("tr");
+    tr.append(el("td", "", "No students recorded yet"));
+    tb.append(tr);
+  }
   const wr = el("div");
   wr.style.overflowX = "auto";
   wr.append(tb);
@@ -1154,12 +1296,20 @@ async function dash() {
   dl.onclick = () => {
     const q2 = v => '"' + String(v).replace(/"/g, '""') + '"';
     const csv = "Enrollment,Name,TopicsDone,Total,BestTest,WeakTopics,LastActive\n" +
-      [cloud.d.roll||"-", cloud.d.name||"-", done.size, T.length, lb(), wkStr, new Date().toISOString()].map(q2).join(",");
+      stuList.map(s => [
+        s.roll||"-",
+        s.name||"-",
+        (s.done||[]).length,
+        T.length,
+        s.best||0,
+        Object.keys(s.weak||{}).join("; "),
+        s.lastUpdated ? new Date(s.lastUpdated).toISOString() : new Date().toISOString()
+      ].map(q2).join(",")).join("\n");
     try {
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `codelens-${cloud.d.roll || 'student'}-progress.csv`;
+      link.download = `codelens-students-progress.csv`;
       link.click();
     } catch(e) {
       alert("CSV export error: " + e.message);
@@ -1175,14 +1325,14 @@ function build(){
   T.forEach((t,i)=>{
     const b=el("button",(i==cur?"on ":"")+(done.has(i)?"done":""),(i+1)+". "+dn(t.n));
     b.append(el("small","",t.s));
-    b.onclick=()=>{cur=i;step=0;build();draw()};
+    b.onclick=()=>{cur=i;step=0;saveStudentData();build();draw()};
     nav.append(b);
   });
   nav.append(el("div","sep","Tests & practice"));
   [[-1,"Mixed Test","all topics"],[-2,"Spot the Bug","find and fix"],[-3,"Teacher Dashboard & Setup","sync & records"]].forEach(([v,n,sb])=>{
     const x=el("button",v==cur?"on":"",n);
     x.append(el("small","",sb));
-    x.onclick=()=>{cur=v;step=0;build();draw()};
+    x.onclick=()=>{cur=v;step=0;saveStudentData();build();draw()};
     nav.append(x);
   });
   document.getElementById("pg").style.width=(done.size/T.length*100)+"%";
