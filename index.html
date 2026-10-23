@@ -1271,23 +1271,26 @@ function loginStudent(rollVal,nameVal){
   return true;
 }
 
-function checkLoginPrompt(){
-  if(cloud.d.roll&&cloud.d.name)return;
+function checkLoginPrompt(force=false){
   const ex=document.getElementById("studentLoginModal");
   if(ex)ex.remove();
+  const curRoll=cloud.d.roll||localStorage.getItem("cl_user_roll")||"";
+  const curName=cloud.d.name||localStorage.getItem("cl_user_name")||"";
+  if(!force && curRoll && curName)return;
+  
   const ov=el("div","modal-overlay");
   ov.id="studentLoginModal";
   const box=el("div","modal-box");
   box.innerHTML=`
-    <h3>Welcome to CodeLens C++ Studio</h3>
-    <p>Please enter your <strong>Enrollment Number</strong> and <strong>Full Name</strong> to track your learning progress and generate your Certificate of Merit.</p>
+    <h3>Student Sign In</h3>
+    <p>Please enter or confirm your <strong>Enrollment Number</strong> and <strong>Full Name</strong> to track your learning progress and generate your Certificate of Merit.</p>
     <div class="modal-field">
       <label for="promptRoll">Enrollment Number <span style="color:var(--bad)">*</span></label>
-      <input id="promptRoll" placeholder="e.g. 21IT001 or 22CE050" value="${cloud.d.roll||''}">
+      <input id="promptRoll" placeholder="e.g. 21IT001 or 22CE050" value="${fesc(curRoll)}" autocomplete="off" autofocus>
     </div>
     <div class="modal-field">
       <label for="promptName">Full Name <span style="color:var(--bad)">*</span></label>
-      <input id="promptName" placeholder="e.g. Rahul Patel" value="${cloud.d.name||''}">
+      <input id="promptName" placeholder="e.g. Rahul Patel" value="${fesc(curName)}" autocomplete="off">
     </div>
     <div class="modal-actions">
       <button id="promptGuestBtn" type="button">Explore as Guest</button>
@@ -1296,22 +1299,48 @@ function checkLoginPrompt(){
   `;
   ov.append(box);
   document.body.append(ov);
-  document.getElementById("promptGuestBtn").onclick=()=>ov.remove();
-  document.getElementById("promptSubmitBtn").onclick=()=>{
-    const r=document.getElementById("promptRoll").value;
-    const n=document.getElementById("promptName").value;
+  
+  const rollInp=document.getElementById("promptRoll");
+  const nameInp=document.getElementById("promptName");
+  
+  rollInp.addEventListener("input",()=>{
+    const r=rollInp.value.trim().toUpperCase();
+    const raw=localStorage.getItem("cl_stu_"+r);
+    if(raw){
+      try{
+        const d=JSON.parse(raw);
+        if(d.name)nameInp.value=d.name;
+      }catch(e){}
+    }
+  });
+  
+  const submitLogin=()=>{
+    const r=rollInp.value.trim();
+    const n=nameInp.value.trim();
     if(loginStudent(r,n))ov.remove();
   };
+  
+  rollInp.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter"){
+      if(nameInp.value.trim())submitLogin();
+      else nameInp.focus();
+    }
+  });
+  nameInp.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter")submitLogin();
+  });
+  
+  document.getElementById("promptGuestBtn").onclick=()=>ov.remove();
+  document.getElementById("promptSubmitBtn").onclick=submitLogin;
+  
+  setTimeout(()=>{
+    if(rollInp.value)rollInp.select();
+    else rollInp.focus();
+  },150);
 }
 
 function promptEditUser(){
-  const curRoll=cloud.d.roll||"";
-  const curName=cloud.d.name||"";
-  const newRoll=prompt("Enter Enrollment Number:",curRoll);
-  if(newRoll===null)return;
-  const newName=prompt("Enter Student Full Name:",curName);
-  if(newName===null)return;
-  loginStudent(newRoll,newName);
+  checkLoginPrompt(true);
 }
 
 function acct(){
@@ -1420,15 +1449,11 @@ function initCloud(){
     cloud.d.roll=savedRoll;
     cloud.d.name=savedName||"";
     loadStudentData(savedRoll,savedName);
-    acct();
-    build();
-    draw();
-  }else{
-    acct();
-    build();
-    draw();
-    setTimeout(checkLoginPrompt,400);
   }
+  acct();
+  build();
+  draw();
+  setTimeout(()=>checkLoginPrompt(true),300);
 }
 
 const dn=n=>n.replace(/^\d+\.\s*/,"");
