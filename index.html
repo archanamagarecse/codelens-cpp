@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CodeLens: Understanding the Code | C++ Studio</title>
+<title>CodeLens | C++ Studio | CHARUSAT CSPIT</title>
 <style>
 :root{--bg:#f6f5f1;--card:#fff;--ink:#1b1f24;--mute:#66707a;--line:#dedbd2;--acc:#0b6e99;--hl:#fff3c4;--ok:#1a7f4b;--bad:#b3261e;--code:#f0eee7;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -61,31 +61,38 @@ h3{color:var(--acc)}
 .sep{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mute);margin:10px 2px 0;border-top:1px solid var(--line);padding-top:10px}
 @media(min-width:761px){nav{max-height:calc(100vh - 24px);overflow-y:auto;padding-right:4px}}
 @media(max-width:760px){.sep{display:none}}
-#acct{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:rgba(255,255,255,.08);padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.16);margin-top:10px}
-#acct .acct-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}
-#acct input{padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.3);background:#fff;color:#111;font-size:.85rem;max-width:180px}
-#acct button{padding:5px 12px;border-radius:6px;border:1px solid #9cc9ff;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:.84rem;font-weight:500;transition:all .2s}
-#acct button:hover{background:rgba(255,255,255,.25);border-color:#fff}
-#acct button.btn-pri{background:#9cc9ff;color:#0f2742;font-weight:600;border-color:#9cc9ff}
-#acct button.btn-pri:hover{background:#c3ddff}
-.acct-status{font-size:.82rem;color:#c5dcfa;margin-left:auto;display:flex;align-items:center;gap:5px}
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,20,30,.72);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}
-.modal-box{background:var(--card);color:var(--ink);border-radius:12px;max-width:480px;width:100%;padding:22px;box-shadow:0 12px 36px rgba(0,0,0,.35);border:1px solid var(--line)}
-.modal-box h3{margin:0 0 8px;font-size:1.25rem;color:var(--acc)}
-.modal-box p{margin:0 0 14px;font-size:.9rem;color:var(--mute);line-height:1.45}
+#acct{margin-top:10px;font-size:.85rem;color:#d3e2f5}
+.acct-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.acct-status{opacity:.9;font-style:italic;margin-left:6px;color:#9cc9ff;transition:opacity .3s}
+#acct button{padding:4px 10px;border-radius:8px;border:1px solid #9cc9ff;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:.8rem}
+#acct button:hover{background:rgba(255,255,255,.2);border-color:#fff}
+#acct input{max-width:190px;padding:4px 8px;border-radius:6px;border:1px solid #9cc9ff;background:rgba(255,255,255,.12);color:#fff}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.modal-box{background:var(--card);color:var(--ink);border:2px solid var(--acc);border-radius:12px;padding:22px;max-width:480px;width:100%;box-shadow:0 12px 30px rgba(0,0,0,.5);animation:popIn .2s ease-out}
+@keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-box h3{margin-top:0;margin-bottom:8px;color:var(--acc)}
+.modal-box p{font-size:.9rem;line-height:1.5;margin-bottom:12px}
 .modal-field{margin-bottom:12px}
-.modal-field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:4px;color:var(--ink)}
-.modal-field input{width:100%;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--code);color:var(--ink);font:inherit;font-size:.9rem;box-sizing:border-box}
-.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
-.modal-actions button{padding:7px 15px;border-radius:6px;border:1px solid var(--line);background:var(--code);color:var(--ink);cursor:pointer;font:inherit;font-size:.88rem}
-.modal-actions button.primary{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+.modal-field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px;color:var(--mute)}
+.modal-field input{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:.95rem}
+.modal-field input:focus{border-color:var(--acc);outline:none}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.modal-actions button{padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font-weight:600}
+.modal-actions button.primary{background:var(--acc);color:var(--card);border-color:var(--acc)}
+.fc{min-height:140px;padding:20px;border:2px solid var(--line);border-radius:12px;background:var(--code);cursor:pointer;white-space:pre-wrap;display:flex;align-items:center;font-size:1.02rem;margin-bottom:10px;user-select:none}.fc.back{border-color:var(--acc)}
+.inst{font-size:1rem;font-weight:700;letter-spacing:.02em;color:#fff;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.28)}.inst small{display:block;font-weight:500;color:#cfe0f5;font-size:.84rem;margin-top:3px;letter-spacing:0}
+.inst{text-align:center;font-size:1.12rem;letter-spacing:.06em}.inst small{text-transform:none;letter-spacing:0;font-size:.85rem}
+.toast{position:fixed;right:16px;bottom:16px;background:var(--acc);color:var(--card);padding:8px 14px;border-radius:20px;font-weight:700;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.3)}.mc{border:2px solid var(--line);border-radius:8px;padding:6px 10px;margin:6px 0;background:var(--code);font:13px ui-monospace,Menlo,Consolas,monospace}.mc.tg{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}.mc.fr{opacity:.55;text-decoration:line-through}.mc small{color:var(--mute)}.ar{color:var(--acc);font-weight:700}.mg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media print{body *{visibility:hidden}#cert,#cert *{visibility:visible}#cert{position:absolute;left:0;top:0;width:100%}}
 </style></head><body>
-<header><h1>Code<span>Lens</span> <small style="font-size:.6em;font-weight:500;color:var(--mute)">C++ Studio</small></h1>
+<header><div class="inst">CHAROTAR UNIVERSITY OF SCIENCE &amp; TECHNOLOGY (CHARUSAT)<small>Chandubhai S Patel Institute of Technology (CSPIT)</small><small>Computer Science &amp; Engineering Department</small></div>
+<h1>Code<span>Lens</span> <small style="font-size:.6em;font-weight:500;color:var(--mute)">C++ Studio</small></h1>
 <p><b>Understanding the Code:</b> step through each line, watch memory change, then test yourself.</p>
-<p class="by">Designed by Dr. Archana Chandrashekhar Magare</p>
-<div id="acct" style="margin-top:10px;font-size:.85rem;color:#d3e2f5"><span id="acs">Checking sign-in...</span></div>
+<p class="by" title="Faculty of Technology, CHARUSAT">Designed by Dr. Archana Chandrashekhar Magare</p>
+<div id="acct"><span id="acs"></span></div>
 <div class="bar"><i id="pg"></i></div>
-<div id="pgt" style="font-size:.85rem;margin-top:6px;color:#d3e2f5"></div></header>
+<div id="pgt" style="font-size:.85rem;margin-top:6px;color:#d3e2f5"></div>
+<div id="xpb" style="font-size:.85rem;margin-top:4px;color:#9cc9ff;font-weight:600"></div></header>
 <div class="wrap"><nav id="nav"></nav><main id="main"></main></div>
 <script>
 const T=[
@@ -707,12 +714,12 @@ const BUGS=[
 ["Uninitialised reference",["int &r;","r = 5;"],0,["int x = 1; int &r = x;","int &r = 0;","int *r;"],"A reference must be bound to a variable when declared."],
 ["No base case",["int fact(int n) {","  return n * fact(n - 1);","}"],1,["if (n <= 1) return 1; return n * fact(n - 1);","return n * fact(n);","return fact(n - 1);"],"Without a base case the recursion never stops."]
 ];
-const sv=()=>{if(typeof saveStudentData==='function')saveStudentData();else{try{localStorage.setItem("cl_done",JSON.stringify([...done].map(i=>T[i].n)))}catch(e){}}cs()};
+const sv=()=>{saveStudentData();cs()};
 function mixed(){const c=el("div","card");c.append(el("h2","","Mixed Test"),el("p","","10 random questions from all topics. Your score and weak topics appear at the end."));
 const pool=[];Object.keys(P).forEach(k=>P[k].forEach(q=>pool.push([k,q])));
-const qs=pool.sort(()=>Math.random()-.5).slice(0,10);let i=0,sc=0;const miss={};const box=el("div");c.append(box);main.append(c);
-const fin=()=>{let best=sc;try{best=Math.max(sc,cloud.d.best||0,+localStorage.getItem("cl_best")||0);cloud.d.best=best;localStorage.setItem("cl_best",best)}catch(e){}if(typeof saveStudentData==='function')saveStudentData();cs({best});
-box.append(el("h2","",sc+" / "+qs.length),el("p","","Best score on this device: "+best));const w=Object.keys(miss);
+const qs=pool.sort(()=>Math.random()-.5).slice(0,10);let i=0,sc=0;const miss={};const box=el("div");c.append(box);main.append(c);let left=600;const tm=el("p","","Time left: 10:00");c.insertBefore(tm,box);clearInterval(tmr);tmr=setInterval(()=>{left--;tm.textContent="Time left: "+Math.floor(left/60)+":"+String(left%60).padStart(2,"0");if(left<=0){clearInterval(tmr);i=qs.length;show()}},1000);
+const fin=()=>{clearInterval(tmr);let best=Math.max(sc,cloud.d.best||0);cloud.d.best=best;saveStudentData();cs({best});award(sc*2);
+box.append(el("h2","",sc+" / "+qs.length),el("p","","Your best score: "+best));const w=Object.keys(miss);
 box.append(el("p","",w.length?"Revise these topics: "+w.join(", "):"No weak topics. Excellent!"));
 const r=el("button","opt","Take a new test");r.style.width="auto";r.onclick=()=>{main.innerHTML="";mixed()};box.append(r)};
 const show=()=>{box.innerHTML="";if(i==qs.length){fin();return}const [k,Q]=qs[i];box.append(el("span","tag",(i+1)+" / "+qs.length+" | "+k),el("p","",Q[0]));
@@ -721,7 +728,7 @@ why.textContent=(ok?"Correct. ":"Not quite. ")+Q[5];const cb=el("div","ctl"),nx=
 function bugs(){const h=el("div","card");h.append(el("h2","","Spot the Bug"),el("p","","Each program has one mistake. Tap the faulty line, then choose the correct fix."));main.append(h);
 BUGS.forEach((B,n)=>{const c=el("div","card");c.append(el("span","tag","Bug "+(n+1)+": "+B[0]));const cd=el("div","code"),fx=el("div"),msg=el("div","why");let found=false;
 B[1].forEach((l,i)=>{const d=el("div","",l||" ");d.style.cursor="pointer";d.onclick=()=>{if(found)return;if(i==B[2]){found=true;d.classList.add("on");msg.textContent="Right line! Now choose the fix.";
-B[3].map((o,j)=>[o,j]).sort(()=>Math.random()-.5).forEach(([o,j])=>{const b=el("button","opt",o);b.onclick=()=>{[...fx.querySelectorAll(".opt")].forEach(x=>x.disabled=true);if(j==0){b.classList.add("ok");msg.textContent="Correct. "+B[4]}else{b.classList.add("no");msg.textContent="Not quite. Correct fix: "+B[3][0]+". "+B[4]}};fx.append(b)})}else{d.style.background="rgba(180,35,24,.2)";msg.textContent="That line is fine. Look again."}};cd.append(d)});
+B[3].map((o,j)=>[o,j]).sort(()=>Math.random()-.5).forEach(([o,j])=>{const b=el("button","opt",o);b.onclick=()=>{[...fx.querySelectorAll(".opt")].forEach(x=>x.disabled=true);if(j==0){b.classList.add("ok");msg.textContent="Correct. "+B[4];award(10,"bug:g"+n)}else{b.classList.add("no");msg.textContent="Not quite. Correct fix: "+B[3][0]+". "+B[4]}};fx.append(b)})}else{d.style.background="rgba(180,35,24,.2)";msg.textContent="That line is fine. Look again."}};cd.append(d)});
 c.append(cd,fx,msg);main.append(c)})}
 const q=(t,c,i,f,a,b,w)=>({t,c:c.split("\n"),i,o:[f,a,b],w});
 const SB={
@@ -756,7 +763,7 @@ const SB={
 };
 function bugCard(B,tag,tp){const c=el("div","card");c.append(el("span","tag",tag));const cd=el("div","code"),fx=el("div"),msg=el("div","why");let found=false;
 B.c.forEach((l,i)=>{const d=el("div","",l||" ");d.style.cursor="pointer";d.onclick=()=>{if(found)return;if(i==B.i){found=true;d.classList.add("on");msg.textContent="Right line! Now choose the fix.";
-B.o.map((o,j)=>[o,j]).sort(()=>Math.random()-.5).forEach(([o,j])=>{const b=el("button","opt",o);b.onclick=()=>{[...fx.querySelectorAll(".opt")].forEach(x=>x.disabled=true);if(j==0){b.classList.add("ok");msg.textContent="Correct. "+B.w}else{b.classList.add("no");wrong(tp);msg.textContent="Not quite. Correct fix: "+B.o[0]+". "+B.w}};fx.append(b)})}else{d.style.background="rgba(180,35,24,.2)";msg.textContent="That line is fine. Look again."}};cd.append(d)});
+B.o.map((o,j)=>[o,j]).sort(()=>Math.random()-.5).forEach(([o,j])=>{const b=el("button","opt",o);b.onclick=()=>{[...fx.querySelectorAll(".opt")].forEach(x=>x.disabled=true);if(j==0){b.classList.add("ok");msg.textContent="Correct. "+B.w;award(10,"bug:"+(tp||"x")+":"+B.c[0])}else{b.classList.add("no");wrong(tp);msg.textContent="Not quite. Correct fix: "+B.o[0]+". "+B.w}};fx.append(b)})}else{d.style.background="rgba(180,35,24,.2)";msg.textContent="That line is fine. Look again."}};cd.append(d)});
 c.append(cd,fx,msg);return c}
 Object.assign(P,{
 "Nested Loops":[["for(i=0;i<2;i++) for(j=0;j<3;j++) cout<<'*'; How many stars?","6","5","2",0,"2 x 3 = 6."],["for(i=1;i<=3;i++){ for(j=1;j<=3;j++) cout<<i*j<<' '; } What is the last number printed?","9","6","3",0,"3 x 3 = 9."],["int c=0; for(i=0;i<4;i++) for(j=i;j<4;j++) c++; cout<<c;","10","16","6",0,"4 + 3 + 2 + 1 = 10."]],
@@ -794,305 +801,486 @@ Object.assign(SB,{
 "Dynamic Memory":[q("S",`int *a = new int[3];\ndelete a[];`,1,`delete[] a;`,`delete(a[]);`,`delete a[3];`,`The array form is delete[] a;`),q("L",`int *a = new int[3];\na[0] = 1;\ndelete a;`,2,`delete[] a;`,`free(a);`,`delete a[0];`,`Memory from new[] must be freed with delete[].`),q("L",`int *p = new int(5);\ndelete p;\ndelete p;`,2,`Remove the second delete`,`Replace it with free(p);`,`Replace it with delete[] p;`,`Deleting twice is undefined behaviour; set p = nullptr after the first delete.`)],
 "File Handling":[q("S",`ofstream out("a.txt")\nout << "Hi";`,0,`ofstream out("a.txt");`,`ofstream out("a.txt":`,`ofstream out = "a.txt";`,`Missing semicolon.`),q("L",`// read numbers from a file\nofstream in("a.txt");\nin >> x;`,1,`ifstream in("a.txt");`,`fstream out("a.txt");`,`ofstream in("a.txt", "r");`,`Reading needs an input stream (ifstream).`),q("L",`ifstream in("a.txt");\nint x;\nwhile (!in.eof()) {\n  in >> x; cout << x;\n}`,2,`while (in >> x) cout << x;`,`while (in.eof()) cout << x;`,`while (in) cout << x;`,`eof() turns true only after a failed read, so the last value can repeat; test the read itself.`)]
 });
-const done = new Set();
-let cur = 0, step = 0;
-const nav = document.getElementById("nav"), main = document.getElementById("main");
-function el(t, c, x) { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
-let isT = true, unsub = null;
-const TEACHER_EMAIL = "archanamagare.cse@charusat.ac.in";
-const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwE4xvfVF6ss33k0YmmNk790WcK6mbV1QpL5rm1-Y8HyiHmdvt6kHV2Bw1OHKkdT_mN/exec";
-let GOOGLE_SHEET_URL = localStorage.getItem("cl_sheet_url") || DEFAULT_GOOGLE_SHEET_URL;
+const TH={
+"Simple Statements":[`A C++ program is a list of statements, each ending with a semicolon. A variable must be declared with a type before it is used. cout prints values and cin reads them.`,`type name = value;   cin >> x;   cout << x;`,`Names cannot start with a digit or be keywords;C++ is case sensitive;int / int gives an int`],
+"Data Types & Casting":[`A data type tells the compiler how much memory a value needs and how to treat it. The basic types are int, float, double, char and bool. Conversion between types is implicit (automatic) or explicit (a cast).`,`(type)value    static_cast<type>(value)`,`Typical sizes: int 4, double 8 bytes;char stores an ASCII code;casting a double to int truncates`],
+"Operators":[`Operators act on operands. The groups are arithmetic, relational, logical, assignment, bitwise and conditional. Precedence and associativity decide the order of evaluation.`,`a + b   a % b   a > b   a && b   a & b   c ? x : y`,`% works only on integers;&& and || stop early (short-circuit);use brackets to make the order clear`],
+"Increment & Decrement":[`++ adds 1 and -- subtracts 1. Prefix (++a) changes the variable first and then uses the new value; postfix (a++) uses the old value and then changes the variable.`,`++a    a++    --a    a--`,`Alone on a line both forms behave the same;do not change one variable twice in one expression`],
+"1. Simple if":[`The if statement runs a block only when its condition is true (any non-zero value). When the condition is false the block is skipped.`,`if (condition) { statements }`,`The condition goes in parentheses;no semicolon after the condition;= assigns, == compares`],
+"2. if-else":[`if-else chooses between two blocks. The if block runs when the condition is true and the else block runs when it is false.`,`if (condition) { ... } else { ... }`,`Exactly one block executes;else has no condition`],
+"3. else-if Ladder":[`An else-if ladder tests several conditions from top to bottom and runs the block of the first true condition. The rest are skipped.`,`if (c1) { ... } else if (c2) { ... } else { ... }`,`Order the tests from most restrictive to least;the final else is optional;only one branch runs`],
+"4. Nested if":[`A nested if is an if inside another if or else. The inner condition is checked only when the outer one lets control reach it.`,`if (c1) { if (c2) { ... } else { ... } }`,`An else pairs with the nearest unmatched if;use braces to avoid the dangling else;deep nesting is hard to read`],
+"5. switch":[`switch selects one of many alternatives by matching an integer or character expression against case labels.`,`switch (expr) { case 1: ...; break; default: ...; }`,`Case labels must be constants;break prevents fall-through;default handles all other values`],
+"6. while Loop":[`while is an entry-controlled loop. The condition is tested before every pass, so the body may run zero times.`,`while (condition) { statements }`,`Initialise before the loop;update inside the body;a missing update makes an infinite loop`],
+"7. do-while Loop":[`do-while is an exit-controlled loop. The body runs once before the condition is tested, so it always runs at least once.`,`do { statements } while (condition);`,`Ends with a semicolon;suited to menus and input validation`],
+"8. for Loop":[`for packs initialisation, condition and update into one line. It is the usual choice when the number of repetitions is known.`,`for (init; condition; update) { statements }`,`Order: init once, then condition, body, update;a variable declared in init is local to the loop;any part may be left empty`],
+"break & continue":[`break leaves the nearest loop or switch immediately. continue skips the rest of the current pass and begins the next one.`,`break;    continue;`,`In nested loops break leaves only the inner loop;use them sparingly`],
+"Nested Loops":[`A loop inside a loop. For every pass of the outer loop the inner loop runs completely. It is used for patterns, tables and matrices.`,`for (i...) { for (j...) { ... } }`,`Total passes = outer count x inner count;the outer loop usually controls rows and the inner controls columns`],
+"User Defined Functions":[`A function is a named block of code that can be called again and again. It has a return type, a name, parameters and a body. Arguments are copied (call by value) unless a reference or pointer is used.`,`type name(parameters) { ...; return value; }`,`Declare a prototype before use;a non-void function must return a value;default arguments go last in the parameter list`],
+"Function Overloading":[`Function overloading gives several functions the same name but different parameter lists. The compiler picks the best match at compile time.`,`int area(int s);   int area(int l, int w);`,`The return type alone is not enough;ambiguous calls are compile errors`],
+"Recursion":[`A recursive function calls itself on a smaller version of the problem until a base case stops it. Each call has its own stack frame.`,`int f(int n) { if (n <= 1) return 1; return n * f(n - 1); }`,`A base case is mandatory;each call must move toward it;very deep recursion can overflow the stack`],
+"Arrays":[`An array holds a fixed number of values of one type in contiguous memory. Elements are reached by an index that starts at 0.`,`type name[size] = {v1, v2, ...};`,`The last index is size - 1;there is no bounds checking;the array name is the address of its first element`],
+"2D Arrays":[`A 2D array is a table of rows and columns stored row by row.`,`type name[rows][cols];`,`m[i][j] is row i, column j;nested loops traverse it;the column size must be given when passing it to a function`],
+"C-Strings":[`A C string is a char array that ends with the null character \\0, which marks where the text stops.`,`char s[] = "Hello";`,`Reserve one extra byte for \\0;copy with strcpy, not =;double quotes for strings, single quotes for one char`],
+"String Functions":[`The <cstring> header supplies strlen, strcpy, strcat and strcmp for C strings.`,`strlen(s)   strcpy(d, s)   strcat(d, s)   strcmp(a, b)`,`strcmp returns 0 when the strings are equal;the destination must be large enough;strncpy limits the count`],
+"std::string":[`std::string is a class from <string>. It manages its own memory and supports +, == and many member functions.`,`string s = "abc";  s.size();  s.substr(1, 2);  s.find("b");`,`getline(cin, s) reads a whole line;find returns string::npos when nothing matches`],
+"Pointers":[`A pointer stores the address of another variable. & gives the address of a variable and * reaches the value at an address.`,`int *p = &x;    *p = 5;`,`Initialise pointers or use nullptr;p + 1 moves by sizeof(type);an array name acts as a pointer to its first element`],
+"Dynamic Memory":[`new allocates memory on the heap while the program runs and delete gives it back. Heap memory stays until you free it.`,`int *p = new int;  delete p;   int *a = new int[n];  delete[] a;`,`new[] pairs with delete[];forgetting delete leaks memory;never use memory after delete`],
+"References":[`A reference is another name for an existing variable. It must be initialised and can never be re-bound.`,`int &r = x;`,`A reference parameter lets a function change the caller's variable;const T& avoids copying large objects`],
+"Structures":[`A structure groups variables of different types under one name. Members are reached with . for a variable and -> for a pointer.`,`struct Student { int roll; float cgpa; };`,`The definition ends with a semicolon;a struct can be copied and passed to functions;members are public by default`],
+"Classes & Objects":[`A class bundles data members and member functions. An object is an instance of a class. Access specifiers (private, protected, public) give encapsulation and data hiding.`,`class A { private: int x; public: void set(int v); };`,`Members are private by default in a class;this points to the current object;each object has its own data members`],
+"Constructors & RAII":[`A constructor has the class name and no return type, and runs when an object is created. The destructor ~Class() runs when the object is destroyed and releases resources (RAII).`,`A(int x) { ... }     ~A() { ... }`,`Constructors can be overloaded;the copy constructor takes const A&;destructors run in reverse order of construction`],
+"Operator Overloading":[`Operator overloading gives the standard operators a meaning for your own types by writing operator functions.`,`V operator+(V o) { ... }`,`:: . .* ?: and sizeof cannot be overloaded;precedence cannot change;a + b means a.operator+(b)`],
+"Inheritance":[`Inheritance lets a derived class reuse the members of a base class (an is-a relation). The types are single, multilevel, multiple, hierarchical and hybrid.`,`class D : public B { ... };`,`The base constructor runs first;public inheritance keeps public members public;private base members are not directly accessible`],
+"Polymorphism":[`Polymorphism means one interface with many forms. Compile-time polymorphism is overloading. Run-time polymorphism uses virtual functions, which pick the version from the object's real type through the vtable.`,`virtual void f();      void f() override;`,`A base class needs a virtual destructor;a pure virtual function (= 0) makes the class abstract;override catches signature mistakes`],
+"Templates":[`Templates let you write one function or class for any type. The compiler generates a version for each type that is used.`,`template<typename T> T maxOf(T a, T b) { ... }`,`Resolved at compile time;the STL is built from templates;T is deduced from the arguments`],
+"STL vector":[`vector is a dynamic array from the STL. It grows automatically and offers push_back, pop_back, size, begin and end.`,`vector<int> v;   v.push_back(5);`,`Random access is O(1);push_back is amortised O(1);reallocation invalidates iterators`],
+"Exceptions":[`Exception handling keeps error handling apart from normal code. throw raises an exception, try wraps risky code and catch handles it; the stack unwinds in between.`,`try { throw 1; } catch (int e) { ... }`,`Catch by reference;list specific catch blocks before general ones;catch (...) catches anything`],
+"File Handling":[`Programs read and write files through streams from <fstream>. ofstream writes, ifstream reads and fstream does both.`,`ofstream out("a.txt");  out << x;  out.close();`,`Check that the file opened;while (in >> x) reads to the end;close files when finished`]
+};
+const rd=x=>Math.round(x*100)/100;
+const LAB={
+"1. Simple if":{s:`A canteen gives a 10% discount only when the bill is above 1000. Change the bill and see whether the discount block runs.`,c:["float bill = @bill@;","if (bill > 1000)","  bill = bill - bill * 0.1;","cout << bill;"],in:[["bill",1500,0,5000]],p:[{bill:1500},{bill:800}],run:v=>{const b=v.bill,c=b>1000,s=[[0,"bill is "+b,[["bill",b]]],[1,b+" > 1000 is "+c,[["bill",b],["condition",c]]]];let r=b;if(c){r=rd(b*0.9);s.push([2,"Discount of 10% applied.",[["bill",r]]])}s.push([3,"cout prints the bill.",[["output",r]]]);return{st:s,out:""+r}}},
+"2. if-else":{s:`A lift allows at most 8 persons. Enter the number of persons and see which branch runs.`,c:["int n = @n@;","if (n <= 8)","  cout << \"Allowed\";","else","  cout << \"Overload\";"],in:[["n",9,0,20]],p:[{n:9},{n:8}],run:v=>{const n=v.n,ok=n<=8,s=[[0,"n = "+n,[["n",n]]],[1,"n <= 8 is "+ok,[["condition",ok]]]];s.push(ok?[2,"The if block runs.",[["output","Allowed"]]]:[4,"Condition false, so the else block runs.",[["output","Overload"]]]);return{st:s,out:ok?"Allowed":"Overload"}}},
+"3. else-if Ladder":{s:`A teacher grades marks as A (90 or more), B (60 or more) and F otherwise. Change the marks and watch each test.`,c:["int m = @m@;","if (m >= 90) cout << \"A\";","else if (m >= 60) cout << \"B\";","else cout << \"F\";"],in:[["m",72,0,100]],p:[{m:95},{m:60}],run:v=>{const m=v.m,s=[[0,"m = "+m,[["m",m]]]];let o;if(m>=90){s.push([1,m+" >= 90 is true.",[["output","A"]]]);o="A"}else{s.push([1,m+" >= 90 is false.",[["test","m >= 90"],["result","false"]]]);if(m>=60){s.push([2,m+" >= 60 is true.",[["output","B"]]]);o="B"}else{s.push([2,m+" >= 60 is false.",[["test","m >= 60"],["result","false"]]]);s.push([3,"The final else runs.",[["output","F"]]]);o="F"}}return{st:s,out:o}}},
+"4. Nested if":{s:`A hostel gate allows entry to students aged 18 or more, but only if they carry an ID (1 = yes, 0 = no).`,c:["int age = @age@, id = @id@;","if (age >= 18) {","  if (id == 1) cout << \"Enter\";","  else cout << \"Show ID\";","} else cout << \"Too young\";"],in:[["age",20,0,60],["id",1,0,1]],p:[{age:20,id:0},{age:16,id:1}],run:v=>{const s=[[0,"age = "+v.age+", id = "+v.id,[["age",v.age],["id",v.id]]],[1,"age >= 18 is "+(v.age>=18),[["outer",v.age>=18]]]];let o;if(v.age>=18){s.push([2,"id == 1 is "+(v.id==1),[["inner",v.id==1]]]);o=v.id==1?"Enter":"Show ID";s.push([v.id==1?2:3,"Output: "+o,[["output",o]]])}else{o="Too young";s.push([4,"Outer condition false, so the outer else runs.",[["output",o]]])}return{st:s,out:o}}},
+"5. switch":{s:`A timetable app shows the day name from a number: 1 = Mon, 2 = Tue, anything else = Other.`,c:["int d = @d@;","switch (d) {","  case 1: cout << \"Mon\"; break;","  case 2: cout << \"Tue\"; break;","  default: cout << \"Other\";","}"],in:[["d",2,0,9]],p:[{d:2},{d:7}],run:v=>{const d=v.d,s=[[0,"d = "+d,[["d",d]]],[1,"switch evaluates d.",[["switch value",d]]]];let o,l;if(d==1){o="Mon";l=2}else if(d==2){o="Tue";l=3}else{o="Other";l=4}s.push([l,d==1||d==2?"case "+d+" matches; break exits the switch.":"No case matches, so default runs.",[["output",o]]]);return{st:s,out:o}}},
+"6. while Loop":{s:`Add the numbers 1 to n with a while loop, for example the total days of an n-day savings plan.`,c:["int i = 1, s = 0;","while (i <= @n@) {","  s += i;","  i++;","}","cout << s;"],in:[["n",4,0,10]],p:[{n:4},{n:0}],run:v=>{const n=v.n,s=[[0,"Start: i = 1, s = 0.",[["i",1],["s",0]]]];let i=1,t=0;while(i<=n){s.push([1,i+" <= "+n+" is true.",[["i",i],["s",t]]]);t+=i;s.push([2,"s = s + i = "+t,[["i",i],["s",t]]]);i++;s.push([3,"i becomes "+i,[["i",i],["s",t]]])}s.push([1,i+" <= "+n+" is false: the loop ends.",[["i",i],["s",t]]]);s.push([5,"Prints the sum.",[["output",t]]]);return{st:s,out:""+t}}},
+"8. for Loop":{s:`A lab computes the sum of squares 1x1 + 2x2 + ... + n x n. Change n and trace each pass.`,c:["int s = 0;","for (int i = 1; i <= @n@; i++)","  s += i * i;","cout << s;"],in:[["n",3,0,8]],p:[{n:3},{n:5}],run:v=>{const n=v.n,s=[[0,"s = 0.",[["s",0]]]];let t=0;for(let i=1;i<=n;i++){s.push([1,"i = "+i+": condition is true.",[["i",i],["s",t]]]);t+=i*i;s.push([2,"s = s + "+i+" * "+i+" = "+t,[["i",i],["s",t]]])}s.push([1,"i = "+(n+1)+": condition false, the loop ends.",[["i",n+1],["s",t]]]);s.push([3,"Prints s.",[["output",t]]]);return{st:s,out:""+t}}},
+"break & continue":{s:`A quiz prints question numbers 1 to 8, but skips one broken question (skip) and stops at the question where time runs out (stop).`,c:["for (int i = 1; i <= 8; i++) {","  if (i == @sk@) continue;","  if (i == @st@) break;","  cout << i << \" \";","}"],in:[["sk",2,0,9],["st",5,0,9]],p:[{sk:2,st:5},{sk:3,st:3}],run:v=>{const s=[],o=[];for(let i=1;i<=8;i++){if(i==v.sk){s.push([1,"i = "+i+": continue skips the print.",[["i",i],["output",o.join(" ")]]]);continue}if(i==v.st){s.push([2,"i = "+i+": break leaves the loop.",[["i",i],["output",o.join(" ")]]]);break}o.push(i);s.push([3,"i = "+i+": printed.",[["i",i],["output",o.join(" ")]]])}return{st:s,out:o.join(" ")}}},
+"Nested Loops":{s:`A pattern program prints a star triangle with n rows: row i has i stars. Change n and watch the inner loop restart.`,c:["for (int i = 1; i <= @n@; i++) {","  for (int j = 1; j <= i; j++)","    cout << \"*\";","  cout << \"\\n\";","}"],in:[["n",3,1,6]],p:[{n:3},{n:5}],run:v=>{const n=v.n,s=[],o=[];for(let i=1;i<=n;i++){s.push([0,"Outer loop: i = "+i,[["i",i],["rows done",o.length]]]);s.push([1,"The inner loop runs j = 1 to "+i+", so "+i+" stars.",[["i",i],["stars in row",i]]]);o.push("*".repeat(i));s.push([3,"Row "+i+" is complete: "+o[i-1],[["rows so far",o.join(" / ")]]])}return{st:s,out:o.join("\n")}}},
+"Operators":{s:`A bank app splits an amount a into groups of b. Change a and b to see the quotient, the remainder and the comparisons.`,c:["int a = @a@, b = @b@;","cout << a / b << \" \" << a % b;","cout << (a > b) << (a == b);"],in:[["a",17,0,99],["b",5,1,9]],p:[{a:17,b:5},{a:6,b:6}],run:v=>{const a=v.a,b=v.b,q=Math.trunc(a/b),r=a%b,g=+(a>b),e=+(a==b);return{st:[[0,"a = "+a+", b = "+b,[["a",a],["b",b]]],[1,"a / b is integer division and a % b is the remainder.",[["a / b",q],["a % b",r]]],[2,"Relational results are 1 (true) or 0 (false).",[["a > b",g],["a == b",e]]]],out:q+" "+r+g+e}}},
+"Increment & Decrement":{s:`A token counter starts at a. Trace how postfix and prefix change a and what gets stored.`,c:["int a = @a@;","int b = a++;","int c = ++a;","cout << a << b << c;"],in:[["a",5,0,20]],p:[{a:5},{a:9}],run:v=>{const a=v.a,a1=a+1,c=a1+1;return{st:[[0,"a = "+a,[["a",a]]],[1,"Postfix: b gets the old value "+a+", then a becomes "+a1,[["a",a1],["b",a]]],[2,"Prefix: a becomes "+c+" first, then c gets it.",[["a",c],["b",a],["c",c]]],[3,"Prints a, b and c side by side.",[["output",""+c+a+c]]]],out:""+c+a+c}}},
+"User Defined Functions":{s:`A shop function add(a, b) totals two item prices. Change the prices and follow the call and the return.`,c:["int add(int a, int b) { return a + b; }","int x = @x@, y = @y@;","cout << add(x, y);"],in:[["x",20,0,99],["y",15,0,99]],p:[{x:20,y:15},{x:0,y:7}],run:v=>{const r=v.x+v.y;return{st:[[1,"x = "+v.x+", y = "+v.y,[["x",v.x],["y",v.y]]],[2,"add(x, y) is called; a and b are copies.",[["a",v.x],["b",v.y]]],[0,"The function returns a + b = "+r,[["return",r]]],[2,"Prints the returned value.",[["output",r]]]],out:""+r}}},
+"Recursion":{s:`Compute n! recursively, for example the number of ways to arrange n books. Watch the stack grow and then unwind.`,c:["int f(int n) {","  if (n <= 1) return 1;","  return n * f(n - 1);","}","cout << f(@n@);"],in:[["n",4,1,6]],p:[{n:4},{n:1}],run:v=>{const n=v.n,s=[];for(let i=n;i>=1;i--)s.push([i>1?2:1,i>1?"f("+i+") is not the base case, so it calls f("+(i-1)+").":"Base case: f(1) returns 1.",[["call stack",Array.from({length:n-i+1},(_,j)=>"f("+(n-j)+")").join(" > ")]]]);let r=1;for(let i=2;i<=n;i++){r*=i;s.push([2,"Returning: f("+i+") = "+i+" * f("+(i-1)+") = "+r,[["f("+i+")",r]]])}s.push([4,"main prints the result.",[["output",r]]]);return{st:s,out:""+r}}},
+"Arrays":{s:`Marks of three students are stored in an array. Change the marks and trace how the highest mark is found.`,c:["int a[3] = {@x@, @y@, @z@};","int max = a[0];","for (int i = 1; i < 3; i++)","  if (a[i] > max) max = a[i];","cout << max;"],in:[["x",40,0,99],["y",75,0,99],["z",60,0,99]],p:[{x:40,y:75,z:60},{x:90,y:20,z:90}],run:v=>{const a=[v.x,v.y,v.z],s=[[0,"Array: "+a.join(", "),[["a",a.join(" ")]]],[1,"max starts as a[0].",[["max",a[0]]]]];let m=a[0];for(let i=1;i<3;i++){const g=a[i]>m;if(g)m=a[i];s.push([3,"i = "+i+": a["+i+"] = "+a[i]+" > max? "+g+(g?", so max = "+m:", max stays "+m),[["i",i],["max",m]]])}s.push([4,"Prints the maximum.",[["output",m]]]);return{st:s,out:""+m}}}
+};
+function labCard(L){const c=el("div","card");c.append(el("h3","","Try it yourself: edit the values, predict the output, then run"),el("p","",L.s));
+const v={},ins={};let res=null,k=0;const row=el("div","ctl");
+const sub=l=>l.replace(/@(\w+)@/g,(m,x)=>v[x]);
+const cd=el("div","code"),tb=el("table"),note=el("div","note"),out=el("div","why"),nav2=el("div","ctl"),pd=el("input","bgi");
+const paint=()=>{cd.innerHTML="";L.c.forEach((l,i)=>cd.append(el("div",res&&res.st[k][0]==i?"on":"",sub(l)||" ")));tb.innerHTML="";note.textContent=res?res.st[k][1]:"Press Run to trace this program with your values.";if(res)res.st[k][2].forEach(r=>{const tr=el("tr");r.forEach(x=>tr.append(el("td","",String(x))));tb.append(tr)});nav2.style.display=res?"flex":"none";out.textContent=""};
+L.in.forEach(([n,d,mn,mx,lb])=>{v[n]=d;const i=el("input","bgi");i.type="number";i.value=d;i.style.maxWidth="90px";i.onchange=()=>{v[n]=Math.max(mn,Math.min(mx,Math.round(+i.value||0)));i.value=v[n];res=null;paint()};ins[n]=i;row.append(el("span","",(lb||n)+" ="),i)});
+(L.p||[]).forEach((p,n)=>{const b=el("button","","Load test "+(n+1));b.onclick=()=>{Object.assign(v,p);for(const x in p)ins[x].value=p[x];res=null;paint()};row.append(b)});
+pd.placeholder="Your predicted output";const go=el("button","p","Run & check"),pv=el("button","","Back"),nx=el("button","","Next"),sp=el("div","split");
+go.onclick=()=>{res=L.run(v);k=0;paint();const o=res.out,pr=pd.value.replace(/\s+/g,"");out.style.whiteSpace="pre-wrap";out.textContent="Actual output: "+(o===""?"(nothing)":o)+(pr===""?"  (type a prediction to be marked)":(pr===o.replace(/\s+/g,"")?"\nPASS: your prediction matches.":"\nFAIL: your prediction did not match. Step through the trace to see why."))};
+pv.onclick=()=>{if(k>0){k--;paint()}};nx.onclick=()=>{if(res&&k<res.st.length-1){k++;paint()}};
+nav2.append(pv,nx);const r2=el("div","ctl");r2.append(pd,go);sp.append(cd,tb);c.append(row,r2,sp,note,nav2,out);paint();return c}
+const EX={
+"3. else-if Ladder":[[["int units = 150;","float bill;","if (units <= 100) bill = units * 2;","else if (units <= 200) bill = 200 + (units - 100) * 3;","else bill = 500 + (units - 200) * 4;","cout << bill;"],[[0,"Electricity slab: units = 150.",[["units","150"]]],[2,"150 <= 100 is false, so the first slab is skipped.",[["test","units <= 100"],["result","false"]]],[3,"150 <= 200 is true: 200 + (150 - 100) x 3.",[["bill","350"]]],[5,"Prints the bill.",[["output","350"]]]]],
+[["int y = 2100;","if (y % 400 == 0) cout << \"Leap\";","else if (y % 100 == 0) cout << \"Not leap\";","else if (y % 4 == 0) cout << \"Leap\";","else cout << \"Not leap\";"],[[0,"Leap year test for 2100.",[["y","2100"]]],[1,"2100 % 400 = 100, which is not 0: false.",[["y % 400","100"]]],[2,"2100 % 100 = 0: true. A century year that is not divisible by 400.",[["y % 100","0"],["output","Not leap"]]],[3,"The remaining branches are skipped.",[["output","Not leap"]]]]]],
+"5. switch":[[["char g = 'B';","switch (g) {","  case 'A': cout << \"Excellent \";","  case 'B': cout << \"Good \";","  case 'C': cout << \"Pass \"; break;","  default: cout << \"Fail\";","}"],[[0,"g is 'B'.",[["g","'B'"]]],[3,"case 'B' matches and prints Good. There is no break.",[["console","Good "]]],[4,"Execution falls through into case 'C' and prints Pass; break then exits.",[["console","Good Pass "]]]]],
+[["int a = 8, b = 0; char op = '/';","switch (op) {","  case '+': cout << a + b; break;","  case '/':","    if (b == 0) cout << \"Error\";","    else cout << a / b;","    break;","  default: cout << \"Bad op\";","}"],[[0,"Calculator with a = 8, b = 0, op = '/'.",[["a","8"],["b","0"],["op","'/'"]]],[3,"case '/' matches.",[["matched","case '/'"]]],[4,"b == 0 is true: division is avoided.",[["b == 0","true"]]],[4,"Prints Error; break leaves the switch.",[["output","Error"]]]]]],
+"6. while Loop":[[["int n = 472, s = 0;","while (n > 0) {","  s += n % 10;","  n /= 10;","}","cout << s;"],[[0,"Sum the digits of 472.",[["n","472"],["s","0"]]],[3,"Pass 1: s = 0 + 2, n = 47.",[["n","47"],["s","2"]]],[3,"Pass 2: s = 2 + 7, n = 4.",[["n","4"],["s","9"]]],[3,"Pass 3: s = 9 + 4, n = 0.",[["n","0"],["s","13"]]],[1,"n > 0 is false: the loop ends.",[["n","0"]]],[5,"Prints 13.",[["output","13"]]]]],
+[["int a = 48, b = 18;","while (b != 0) {","  int t = b;","  b = a % b;","  a = t;","}","cout << a;"],[[0,"Euclid's GCD of 48 and 18.",[["a","48"],["b","18"]]],[4,"Pass 1: t = 18, b = 48 % 18 = 12, a = 18.",[["a","18"],["b","12"]]],[4,"Pass 2: t = 12, b = 18 % 12 = 6, a = 12.",[["a","12"],["b","6"]]],[4,"Pass 3: t = 6, b = 12 % 6 = 0, a = 6.",[["a","6"],["b","0"]]],[1,"b != 0 is false: the loop ends.",[["b","0"]]],[6,"Prints the GCD.",[["output","6"]]]]]],
+"8. for Loop":[[["int a = 0, b = 1;","for (int i = 0; i < 6; i++) {","  cout << a << \" \";","  int next = a + b;","  a = b;","  b = next;","}"],[[0,"Fibonacci series: a = 0, b = 1.",[["a","0"],["b","1"]]],[2,"Pass 1 prints 0, then a = 1, b = 1.",[["output","0"],["a, b","1, 1"]]],[2,"Pass 3 prints 1, then a = 2, b = 3.",[["output","0 1 1"],["a, b","2, 3"]]],[2,"Pass 5 prints 3, then a = 5, b = 8.",[["output","0 1 1 2 3"],["a, b","5, 8"]]],[2,"Pass 6 prints 5 and the loop ends.",[["output","0 1 1 2 3 5"]]]]],
+[["int n = 29;","bool prime = n > 1;","for (int d = 2; d * d <= n; d++) {","  if (n % d == 0) { prime = false; break; }","}","cout << (prime ? \"Prime\" : \"Not prime\");"],[[0,"Is 29 prime?",[["n","29"]]],[2,"d = 2: 4 <= 29, and 29 % 2 = 1, so no divisor.",[["d","2"],["n % d","1"]]],[2,"d = 3, 4, 5 leave remainders 2, 1 and 4.",[["d","3, 4, 5"],["prime","true"]]],[2,"d = 6: 36 <= 29 is false, so the loop ends.",[["d","6"]]],[5,"prime is still true.",[["output","Prime"]]]]]],
+"Nested Loops":[[["for (int i = 1; i <= 3; i++) {","  for (int j = 1; j <= 3; j++)","    cout << i * j << \" \";","  cout << \"\\n\";","}"],[[0,"Outer loop: i = 1.",[["i","1"]]],[2,"The inner loop prints 1 x 1, 1 x 2, 1 x 3.",[["row 1","1 2 3"]]],[2,"i = 2: the inner loop restarts and prints the 2 times table.",[["row 2","2 4 6"]]],[2,"i = 3 prints the last row.",[["row 3","3 6 9"]]]]],
+[["for (int i = 3; i >= 1; i--) {","  for (int j = 1; j <= i; j++)","    cout << j;","  cout << \"\\n\";","}"],[[0,"The outer loop counts down: i = 3.",[["i","3"]]],[2,"The inner loop runs 3 times.",[["row 1","123"]]],[2,"i = 2: two numbers.",[["row 2","12"]]],[2,"i = 1: one number.",[["row 3","1"]]]]]],
+"Arrays":[[["int a[5] = {4, 8, 15, 16, 23};","int s = 0;","for (int i = 0; i < 5; i++)","  s += a[i];","cout << s / 5.0;"],[[0,"Five marks in an array.",[["a","4 8 15 16 23"]]],[3,"The loop adds each element: 4, 12, 27, 43, 66.",[["s","66"]]],[4,"66 / 5.0 = 13.2 (real division).",[["output","13.2"]]]]],
+[["int a[4] = {5, 1, 4, 2};","for (int i = 0; i < 3; i++)","  if (a[i] > a[i + 1]) {","    int t = a[i]; a[i] = a[i+1]; a[i+1] = t;","  }"],[[0,"First pass of bubble sort.",[["a","5 1 4 2"]]],[3,"i = 0: 5 > 1, so swap.",[["a","1 5 4 2"]]],[3,"i = 1: 5 > 4, so swap.",[["a","1 4 5 2"]]],[3,"i = 2: 5 > 2, so swap. The largest value has bubbled to the end.",[["a","1 4 2 5"]]]]]],
+"User Defined Functions":[[["void swapv(int &x, int &y) {","  int t = x; x = y; y = t;","}","int a = 3, b = 7;","swapv(a, b);","cout << a << b;"],[[3,"a = 3, b = 7.",[["a","3"],["b","7"]]],[4,"x and y are references, so they are other names for a and b.",[["x","alias of a"],["y","alias of b"]]],[1,"t = 3, x = 7, y = 3. This changes a and b themselves.",[["a","7"],["b","3"]]],[5,"Prints 73.",[["output","73"]]]]],
+[["bool even(int n) { return n % 2 == 0; }","int countEven(int a[], int n) {","  int c = 0;","  for (int i = 0; i < n; i++)","    if (even(a[i])) c++;","  return c;","}","int a[4] = {3, 8, 6, 5};","cout << countEven(a, 4);"],[[7,"Array of four numbers.",[["a","3 8 6 5"]]],[8,"countEven(a, 4) is called.",[["n","4"],["c","0"]]],[4,"even(3) is false and even(8) is true, so c = 1.",[["c","1"]]],[4,"even(6) is true (c = 2) and even(5) is false.",[["c","2"]]],[5,"Returns c to main.",[["return","2"]]],[8,"Prints 2.",[["output","2"]]]]]],
+"Recursion":[[["int sumd(int n) {","  if (n == 0) return 0;","  return n % 10 + sumd(n / 10);","}","cout << sumd(123);"],[[4,"Call sumd(123).",[["stack","sumd(123)"]]],[2,"123 % 10 = 3, plus sumd(12).",[["stack","sumd(123) > sumd(12)"]]],[2,"Then 2 + sumd(1), and 1 + sumd(0).",[["stack","... > sumd(1) > sumd(0)"]]],[1,"Base case: sumd(0) returns 0.",[["sumd(0)","0"]]],[2,"Unwinding: 1 + 0 = 1, 2 + 1 = 3, 3 + 3 = 6.",[["sumd(123)","6"]]],[4,"Prints 6.",[["output","6"]]]]],
+[["int fib(int n) {","  if (n <= 1) return n;","  return fib(n - 1) + fib(n - 2);","}","cout << fib(4);"],[[4,"fib(4) needs fib(3) + fib(2).",[["call","fib(4)"]]],[2,"fib(3) needs fib(2) + fib(1); fib(2) needs fib(1) + fib(0).",[["calls","fib(3), fib(2), fib(1), fib(0)"]]],[1,"Base cases: fib(1) = 1 and fib(0) = 0.",[["fib(1)","1"],["fib(0)","0"]]],[2,"fib(2) = 1 and fib(3) = 1 + 1 = 2.",[["fib(2)","1"],["fib(3)","2"]]],[2,"fib(2) is computed again on the right: 1. fib(4) = 2 + 1.",[["fib(4)","3"]]],[4,"Prints 3. Note how fib(2) was calculated twice.",[["output","3"]]]]]],
+"Pointers":[[["void swapp(int *p, int *q) {","  int t = *p; *p = *q; *q = t;","}","int a = 1, b = 2;","swapp(&a, &b);","cout << a << b;"],[[3,"a = 1, b = 2.",[["a","1"],["b","2"]]],[4,"The addresses of a and b are passed to p and q.",[["p","&a"],["q","&b"]]],[1,"t = 1; *p = 2 writes into a; *q = 1 writes into b.",[["a","2"],["b","1"]]],[5,"Prints 21.",[["output","21"]]]]],
+[["int a[4] = {10, 20, 30, 40};","int *p = a, s = 0;","while (p < a + 4) {","  s += *p;","  p++;","}","cout << s;"],[[1,"p points to a[0].",[["p","→ a[0]"],["s","0"]]],[3,"s = 10, then p moves to a[1].",[["s","10"],["p","→ a[1]"]]],[3,"s = 30, then s = 60: p reaches a[3].",[["s","60"],["p","→ a[3]"]]],[3,"s = 100 and p moves one past the end.",[["s","100"],["p","→ a+4"]]],[2,"p < a + 4 is false, so the loop ends.",[["p","a + 4"]]],[6,"Prints 100.",[["output","100"]]]]]],
+"Classes & Objects":[[["class Acc {","  int bal;","public:","  Acc(int b) : bal(b) {}","  bool take(int x) { if (x > bal) return false; bal -= x; return true; }","  int get() { return bal; }","};","Acc a(100);","a.take(30);","cout << a.take(90) << a.get();"],[[7,"The constructor sets bal = 100.",[["bal","100"]]],[8,"take(30): 30 > 100 is false, so bal = 70 and it returns true.",[["bal","70"]]],[9,"take(90): 90 > 70, so it returns false and bal stays 70.",[["take(90)","0 (false)"],["bal","70"]]],[9,"Prints 0 and then 70.",[["output","070"]]]]],
+[["class C {","public:","  static int n;","  int id;","  C() { id = ++n; }","};","int C::n = 0;","C a, b;","cout << a.id << b.id << C::n;"],[[6,"The static member n is shared by all objects.",[["C::n","0"]]],[7,"a is constructed: n = 1, a.id = 1.",[["C::n","1"],["a.id","1"]]],[7,"b is constructed: n = 2, b.id = 2.",[["C::n","2"],["b.id","2"]]],[8,"Prints 1, 2 and 2.",[["output","122"]]]]]]
+};
+function cards(t){const c=[],n=dn(t.n),th=TH[t.n];if(th){c.push(["What is "+n+"?",th[0]]);c.push(["Write the basic syntax for "+n+".",th[1]])}
+(P[t.n]||[t.q]).forEach(Q=>c.push([Q[0],Q[Q[4]+1]+". "+Q[5]]));
+(BG[t.n]||[]).forEach(b=>c.push(["Predict the output:\n"+b[0],b[1]+". "+b[2]]));
+t.k.forEach(x=>c.push(["Recall a key rule of "+n+".",x]));return c}
+function deck(cs,title){const c=el("div","card");c.append(el("h3","",title+" ("+cs.length+" cards)"));let i=0,f=false;const fc=el("div","fc"),ct=el("span"),ctl=el("div","ctl");
+const show=()=>{fc.textContent=(f?"Answer: ":"Question: ")+cs[i][f?1:0];fc.className="fc"+(f?" back":"");ct.textContent="Card "+(i+1)+" of "+cs.length+(f?"":" | tap the card to see the answer")};
+fc.onclick=()=>{f=!f;show()};const pv=el("button","","Previous"),nx=el("button","p","Next"),sh=el("button","","Shuffle");
+pv.onclick=()=>{i=(i-1+cs.length)%cs.length;f=false;show()};nx.onclick=()=>{i=(i+1)%cs.length;f=false;show()};sh.onclick=()=>{cs.sort(()=>Math.random()-.5);i=0;f=false;show()};
+ctl.append(pv,nx,sh,ct);c.append(fc,ctl);show();return c}
+function flashAll(){const all=[];T.forEach(t=>cards(t).forEach(x=>all.push(["["+dn(t.n)+"] "+x[0],x[1]])));all.sort(()=>Math.random()-.5);const h=el("div","card");h.append(el("h2","","Flash Cards"),el("p","","Quick questions and answers from every topic, in random order. Tap a card to flip it."));main.append(h,deck(all,"All topics"))}
+function tok(lines){const T=[];lines.forEach((ln,li)=>{const s=ln.replace(/\/\/.*/,"");const re=/\s*(\d+\.\d+|\d+|'(?:\\.|[^'])'|"(?:\\.|[^"])*"|[A-Za-z_]\w*|\+\+|--|<<|>>|<=|>=|==|!=|&&|\|\||[-+*\/%]=|::|[^\s])/g;let m;while((m=re.exec(s)))T.push({t:m[1],l:li,c:m.index+m[0].length-m[1].length})});return T}
+function parse(T){let p=0;const pk=()=>p<T.length?T[p].t:"",nx=()=>T[p++],ex=s=>{if(pk()!=s)throw 1;p++},tx=(a,b)=>T.slice(a,b).map(x=>x.t).join(" "),TY=/^(int|float|double|char|bool)$/,FT=/^(int|float|double|char|bool|void)$/;
+const bin=[["||"],["&&"],["|"],["^"],["&"],["==","!="],["<","<=",">",">="],["+","-"],["*","/","%"]];
+const expr=()=>asg();
+function asg(){const l=tern();if(/^([-+*\/%]?=)$/.test(pk())&&(l.k=="v"||l.k=="i")){const o=nx().t;return{k:"a",o,l,r:asg()}}return l}
+function tern(){const c=bn(0);if(pk()=="?"){p++;const a=asg();ex(":");const b=asg();return{k:"t",c,a,b}}return c}
+function bn(i){if(i==bin.length)return un();let l=bn(i+1);while(bin[i].includes(pk())){const o=nx().t;l={k:"b",o,l,r:bn(i+1)}}return l}
+function un(){const t=pk();if(t=="!"||t=="-"||t=="+"){p++;return{k:"u",o:t,e:un()}}if(t=="++"||t=="--"){p++;return{k:"p",o:t,e:un()}}let e=prim();while(pk()=="++"||pk()=="--")e={k:"q",o:nx().t,e};return e}
+function prim(){const t=nx();if(!t)throw 1;const s=t.t;if(s=="("){if(TY.test(pk())&&T[p+1]&&T[p+1].t==")"){const ty=nx().t;p++;return{k:"c",ty,e:un()}}const e=expr();ex(")");return e}
+if(/^\d/.test(s))return{k:"n",v:+s,f:s.includes("."),tk:p-1};if(s[0]=="'"){let ch=s.slice(1,-1);ch=ch=="\\n"?"\n":ch[0]=="\\"?ch[1]:ch;return{k:"h",v:ch.charCodeAt(0)}}
+if(s[0]=='"')return{k:"s",v:s.slice(1,-1).replace(/\\n/g,"\n")};
+if(/^[A-Za-z_]/.test(s)){if(pk()=="["){p++;const i=expr();ex("]");return{k:"i",n:s,i}}if(pk()=="("){p++;const a=[];while(pk()!=")"){a.push(expr());if(pk()==",")p++}p++;return{k:"f",n:s,a}}return{k:"v",n:s}}throw 1}
+function simple(){const line=T[p].l,p0=p;if(TY.test(pk())){const ty=nx().t,d=[];do{const nm=nx().t;let n=null,init=null;if(pk()=="["){p++;n=expr();ex("]")}if(pk()=="="){p++;if(pk()=="{"){p++;init=[];while(pk()!="}"){init.push(expr());if(pk()==",")p++}p++}else init=asg()}d.push({nm,n,init})}while(pk()==","&&(p++,true));return{k:"d",ty,d,line,tx:tx(p0,p)}}const e=expr();return{k:"e",e,line,tx:tx(p0,p)}}
+function cnd(){ex("(");const a=p,c=expr();const t=tx(a,p);ex(")");return[c,t]}
+function stmt(){const t=pk(),line=T[p].l,q0=p;
+if(t=="{"){p++;const b=[];while(pk()!="}")b.push(stmt());p++;return{k:"B",b,line}}
+if(t=="if"){p++;const[c,ct]=cnd(),a=stmt();let e=null;if(pk()=="else"){p++;e=stmt()}return{k:"I",c,ct,a,e,line}}
+if(t=="while"){p++;const[c,ct]=cnd();return{k:"W",c,ct,b:stmt(),line}}
+if(t=="do"){p++;const b=stmt();ex("while");const[c,ct]=cnd();ex(";");return{k:"D",c,ct,b,line}}
+if(t=="for"){p++;ex("(");const i=pk()==";"?null:simple();ex(";");let a=p;const c=pk()==";"?null:expr(),ct=tx(a,p);ex(";");a=p;const u=pk()==")"?null:expr(),ut=tx(a,p);ex(")");return{k:"F",i,c,ct,u,ut,b:stmt(),line}}
+if(t=="switch"){p++;const[c,ct]=cnd();ex("{");const cs=[];while(pk()!="}"){let v=null,vt="";if(pk()=="case"){p++;const a0=p;v=expr();vt=tx(a0,p);ex(":")}else{ex("default");ex(":")}const b=[];while(pk()!="case"&&pk()!="default"&&pk()!="}")b.push(stmt());cs.push({v,vt,b,isD:v==null})}p++;return{k:"S",c,ct,cs,line}}
+if(t=="return"){p++;let e=null;if(pk()!=";")e=expr();ex(";");return{k:"R",e,line,tx:tx(q0,p)}}
+if(t=="break"||t=="continue"){p++;ex(";");return{k:t=="break"?"X":"C",line}}
+if(t=="cin"){p++;const a=[];while(pk()==">>"){p++;a.push(nx().t)}ex(";");return{k:"N",a,line,tx:tx(q0,p)}}
+if(t=="cout"){p++;const a=[];while(pk()=="<<"){p++;a.push(expr())}ex(";");return{k:"O",a,line,tx:tx(q0,p)}}
+const s=simple();ex(";");return s}
+function fdef(){const line=T[p].l,rt=nx().t,name=nx().t;ex("(");const ps=[];while(pk()!=")"){const ty=nx().t;let ref=false,arr=false;if(pk()=="&"){p++;ref=true}const nm=nx().t;if(pk()=="["){p++;ex("]");arr=true}ps.push({ty,nm,ref,arr});if(pk()==",")p++}p++;return{k:"fn",name,rt,ps,b:stmt(),line}}
+const prog=[];while(p<T.length){if(FT.test(pk())&&T[p+1]&&/^[A-Za-z_]/.test(T[p+1].t)&&T[p+2]&&T[p+2].t=="(")prog.push(fdef());else prog.push(stmt())}return prog}
+function interp(lines,maxS){try{const prog=parse(tok(lines));let V={},Ty={};const F={},S=[],st=[],out=[];let cnt=0,retv=0;maxS=maxS||200;prog.forEach(x=>{if(x.k=="fn")(F[x.name]=F[x.name]||[]).push(x)});
+const FL=/^(float|double)$/,isF=n=>n.k=="n"?n.f:n.k=="v"||n.k=="i"?FL.test(Ty[n.n]):n.k=="f"?FL.test((pick(n)||{rt:""}).rt):n.k=="b"?("+-*/%".includes(n.o)&&(isF(n.l)||isF(n.r))):n.k=="u"||n.k=="p"||n.k=="q"?isF(n.e):n.k=="c"?FL.test(n.ty):n.k=="t"?isF(n.a)||isF(n.b):n.k=="a"?isF(n.l):false;
+const isC=n=>n.k=="h"||((n.k=="v"||n.k=="i")&&Ty[n.n]=="char"),cv=(ty,x)=>ty=="int"||ty=="char"?Math.trunc(x):ty=="bool"?+!!x:x;
+const pick=n=>{const c=(F[n.n]||[]).filter(f=>f.ps.length==n.a.length);return c.length<2?c[0]||null:c.find(f=>f.ps.every((q,i)=>FL.test(q.ty)==!!isF(n.a[i])))||c[0]},get=n=>n.k=="i"?V[n.n][ev(n.i)]:V[n.n],set=(n,x)=>{x=cv(Ty[n.n],x);if(n.k=="i")V[n.n][ev(n.i)]=x;else V[n.n]=x;return x};
+function bop(o,a,b,f){switch(o){case"+":return a+b;case"-":return a-b;case"*":return a*b;case"/":if(b==0)throw 2;return f?a/b:Math.trunc(a/b);case"%":if(b==0)throw 2;return a%b;case"&":return a&b;case"|":return a|b;case"^":return a^b;case"<":return +(a<b);case"<=":return +(a<=b);case">":return +(a>b);case">=":return +(a>=b);case"==":return +(a==b);case"!=":return +(a!=b)}}
+const snap=()=>{const r=Object.keys(V).map(k=>[k,Array.isArray(V[k])?"["+V[k].join(", ")+"]":""+rd(V[k])]);if(out.length)r.push(["console",out.join("").replace(/\n/g," / ")]);return r.length?r:[["-","-"]]};
+const push=(line,note)=>{if(++cnt>maxS)throw 3;st.push([line,(S.length?"In "+S[S.length-1]+": ":"")+note,snap()])},tf=(s,c)=>"Test ("+s.ct+") is "+(c?"true":"false");
+function ev(n){switch(n.k){case"n":case"h":return n.v;case"s":return 0;case"v":return n.n=="true"?1:n.n=="false"?0:V[n.n];case"i":return V[n.n][ev(n.i)];case"c":return cv(n.ty,ev(n.e));case"t":return ev(n.c)?ev(n.a):ev(n.b);
+case"u":{const x=ev(n.e);return n.o=="!"?+!x:n.o=="-"?-x:x}case"p":return set(n.e,ev(n.e)+(n.o=="++"?1:-1));case"q":{const o=ev(n.e);set(n.e,o+(n.o=="++"?1:-1));return o}
+case"a":{const r=ev(n.r);return set(n.l,n.o=="="?r:bop(n.o[0],get(n.l),r,isF(n.l)||isF(n.r)))}
+case"b":{if(n.o=="&&")return +(ev(n.l)&&ev(n.r));if(n.o=="||")return +(ev(n.l)||ev(n.r));return bop(n.o,ev(n.l),ev(n.r),isF(n))}
+case"f":{const fn=pick(n);if(!fn)throw 1;if(S.length>25)throw 3;const args=n.a.map((a,i)=>{const q=fn.ps[i];return q.arr?V[a.n]:cv(q.ty,ev(a))});const V0=V,T0=Ty;V={};Ty={};fn.ps.forEach((q,i)=>{V[q.nm]=args[i];Ty[q.nm]=q.ty});S.push(n.n+"("+args.map(x=>Array.isArray(x)?"array":x).join(", ")+")");push(fn.line,"called with "+fn.ps.map((q,i)=>q.nm+" = "+(Array.isArray(args[i])?"array":args[i])).join(", "));x1(fn.b);const rv=retv;retv=0;const fin=fn.ps.map(q=>V[q.nm]);S.pop();V=V0;Ty=T0;fn.ps.forEach((q,i)=>{if(q.ref&&(n.a[i].k=="v"||n.a[i].k=="i"))set(n.a[i],fin[i])});return cv(fn.rt,rv)}}}
+const pr=a=>a.k=="s"?a.v:a.k=="t"?pr(ev(a.c)?a.a:a.b):a.k=="v"&&a.n=="endl"?"\n":isC(a)?String.fromCharCode(ev(a)):""+rd(ev(a));
+function x1(s){switch(s.k){
+case"fn":return;
+case"B":for(const y of s.b){const r=x1(y);if(r)return r}return;
+case"d":for(const d of s.d){Ty[d.nm]=s.ty;if(d.n){V[d.nm]=Array(ev(d.n)).fill(0);if(d.init)d.init.forEach((e,i)=>{V[d.nm][i]=cv(s.ty,ev(e))})}else V[d.nm]=d.init?cv(s.ty,ev(d.init)):0}push(s.line,"Declare and set: "+s.tx);return;
+case"e":ev(s.e);push(s.line,"Execute: "+s.tx);return;
+case"N":push(s.line,"cin reads "+s.a.join(", ")+" (the page uses the value you set in its declaration)");return;
+case"R":retv=s.e?ev(s.e):0;push(s.line,"return "+retv);return"R";
+case"O":{let o="";s.a.forEach(a=>{o+=pr(a)});out.push(o);push(s.line,"Prints "+o.replace(/\n/g,"\\n"));return}
+case"I":{const c=ev(s.c);push(s.line,tf(s,c));if(c)return x1(s.a);if(s.e)return x1(s.e);return}
+case"S":{const c=ev(s.c);push(s.line,"switch ("+s.ct+") evaluates to "+c);let i=s.cs.findIndex(k=>k.v&&ev(k.v)==c);const dflt=i<0;if(dflt)i=s.cs.findIndex(k=>k.isD);if(i<0)return;push(s.line,dflt?"No case matches, so default runs.":"A case matches; execution starts there.");for(;i<s.cs.length;i++)for(const y of s.cs[i].b){const r=x1(y);if(r=="X")return;if(r)return r}return}
+case"W":for(;;){const c=ev(s.c);push(s.line,tf(s,c));if(!c)return;const r=x1(s.b);if(r=="X")return;if(r=="R")return r}
+case"D":for(;;){const r=x1(s.b);if(r=="X")return;if(r=="R")return r;const c=ev(s.c);push(s.line,tf(s,c));if(!c)return}
+case"F":{if(s.i)x1(s.i);for(;;){const c=s.c?ev(s.c):1;push(s.line,tf({ct:s.ct||"true"},c));if(!c)return;const r=x1(s.b);if(r=="X")return;if(r=="R")return r;if(s.u){ev(s.u);push(s.line,"Update: "+s.ut)}}}
+case"X":push(s.line,"break: leave the loop or switch");return"X";case"C":push(s.line,"continue: skip to the next pass");return"C"}}
+try{prog.forEach(x1)}catch(e){if(e===2)push(0,"Division by zero: undefined behaviour in C++.");else if(e===3)st.push([0,"Trace stopped: too many steps to show.",snap()]);else return null}
+if(!st.length)return null;st.out=out.join("");return st}catch(e){return null}}
+function editable(lines){try{const T=tok(lines),pg=parse(T),r=[];const add=(e,nm)=>{const t=T[e.tk];r.push({name:nm,val:+e.v,fl:e.f,l:t.l,c:t.c,len:t.t.length})};
+const lit=(n,nm)=>{if(!n||typeof n!="object")return;if(Array.isArray(n)){n.forEach(x=>lit(x,nm));return}if(n.k=="n")add(n,nm);else if(n.k=="f")n.a.forEach((x,i)=>lit(x,n.n+" arg"+(i+1)));else if(n.k=="c"||n.k=="u")lit(n.e,nm)};
+pg.forEach(s=>{if(s.k=="d")s.d.forEach(d=>{if(d.n)(d.init||[]).forEach((e,i)=>lit(e,d.nm+"["+i+"]"));else lit(d.init,d.nm)});else if(s.k=="O")s.a.forEach(a=>lit(a,"value"));else if(s.k=="e"&&s.e.k=="f")lit(s.e,"")});return r.slice(0,6)}catch(e){return null}}
+function patch(lines,ed,vals){const o=lines.slice();ed.map((e,i)=>[e,vals[i]]).sort((a,b)=>b[0].l-a[0].l||b[0].c-a[0].c).forEach(([e,v])=>{if(typeof v=="number"&&e.fl&&Number.isInteger(v))v=v+".0";o[e.l]=o[e.l].slice(0,e.c)+v+o[e.l].slice(e.c+e.len)});return o}
+function autoLabs(t){const out=[];[[t.c,"Simple"]].concat((EX[t.n]||[]).map((e,i)=>[e[0],i?"Complex":"Medium"])).forEach(([c,nm])=>{if(out.length>=2)return;const ed=editable(c);if(!ed||!ed.length||!interp(c))return;const keys=ed.map((e,i)=>"v"+i),tpl=patch(c,ed,keys.map(k=>"@"+k+"@"));
+out.push(labCard({s:"Test lab ("+nm+" example): change the values passed into the variables, predict the output, then run to check every line.",c:tpl,in:ed.map((e,i)=>[keys[i],e.val,-9999,9999,e.name]),p:[0,1,2].map(j=>Object.fromEntries(keys.map((k,i)=>[k,j==0?ed[i].val:j==1?0:ed[i].val*2]))),run:v=>{const st=interp(patch(c,ed,keys.map(k=>v[k])));return st?{st,out:st.out}:{st:[[0,"This program cannot be traced.",[["-","-"]]]],out:""}}}))});return out}
+const AL={
+"2D Arrays":["Declare a table m with 2 rows and 3 columns and fill it with values","Set the row index i to 0","Set the column index j to 0 for this row","Print or use m[i][j]","Move to the next column; when the columns end, move to the next row","Stop when every row has been visited"],
+"C-Strings":["Declare a char array and store the text with a final \\0","Start at index 0","Read the character at the index","Stop if it is \\0, otherwise process it","Move to the next index and repeat","Print the result"],
+"String Functions":["Include the <cstring> header","Make sure the destination array is big enough","Call strlen, strcpy, strcat or strcmp with the arrays","Use the returned value (a length or a comparison result)","Print the result"],
+"std::string":["Declare a string and give it a value","Join or change it with +, += or an index","Call size(), substr() or find() when needed","Check that find() did not return string::npos","Print the result"],
+"Pointers":["Declare a variable x and give it a value","Declare a pointer p and store the address of x with &x","Read or change x through the pointer with *p","Print x to see the change","Set p to nullptr if it is no longer needed"],
+"Brain Gym 3":["Declare an array and a pointer to its first element","Apply the pointer operation (p++, *p++, *++p or (*p)++)","Work out whether the pointer or the pointed value changed","Print the value or values","Compare with your prediction"],
+"Dynamic Memory":["Request memory with new","Check that the pointer is not null","Store and use values through the pointer or the array index","Release the memory with delete (or delete[] for arrays)","Set the pointer to nullptr"],
+"References":["Declare the variable x","Declare a reference r bound to x","Use or change r: this changes x itself","Pass references to functions that must modify the caller's variables","Print the result"],
+"Structures":["Define the struct with its members","Declare a variable of the struct type and set its members","Read or change members with the dot operator","Use -> when you have a pointer to the struct","Print the members"],
+"Classes & Objects":["Define the class with private data and public member functions","Create an object (the constructor runs)","Call member functions on the object with the dot operator","Member functions read or change the private data","Print the result; the destructor runs when the object ends"],
+"Constructors & RAII":["Define the class with a constructor and a destructor","Create an object: the constructor acquires the resource","Use the object inside its scope","Leave the scope: the destructor releases the resource automatically","Objects are destroyed in reverse order of creation"],
+"Operator Overloading":["Define the class with an operator function such as operator+","Create two objects","Write a + b: the compiler calls a.operator+(b)","The function builds and returns a new object","Print the result"],
+"Inheritance":["Define the base class with common members","Define the derived class with : public Base","Create a derived object: the base constructor runs first, then the derived one","Call inherited and own member functions","When the object ends, the derived destructor runs first, then the base"],
+"Polymorphism":["Declare the base function as virtual","Override it in the derived class","Make a base pointer point to a derived object","Call the function through the pointer","The program looks up the real object's version in the vtable and runs it"],
+"Templates":["Write the template header: template<typename T>","Write the function or class using T","Call it with a particular type; the compiler deduces T","The compiler generates a version for that type","Use the result"],
+"STL vector":["Include <vector> and declare vector<int> v","Add items with push_back","Read items with v[i] or loop over them","Remove the last item with pop_back","Use size() to know how many items remain"],
+"Exceptions":["Write the risky code inside a try block","If an error is found, throw an exception","The stack unwinds and normal code in the try block is skipped","The matching catch block runs and handles the error","Execution continues after the catch block"],
+"File Handling":["Include <fstream>","Open the file with ofstream (write) or ifstream (read)","Check that the file opened successfully","Write with << or read with >> in a loop","Close the file"]
+};
+const FWD=150,GAP=26,fesc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function fwrap(s){s=fesc(String(s).replace(/;\s*$/,"")).replace(/\s+/g," ");const w=[];let c="";s.split(" ").forEach(x=>{if((c+" "+x).trim().length>22&&c){w.push(c);c=x}else c=(c+" "+x).trim()});w.push(c);return w.length>3?[w[0],w[1],w[2].slice(0,18)+"..."]:w}
+const ftxt=(cx,cy,s,fs)=>{const l=fwrap(s);return'<text x="'+cx+'" y="'+(cy-(l.length-1)*(fs+1)/2+fs/3)+'" text-anchor="middle" style="fill:var(--ink);font:'+fs+'px sans-serif">'+l.map((x,i)=>'<tspan x="'+cx+'" dy="'+(i?fs+2:0)+'">'+x+'</tspan>').join("")+'</text>'};
+const fpa=(p,na)=>'<path d="M'+p.map(q=>q.join(",")).join(" L")+'" fill="none" style="stroke:var(--mute);stroke-width:1.5"'+(na?"":' marker-end="url(#ar)"')+'/>',flb=(x,y,s)=>'<text x="'+x+'" y="'+y+'" style="fill:var(--acc);font:bold 10px sans-serif">'+s+'</text>';
+const fshape=(n,cx,y)=>n.t=="io"?'<polygon points="'+[cx-60,y,cx+75,y,cx+60,y+36,cx-75,y+36]+'" style="fill:var(--card);stroke:var(--acc);stroke-width:1.5"/>'+ftxt(cx,y+18,n.s,10):'<rect x="'+(cx-70)+'" y="'+y+'" width="140" height="36" rx="4" style="fill:var(--card);stroke:var(--acc);stroke-width:1.5"/>'+ftxt(cx,y+18,n.s,10);
+const fdia=(s,cx,y)=>'<polygon points="'+[cx,y,cx+78,y+30,cx,y+60,cx-78,y+30]+'" style="fill:var(--code);stroke:var(--acc);stroke-width:1.5"/>'+ftxt(cx,y+30,s,9),fterm=(s,cx,y)=>'<rect x="'+(cx-50)+'" y="'+y+'" width="100" height="30" rx="15" style="fill:var(--acc);stroke:var(--acc)"/><text x="'+cx+'" y="'+(y+19)+'" text-anchor="middle" style="fill:var(--card);font:bold 12px sans-serif">'+s+'</text>';
+function fmeas(L){let w=FWD;L.forEach(n=>{if(n.t=="d")w=Math.max(w,fmeas(n.y)+fmeas(n.n)+30);else if(n.t=="l"||n.t=="dw")w=Math.max(w,fmeas(n.b)+70)});return w}
+function fdraw(L,cx,y,o){let b=null;for(const n of L){const top=b==null?y:b+GAP;if(b!=null)o.push(fpa([[cx,b],[cx,top]]));
+if(n.t=="p"||n.t=="io"){o.push(fshape(n,cx,top));b=top+36}
+else if(n.t=="d"){o.push(fdia(n.s,cx,top));const wy=fmeas(n.y),wn=fmeas(n.n),cY=cx-(wn+30)/2,cN=cx+(wy+30)/2,vy=top+30;o.push(fpa([[cx-78,vy],[cY,vy],[cY,vy+GAP]]),flb(cx-92,vy-4,"Yes"),fpa([[cx+78,vy],[cN,vy],[cN,vy+GAP]]),flb(cx+84,vy-4,"No"));
+const by=n.y.length?fdraw(n.y,cY,vy+GAP,o):vy,bn=n.n.length?fdraw(n.n,cN,vy+GAP,o):vy,m=Math.max(by,bn)+GAP;o.push(fpa([[cY,by],[cY,m],[cx,m]],1),fpa([[cN,bn],[cN,m],[cx,m]],1));b=m}
+else if(n.t=="l"){o.push(fdia(n.s,cx,top));const bw=Math.max(FWD,fmeas(n.b)),Lx=cx-bw/2-30,Rx=cx+bw/2+30,vy=top+30;o.push(fpa([[cx,top+60],[cx,top+60+GAP]]),flb(cx+6,top+60+16,"Yes"),flb(cx+84,vy-4,"No"));
+const bb=n.b.length?fdraw(n.b,cx,top+60+GAP,o):top+60+GAP,ex=bb+GAP*1.5;o.push(fpa([[cx,bb],[cx,bb+GAP/2],[Lx,bb+GAP/2],[Lx,vy],[cx-78,vy]]),fpa([[cx+78,vy],[Rx,vy],[Rx,ex],[cx,ex]],1));b=ex}
+else if(n.t=="dw"){const bb=n.b.length?fdraw(n.b,cx,top,o):top,dt=bb+GAP,vy=dt+30,bw=Math.max(FWD,fmeas(n.b)),Lx=cx-bw/2-30;o.push(fpa([[cx,bb],[cx,dt]]),fdia(n.s,cx,dt),fpa([[cx-78,vy],[Lx,vy],[Lx,top-12],[cx,top-12],[cx,top]]),flb(cx-92,vy-4,"Yes"),flb(cx+6,dt+76,"No"));b=dt+60}}
+return b==null?y:b}
+function flowSvg(tree){const W=fmeas(tree)+140,cx=W/2,o=[fterm("Start",cx,10),fpa([[cx,40],[cx,40+GAP]])];const b=fdraw(tree,cx,40+GAP,o),e=tree.length?b+GAP:40+GAP;if(tree.length)o.push(fpa([[cx,b],[cx,e]]));o.push(fterm("End",cx,e));const H=e+50;
+return'<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" style="max-width:100%;height:auto"><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" style="fill:var(--mute)"/></marker></defs>'+o.join("")+'</svg>'}
+function psafe(c){try{return parse(tok(c))}catch(e){return null}}
+function toFlow(pg){const f=l=>l.filter(x=>x.k!="fn").flatMap(g),g=s=>{switch(s.k){case"B":return s.b.flatMap(g);case"d":case"e":case"R":return[{t:"p",s:s.tx}];case"O":case"N":return[{t:"io",s:s.tx}];case"X":return[{t:"p",s:"break"}];case"C":return[{t:"p",s:"continue"}];
+case"I":return[{t:"d",s:s.ct,y:g(s.a),n:s.e?g(s.e):[]}];case"W":return[{t:"l",s:s.ct,b:g(s.b)}];case"D":return[{t:"dw",s:s.ct,b:g(s.b)}];
+case"F":return(s.i?g(s.i):[]).concat([{t:"l",s:s.ct||"true",b:g(s.b).concat(s.u?[{t:"p",s:s.ut}]:[])}]);
+case"S":{const mk=i=>i>=s.cs.length?[]:s.cs[i].isD?s.cs[i].b.flatMap(g):[{t:"d",s:s.ct+" == "+s.cs[i].vt,y:s.cs[i].b.flatMap(g),n:mk(i+1)}];return mk(0)}}return[]};return f(pg)}
+function algoLines(pg){const o=[],g=(l,d)=>l.forEach(s=>{switch(s.k){case"fn":return;case"B":g(s.b,d);return;case"d":o.push([d,"Declare and set: "+s.tx]);return;case"e":o.push([d,"Do: "+s.tx]);return;case"O":o.push([d,"Display: "+s.tx.replace(/^cout << /,"").replace(/ << /g," then ")]);return;case"N":o.push([d,"Read input: "+s.tx.replace(/^cin >> /,"")]);return;case"R":o.push([d,s.tx.replace("return","Return")]);return;case"X":o.push([d,"Leave the loop (break)"]);return;case"C":o.push([d,"Skip to the next pass (continue)"]);return;
+case"I":o.push([d,"If "+s.ct+" is true:"]);g([s.a],d+1);if(s.e){o.push([d,"Otherwise:"]);g([s.e],d+1)}return;case"W":o.push([d,"While "+s.ct+" is true, repeat:"]);g([s.b],d+1);return;case"D":o.push([d,"Repeat:"]);g([s.b],d+1);o.push([d,"Go back while "+s.ct+" is true"]);return;
+case"F":if(s.i)g([s.i],d);o.push([d,"While "+s.ct+" is true, repeat:"]);g([s.b],d+1);if(s.u)o.push([d+1,"Update: "+s.ut]);return;case"S":o.push([d,"Check the value of "+s.ct+":"]);s.cs.forEach(k=>{o.push([d+1,k.isD?"Default case:":"If it equals "+k.vt+":"]);g(k.b,d+2)});return}});g(pg,0);return o}
+function algoView(c,t){const w=el("div","card");w.append(el("h3","","Algorithm: the steps in plain English"));const pg=psafe(c);let L=null;if(pg&&pg.length)L=algoLines(pg);else if(c===t.c&&AL[t.n])L=AL[t.n].map(x=>[0,x]);
+if(!L){w.append(el("p","","An algorithm is not available for this example."));return w}
+const ol=el("div");ol.style.cssText="font-size:.95rem;line-height:1.9";[[0,"Start"]].concat(L,[[0,"End"]]).forEach((x,i,a)=>{const r=el("div","",(i&&i<a.length-1?i+". ":"")+x[1]);r.style.paddingLeft=(x[0]*22)+"px";if(i==0||i==a.length-1)r.style.fontWeight="700";ol.append(r)});w.append(ol);return w}
+function flowView(c,t){const w=el("div","card");w.append(el("h3","","Flowchart"));const pg=psafe(c);let tr=null;if(pg&&pg.length)tr=toFlow(pg);else if(c===t.c&&AL[t.n])tr=AL[t.n].map(s=>({t:/^(Print|Display|Read|Input|Write)/i.test(s)?"io":"p",s}));
+if(!tr){w.append(el("p","","A flowchart is not available for this example."));return w}
+const box=el("div");box.style.overflowX="auto";box.innerHTML=flowSvg(tr);w.append(box,el("p","","Rectangle: action. Parallelogram: input or output. Diamond: decision (Yes / No)."));if(!pg)w.append(el("p","","For this topic the flowchart shows the steps in order."));return w}
+let tmr=null,XP={xp:0,streak:0,last:"",c:{},b:[]};try{XP=Object.assign(XP,JSON.parse(localStorage.getItem("cl_xp")||"{}"))}catch(e){}
+const today=()=>new Date().toISOString().slice(0,10),cnt=p=>Object.keys(XP.c).filter(k=>k.startsWith(p)).length,isDone=n=>done.has(T.findIndex(t=>t.n==n));
+const BDG=[["First Step","Complete 1 topic",()=>done.size>=1],["Halfway","Complete half of the topics",()=>done.size>=Math.ceil(T.length/2)],["Loop Master","Finish all five loop topics",()=>["6. while Loop","7. do-while Loop","8. for Loop","break & continue","Nested Loops"].every(isDone)],["Bug Hunter","Fix 10 bugs",()=>cnt("bug:")>=10],["Quiz Ace","Score 8 or more in a Mixed Test",()=>lb()>=8],["Puzzle Pro","Solve 5 code puzzles",()=>cnt("ord:")>=5],["Builder","Complete 6 project stages",()=>cnt("proj:")>=6],["Memory Master","Finish 3 memory scenes",()=>cnt("mem:")>=3],["Daily Champion","Win 3 daily challenges",()=>cnt("day:")>=3],["7-Day Streak","Learn 7 days in a row",()=>XP.streak>=7]];
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),1800)}
+function chips(){const e=document.getElementById("xpb");if(e)e.textContent="XP "+XP.xp+"  |  Streak "+XP.streak+" day"+(XP.streak==1?"":"s")+"  |  Badges "+XP.b.length+" / "+BDG.length}
+function award(n,key){XP.c=XP.c||{};if(key){if(XP.c[key])return;XP.c[key]=1}const t=today();if(XP.last!=t){const y=new Date(Date.now()-864e5).toISOString().slice(0,10);XP.streak=XP.last==y?XP.streak+1:1;XP.last=t}
+XP.xp+=n;toast("+"+n+" XP");BDG.forEach(([nm,d,f])=>{if(!XP.b.includes(nm)&&f()){XP.b.push(nm);toast("Badge earned: "+nm)}});try{localStorage.setItem("cl_xp",JSON.stringify(XP))}catch(e){}chips();saveStudentData();cs()}
+function myprog(){const c=el("div","card");c.append(el("h2","","My Progress"),el("p","","XP "+XP.xp+" | Streak "+XP.streak+" day(s) | Topics completed "+done.size+" of "+T.length+" | Best Mixed Test "+lb()+" / 10"));const g=el("div");g.style.cssText="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px";
+BDG.forEach(([n,d])=>{const on=XP.b.includes(n),x=el("div","mc"+(on?" tg":""));x.innerHTML="<b>"+(on?"Earned: ":"Locked: ")+n+"</b><br><small>"+d+"</small>";if(!on)x.style.opacity=.6;g.append(x)});c.append(g);main.append(c);
+const k=el("div","card");k.append(el("h3","","Certificate of Merit"));
+if(lb()<8){k.append(el("p","","Unlocked when you score 8 or more out of 10 in the Mixed Test. Your best so far: "+lb()+" / 10."))}else{const nm=el("input","bgi");nm.placeholder="Your name";nm.value=cloud.d.name||"";const pb=el("button","p","Print / save as PDF");const ce=el("div");ce.id="cert";
+const fill=()=>{ce.innerHTML='<div style="border:6px double var(--acc);padding:26px;text-align:center;border-radius:6px"><div style="font-weight:700;letter-spacing:.06em">CHAROTAR UNIVERSITY OF SCIENCE &amp; TECHNOLOGY (CHARUSAT)</div><div style="font-size:.85rem;color:var(--mute)">Chandubhai S Patel Institute of Technology (CSPIT)</div><div style="font-size:.85rem;color:var(--mute)">Computer Science &amp; Engineering Department</div><h2 style="margin:18px 0 6px">Certificate of Merit</h2><p>This certifies that <b>'+fesc(nm.value||"__________")+'</b> (Enrollment No. <b>'+fesc(cloud.d.roll||"__________")+'</b>) scored <b>'+lb()+' out of 10</b> in the CodeLens C++ Mixed Test on '+today()+'.</p><p style="font-size:.78rem;color:var(--mute)">Practice certificate generated by CodeLens. It is not an official university document.</p></div>'};
+nm.oninput=fill;pb.onclick=()=>window.print();fill();const r=el("div","ctl");r.append(nm,pb);k.append(r,ce)}main.append(k)}
+function mkLab(c,s){const ed=editable(c);if(!ed||!ed.length||!interp(c))return null;const keys=ed.map((e,i)=>"v"+i),tpl=patch(c,ed,keys.map(k=>"@"+k+"@"));return labCard({s,c:tpl,in:ed.map((e,i)=>[keys[i],e.val,-9999,9999,e.name]),p:[],run:v=>{const st=interp(patch(c,ed,keys.map(k=>v[k])));return st?{st,out:st.out}:{st:[[0,"This program cannot be traced.",[["-","-"]]]],out:""}}})}
+const sig=r=>r?r.out+"|"+JSON.stringify(r[r.length-1][2]):null;
+function puzzles(){const h=el("div","card");h.append(el("h2","","Code Puzzles"),el("p","","The lines of each program are jumbled. Use the arrows to put them in the right order, then check. A different order is accepted if the program gives the same result."));const nb=el("button","p","New puzzles");nb.onclick=()=>{main.innerHTML="";puzzles()};h.append(nb);main.append(h);
+const pool=[];T.forEach(t=>[[t.c,0]].concat((EX[t.n]||[]).map((e,i)=>[e[0],i+1])).forEach(([c,i])=>{if(c.length>=4&&c.length<=9&&interp(c))pool.push([t.n,c,i])}));
+pool.sort(()=>Math.random()-.5).slice(0,5).forEach(([tn,c,xi],pi)=>{const w=el("div","card");w.append(el("span","tag",dn(tn)),el("p","","Put these lines in order:"));let arr=c.map((l,i)=>[l,i]).sort(()=>Math.random()-.5);const cd=el("div","code"),msg=el("div","why");
+const paint=(res)=>{cd.innerHTML="";arr.forEach(([l,o],i)=>{const d=el("div","");d.style.display="flex";d.style.gap="6px";d.style.alignItems="center";const u=el("button","","▲"),dw=el("button","","▼");u.onclick=()=>{if(i>0){[arr[i-1],arr[i]]=[arr[i],arr[i-1]];paint()}};dw.onclick=()=>{if(i<arr.length-1){[arr[i+1],arr[i]]=[arr[i],arr[i+1]];paint()}};const t=el("span","",l||" ");t.style.whiteSpace="pre";t.style.flex="1";if(res)t.style.background=c[i]==l?"rgba(26,122,76,.25)":"rgba(180,35,24,.22)";d.append(u,dw,t);cd.append(d)})};
+const ck=el("button","p","Check order");ck.onclick=()=>{const m=arr.map(x=>x[0]),ok=m.every((l,i)=>l==c[i])||(sig(interp(m))!==null&&sig(interp(m))==sig(interp(c)));paint(true);msg.textContent=ok?"Correct! The program works.":"Not yet: green lines are in the right place, red ones are not.";if(ok)award(15,"ord:"+tn+xi)};
+paint();w.append(cd,ck,msg);main.append(w)})}
+const PROJ=[{n:"Student Result Calculator",st:[["Store the marks","Three subject marks are kept in variables.",["int m1 = 78, m2 = 64, m3 = 91;"]],["Total and average","Add the marks, then divide by 3.0 so the average keeps its decimals.",["int total = m1 + m2 + m3;","float avg = total / 3.0;"]],["Decide the grade","An else-if ladder picks the grade from the average.",["char grade;","if (avg >= 75) grade = 'A';","else if (avg >= 60) grade = 'B';","else if (avg >= 40) grade = 'C';","else grade = 'F';"]],["Show the result","Print the total, the average and the grade.",["cout << total << \" \" << avg << \" \" << grade;"]]]},
+{n:"ATM Withdrawal",st:[["Set up the account","Balance, amount to withdraw and the PIN check values.",["int balance = 5000, amount = 1200, pin = 1234, entered = 1234;"]],["Check the PIN","A bool stores whether the entered PIN matches.",["bool ok = (pin == entered);"]],["Check the balance and pay","Nested ifs: first the PIN, then the balance.",["if (ok) {","  if (amount <= balance) {","    balance = balance - amount;","    cout << \"Collect cash. Balance \" << balance;","  } else cout << \"Insufficient balance\";","} else cout << \"Wrong PIN\";"]]]},
+{n:"Table and Total",st:[["Choose the table","n is the table number and sum will collect the total.",["int n = 5, sum = 0;"]],["Loop 1 to 10","A for loop prints each line of the table and adds it to sum.",["for (int i = 1; i <= 10; i++) {","  cout << n << \" x \" << i << \" = \" << n * i << \"  \";","  sum += n * i;","}"]],["Print the total","After the loop, show the total.",["cout << \"Total = \" << sum;"]]]}];
+function projects(){const h=el("div","card");h.append(el("h2","","Mini Projects"),el("p","","Build a small program one stage at a time. Each stage adds code; edit the values and run the whole program so far."));let pi=0,sk=0;const body=el("div"),pb=el("div","ctl"),sb=el("div","ctl");
+const render=()=>{body.innerHTML="";sb.innerHTML="";[...pb.children].forEach((b,i)=>b.classList.toggle("sel",i==pi));const P=PROJ[pi];P.st.forEach((s,i)=>{const b=el("button",i==sk?"sel":"","Stage "+(i+1));b.onclick=()=>{sk=i;render();award(5,"proj:"+pi+":"+i)};sb.append(b)});
+const s=P.st[sk],cum=[].concat(...P.st.slice(0,sk+1).map(x=>x[2])),c=el("div","card");c.append(el("h3","","Stage "+(sk+1)+": "+s[0]),el("p","",s[1]));const nw=el("div","code");s[2].forEach(l=>nw.append(el("div","on",l)));c.append(el("p","","New code in this stage (highlighted):"),nw);body.append(c);const lab=mkLab(cum,"Program so far: change the values, predict the output, run.");if(lab)body.append(lab)};
+PROJ.forEach((P,i)=>{const b=el("button","",P.n);b.onclick=()=>{pi=i;sk=0;render()};pb.append(b)});h.append(pb,sb);main.append(h,body);render()}
+const xs=v=>({n:"x",v,x:"0x1000"}),ps={n:"p",v:"0x1000",t:"x",x:"0x1008"},qs=(v,t)=>({n:"q",v,t,x:"0x1010"}),hp=(v,f)=>({a:"0x7000",v,f}),AA=(a,b,c)=>[{n:"a[0]",v:a,x:"0x2000"},{n:"a[1]",v:b,x:"0x2004"},{n:"a[2]",v:c,x:"0x2008"}],AP=(t,v)=>({n:"p",v,t,x:"0x2010"});
+const MEM=[{n:"Pointers and the heap",c:["int x = 10;","int *p = &x;","*p = 25;","int *q = new int(7);","*q = *p;","delete q;","q = nullptr;"],st:[
+{l:0,t:"x is created on the stack.",s:[xs(10)],h:[]},{l:1,t:"p stores the address of x.",s:[xs(10),ps],h:[]},{l:2,t:"*p = 25 writes through the pointer, so x changes.",s:[xs(25),ps],h:[]},{l:3,t:"new allocates an int on the heap; q points to it.",s:[xs(25),ps,qs("0x7000","0x7000")],h:[hp(7)]},{l:4,t:"*q = *p copies 25 into the heap block.",s:[xs(25),ps,qs("0x7000","0x7000")],h:[hp(25)]},{l:5,t:"delete frees the block. q still holds the old address: it is now dangling.",s:[xs(25),ps,qs("0x7000 (dangling)")],h:[hp(25,1)]},{l:6,t:"q = nullptr makes the pointer safe.",s:[xs(25),ps,qs("nullptr")],h:[hp(25,1)]}]},
+{n:"Arrays and pointer arithmetic",c:["int a[3] = {10, 20, 30};","int *p = a;","p++;","*p = 99;"],st:[
+{l:0,t:"Three ints sit side by side, 4 bytes apart.",s:AA(10,20,30),h:[]},{l:1,t:"The array name is the address of its first element, so p points to a[0].",s:[...AA(10,20,30),AP("a[0]","0x2000")],h:[]},{l:2,t:"p++ moves by one int (4 bytes), so p now points to a[1].",s:[...AA(10,20,30),AP("a[1]","0x2004")],h:[]},{l:3,t:"*p = 99 changes a[1].",s:[...AA(10,99,30),AP("a[1]","0x2004")],h:[]}]},
+{n:"References are aliases",c:["int a = 1, b = 2;","int &r = a;","r = 5;","int *p = &b;","*p = 9;"],st:[
+{l:0,t:"a and b are two separate boxes.",s:[{n:"a",v:1,x:"0x3000"},{n:"b",v:2,x:"0x3004"}],h:[]},{l:1,t:"r is another name for a. No new box is created.",s:[{n:"a (also r)",v:1,x:"0x3000"},{n:"b",v:2,x:"0x3004"}],h:[]},{l:2,t:"Changing r changes a.",s:[{n:"a (also r)",v:5,x:"0x3000"},{n:"b",v:2,x:"0x3004"}],h:[]},{l:3,t:"A pointer is a real variable holding an address.",s:[{n:"a (also r)",v:5,x:"0x3000"},{n:"b",v:2,x:"0x3004"},{n:"p",v:"0x3004",t:"b",x:"0x3010"}],h:[]},{l:4,t:"*p = 9 changes b.",s:[{n:"a (also r)",v:5,x:"0x3000"},{n:"b",v:9,x:"0x3004"},{n:"p",v:"0x3004",t:"b",x:"0x3010"}],h:[]}]}];
+function memPage(){const h=el("div","card");h.append(el("h2","","Memory View"),el("p","","Watch the stack and the heap change line by line. A pointer's target is outlined."));main.append(h);const w=el("div","card");w.append(el("h3","","Why stack and heap matter"));const sx=el("div");sx.style.fontSize=".95rem";sx.innerHTML='<p>Every running program gets two main areas of memory. The <b>stack</b> holds local variables and function calls, and C++ manages it for you. The <b>heap</b> holds memory you ask for while the program runs with <code>new</code>, and you manage it yourself.</p><div style="overflow-x:auto"><table style="font-family:inherit;font-size:.9rem"><tr><th>Aspect</th><th>Stack</th><th>Heap</th></tr><tr><td>Who manages it</td><td>The compiler: space is reserved when a function starts and freed when it returns</td><td>You: <code>new</code> allocates, <code>delete</code> frees</td></tr><tr><td>Speed</td><td>Very fast: it only moves a pointer</td><td>Slower: the allocator must find a free block</td></tr><tr><td>Size</td><td>Small and fixed (usually a few MB)</td><td>Large, limited by available memory</td></tr><tr><td>Lifetime</td><td>Until the block or function ends</td><td>Until you delete it</td></tr><tr><td>Size known</td><td>At compile time, e.g. <code>int a[10]</code></td><td>At run time, e.g. <code>new int[n]</code></td></tr><tr><td>Typical bugs</td><td>Stack overflow from deep recursion or huge local arrays</td><td>Memory leak, dangling pointer, double delete</td></tr><tr><td>Example</td><td><code>int x = 5;</code></td><td><code>int *p = new int(5);</code></td></tr></table></div><p><b>Why it is significant</b></p><ul><li>Stack data disappears when the function ends, so returning the address of a local variable gives a dangling pointer.</li><li>Heap memory survives function calls, so it can be shared and can grow. This is how dynamic arrays and linked lists work.</li><li>Forgetting <code>delete</code> leaks memory. Using memory after <code>delete</code>, or deleting twice, is undefined behaviour.</li><li>Rule of thumb: use the stack by default. Use the heap only when the size is not known at compile time, the data must outlive the function, or it is very large.</li><li>Prefer <code>vector</code> and smart pointers: they free heap memory automatically (RAII).</li></ul>';w.append(sx);main.append(w);
+MEM.forEach((sc,si)=>{const c=el("div","card");c.append(el("h3","",sc.n));let k=0;const sp=el("div","split"),cd=el("div","code"),mm=el("div"),note=el("div","note"),ct=el("div","ctl"),pv=el("button","","Back"),nx=el("button","p","Next"),cn=el("span");
+const col=(ti,cells,tg)=>{const d=el("div");d.append(el("b","",ti));cells.forEach(x=>{const m=el("div","mc"+(tg.has(x.n)||tg.has(x.a)?" tg":"")+(x.f?" fr":""));m.innerHTML="<b>"+(x.n||"heap "+x.a)+"</b> = "+x.v+(x.t?' <span class="ar">to '+x.t+"</span>":"")+(x.x?" <small>@"+x.x+"</small>":"")+(x.f?" <small>freed</small>":"");d.append(m)});return d};
+const paint=()=>{const s=sc.st[k];cd.innerHTML="";sc.c.forEach((l,i)=>cd.append(el("div",i==s.l?"on":"",l)));mm.innerHTML="";const tg=new Set(s.s.filter(x=>x.t).map(x=>x.t)),g=el("div","mg");g.append(col("Stack",s.s,tg),col("Heap",s.h,tg));mm.append(g);note.textContent=s.t;cn.textContent="Step "+(k+1)+" / "+sc.st.length;pv.disabled=k==0;nx.disabled=k==sc.st.length-1;if(k==sc.st.length-1)award(10,"mem:"+si)};
+pv.onclick=()=>{k--;paint()};nx.onclick=()=>{k++;paint()};sp.append(cd,mm);ct.append(pv,nx,cn);c.append(sp,note,ct);main.append(c);paint()})}
+function daily(){const h=el("div","card");h.append(el("h2","","Daily Challenge"),el("p","","Three new puzzles every day, the same for everyone. Type the output of each program. Solve all three to earn 30 XP and keep your streak."));const tm=el("p","","Time: 0 s");h.append(tm);main.append(h);
+const pool=Object.entries(BG).flatMap(([n,a])=>a.map(b=>[n,b]));let hs=0;for(const ch of today())hs=(hs*31+ch.charCodeAt(0))>>>0;let t0=0,got=0;const picks=[0,1,2].map(i=>pool[(hs+i*37)%pool.length]);
+clearInterval(tmr);tmr=setInterval(()=>{t0++;tm.textContent="Time: "+t0+" s"},1000);const nm=s=>s.replace(/\s+/g,"");
+picks.forEach(([tn,b],i)=>{const c=el("div","card");c.append(el("span","tag","Puzzle "+(i+1)+" | "+dn(tn)),el("div","code"));c.lastChild.append(el("div","",b[0]));const inp=el("input","bgi"),ck=el("button","p","Check"),o=el("div","why");inp.placeholder="Output";let ok=false;
+ck.onclick=()=>{if(ok)return;if(nm(inp.value)==nm(b[1])){ok=true;o.textContent="Correct! "+b[2];if(++got==3){clearInterval(tmr);o.textContent+=" All three solved in "+t0+" seconds.";award(30,"day:"+today())}}else o.textContent="Not quite. Trace it again."};const r=el("div","ctl");r.append(inp,ck);c.append(r,o);main.append(c)})}
+const done=new Set();let cur=0,step=0;
+window.done=done;window.getCur=()=>cur;window.setCur=(v)=>{cur=v};
+const nav=document.getElementById("nav"),main=document.getElementById("main");
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+let isT=false,unsub=null;
+const cloud={ref:null,d:{best:0,roll:"",name:""}};window.cloud=cloud;
 
-const cloud = {
-  ref: null,
-  d: {
-    best: 0,
-    roll: localStorage.getItem("cl_user_roll") || "",
-    name: localStorage.getItem("cl_user_name") || ""
+let stTimeout=null;
+const st=(m,autoClear=false)=>{
+  const e=document.getElementById("acs");
+  if(e){
+    e.textContent=m;
+    if(autoClear){
+      clearTimeout(stTimeout);
+      stTimeout=setTimeout(()=>{if(e)e.textContent=""},2500);
+    }
   }
 };
 
-const st = m => {
-  const e = document.getElementById("acs");
-  if (e) e.textContent = m;
-};
+let weak={};try{weak=JSON.parse(localStorage.getItem("cl_weak")||"{}")}catch(e){}
+function wrong(tp){if(!tp)return;weak[tp]=(weak[tp]||0)+1;saveStudentData();cs()}
+const lb=()=>{return (cloud.d&&cloud.d.best)||0};
 
-let weak = {};
+const DEFAULT_GOOGLE_SHEET_URL="https://script.google.com/macros/s/AKfycbwE4xvfVF6ss33k0YmmNk790WcK6mbV1QpL5rm1-Y8HyiHmdvt6kHV2Bw1OHKkdT_mN/exec";
+const TEACHER_EMAIL="archanamagare.cse@charusat.ac.in";
 
-// Save active student's state and last updated topic
-function saveStudentData() {
-  const roll = cloud.d.roll;
-  if (!roll) return;
-  const data = {
-    roll: roll,
-    name: cloud.d.name,
-    done: [...done].map(i => T[i].n),
-    cur: cur,
-    step: step,
-    weak: weak,
-    best: cloud.d.best || lb(),
-    lastUpdated: Date.now()
-  };
-  try {
-    localStorage.setItem("cl_stu_" + roll, JSON.stringify(data));
-    localStorage.setItem("cl_user_roll", roll);
-    localStorage.setItem("cl_user_name", cloud.d.name || "");
-    localStorage.setItem("cl_done", JSON.stringify(data.done));
-    localStorage.setItem("cl_weak", JSON.stringify(weak));
-    localStorage.setItem("cl_best", data.best);
-    localStorage.setItem("cl_cur", cur);
-  } catch(e){}
+function getSheetUrl(){
+  const custom=(localStorage.getItem("cl_sheet_url")||"").trim();
+  return custom||DEFAULT_GOOGLE_SHEET_URL;
 }
 
-// Load a student's data:
-// - If NEW user: progress bar resets to zero, starts at topic 0
-// - If EXISTING user: restores progress bar and jumps to last updated topic
-function loadStudentData(roll, name) {
-  if (!roll) {
-    done.clear();
-    cur = 0;
-    step = 0;
-    weak = {};
-    cloud.d.best = 0;
+async function sendToGoogleSheet(data){
+  const url=getSheetUrl();
+  if(!url)return false;
+  try{
+    await fetch(url,{
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(data)
+    });
+    st("✓ Saved",true);
+    return true;
+  }catch(err){
+    console.error("Save error:",err);
     return false;
   }
-  roll = roll.trim().toUpperCase();
-  const raw = localStorage.getItem("cl_stu_" + roll);
-  if (raw) {
-    try {
-      const data = JSON.parse(raw);
+}
+
+function saveStudentData(){
+  if(!cloud.d.roll)return;
+  const roll=cloud.d.roll.trim().toUpperCase();
+  const data={
+    roll:roll,
+    name:cloud.d.name||"",
+    done:[...done].map(i=>T[i]?T[i].n:i),
+    cur:cur,
+    weak:weak,
+    best:cloud.d.best||0,
+    xp:XP,
+    lastUpdated:new Date().toISOString()
+  };
+  try{
+    localStorage.setItem("cl_stu_"+roll,JSON.stringify(data));
+    localStorage.setItem("cl_user_roll",roll);
+    localStorage.setItem("cl_user_name",cloud.d.name||"");
+    localStorage.setItem("cl_done",JSON.stringify(data.done));
+    localStorage.setItem("cl_weak",JSON.stringify(weak));
+    localStorage.setItem("cl_best",data.best);
+    localStorage.setItem("cl_cur",cur);
+    localStorage.setItem("cl_xp",JSON.stringify(XP));
+  }catch(e){}
+}
+
+function loadStudentData(roll,name){
+  if(!roll){
+    done.clear();
+    cur=0;
+    step=0;
+    weak={};
+    cloud.d.best=0;
+    XP={xp:0,streak:0,last:"",c:{},b:[]};
+    chips();
+    return false;
+  }
+  roll=roll.trim().toUpperCase();
+  const raw=localStorage.getItem("cl_stu_"+roll);
+  if(raw){
+    try{
+      const data=JSON.parse(raw);
       done.clear();
-      (data.done || []).forEach(n => {
-        const i = T.findIndex(t => t.n == n);
-        if (i >= 0) done.add(i);
+      (data.done||[]).forEach(n=>{
+        const i=T.findIndex(t=>t.n==n);
+        if(i>=0)done.add(i);
       });
-      cur = (typeof data.cur === "number" && data.cur >= -3 && data.cur < T.length) ? data.cur : 0;
-      step = 0;
-      weak = data.weak || {};
-      cloud.d.best = data.best || 0;
-      if (data.name && !name) cloud.d.name = data.name;
-      else if (name) cloud.d.name = name;
-      return true; // Existing user restored
-    } catch(e){}
+      cur=(typeof data.cur==="number"&&data.cur>=-9&&data.cur<T.length)?data.cur:0;
+      step=0;
+      weak=data.weak||{};
+      cloud.d.best=data.best||0;
+      if(data.xp){
+        XP=Object.assign({xp:0,streak:0,last:"",c:{},b:[]},data.xp);
+      }
+      chips();
+      if(data.name&&!name)cloud.d.name=data.name;
+      else if(name)cloud.d.name=name;
+      return true;
+    }catch(e){}
   }
   
-  // Migration check: if this student was the active user before per-user storage
-  if (localStorage.getItem("cl_user_roll") === roll && localStorage.getItem("cl_done")) {
-    try {
-      const legacyDone = JSON.parse(localStorage.getItem("cl_done") || "[]");
-      if (legacyDone.length > 0) {
+  if(localStorage.getItem("cl_user_roll")===roll&&localStorage.getItem("cl_done")){
+    try{
+      const legacyDone=JSON.parse(localStorage.getItem("cl_done")||"[]");
+      if(legacyDone.length>0){
         done.clear();
-        legacyDone.forEach(n => {
-          const i = T.findIndex(t => t.n == n);
-          if (i >= 0) done.add(i);
+        legacyDone.forEach(n=>{
+          const i=T.findIndex(t=>t.n==n);
+          if(i>=0)done.add(i);
         });
-        cur = +(localStorage.getItem("cl_cur") || 0);
-        step = 0;
-        weak = JSON.parse(localStorage.getItem("cl_weak") || "{}");
-        cloud.d.best = +(localStorage.getItem("cl_best") || 0);
-        if (name) cloud.d.name = name;
+        cur=+(localStorage.getItem("cl_cur")||0);
+        step=0;
+        weak=JSON.parse(localStorage.getItem("cl_weak")||"{}");
+        cloud.d.best=+(localStorage.getItem("cl_best")||0);
+        if(name)cloud.d.name=name;
         saveStudentData();
         return true;
       }
-    } catch(e){}
+    }catch(e){}
   }
   
   // BRAND NEW USER with this enrollment number:
   // Reset progress bar to zero (0%) and start at Topic 1 (cur = 0)
   done.clear();
-  cur = 0;
-  step = 0;
-  weak = {};
-  cloud.d.best = 0;
-  if (name) cloud.d.name = name;
+  cur=0;
+  step=0;
+  weak={};
+  cloud.d.best=0;
+  XP={xp:0,streak:0,last:"",c:{},b:[]};
+  chips();
+  if(name)cloud.d.name=name;
   saveStudentData();
-  return false; // New user initialized at 0
+  return false;
 }
 
-function wrong(tp) {
-  if (!tp) return;
-  weak[tp] = (weak[tp] || 0) + 1;
-  saveStudentData();
-  cs();
-}
+function cs(x){Object.assign(cloud.d,x||{});clearTimeout(cs.tm);cs.tm=setTimeout(cs0,1200)}
 
-const lb = () => {
-  return cloud.d.best || (+localStorage.getItem("cl_best") || 0);
-};
-
-function cs(x) {
-  Object.assign(cloud.d, x || {});
-  clearTimeout(cs.tm);
-  cs.tm = setTimeout(cs0, 1200);
-}
-
-function getSheetUrl() {
-  const custom = (localStorage.getItem("cl_sheet_url") || "").trim();
-  return custom || DEFAULT_GOOGLE_SHEET_URL;
-}
-
-// Send login or progress data to Dr. Archana Magare's Google Sheet
-async function sendToGoogleSheet(data) {
-  const url = getSheetUrl();
-  if (!url) {
-    st("Saved on device (Google Sheet URL not configured yet)");
-    return false;
-  }
-  st("Saving to Google Sheet...");
-  try {
-    await fetch(url, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(data)
-    });
-    const timeStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    st("✓ Saved to Google Sheet (" + timeStr + ")");
-    return true;
-  } catch (err) {
-    console.error("Google Sheet save error:", err);
-    st("Saved on device (sync error: check internet/sheet)");
-    return false;
-  }
-}
-
-function cs0() {
-  if (!cloud.d.roll && !cloud.d.name) {
-    st("Enter enrollment number & name to sync progress.");
-    return;
-  }
-  const d = {
-    action: "PROGRESS_UPDATE",
-    enrollmentNo: cloud.d.roll || "",
-    name: cloud.d.name || "",
-    bestScore: cloud.d.best || lb(),
-    done: [...done].map(i => T[i].n),
-    topicsCompleted: done.size,
-    totalTopics: T.length,
-    lastTopicIndex: cur,
-    lastTopicName: (cur >= 0 && cur < T.length) ? T[cur].n : (cur == -1 ? "Mixed Test" : cur == -2 ? "Spot the Bug" : "Teacher Dashboard"),
-    weakTopics: Object.keys(weak).join(", ") || "None",
-    timestamp: new Date().toLocaleString(),
-    userAgent: navigator.userAgent
+function cs0(){
+  if(!cloud.d.roll)return;
+  const topicTitle=(cur>=0&&cur<T.length)?T[cur].n:
+    (cur==-1?"Mixed Test":cur==-2?"Spot the Bug":cur==-4?"Flash Cards":
+     cur==-5?"My Progress":cur==-6?"Code Puzzles":cur==-7?"Mini Projects":
+     cur==-8?"Memory View":cur==-9?"Daily Challenge":"Studio");
+  const d={
+    action:"PROGRESS_UPDATE",
+    enrollmentNo:cloud.d.roll||"",
+    name:cloud.d.name||"",
+    bestScore:cloud.d.best||lb(),
+    done:[...done].map(i=>T[i]?T[i].n:i),
+    topicsCompleted:done.size,
+    totalTopics:T.length,
+    lastTopicIndex:cur,
+    lastTopicName:topicTitle,
+    weakTopics:Object.keys(weak).join(", ")||"None",
+    xp:XP.xp,
+    streak:XP.streak,
+    badges:XP.b.length,
+    timestamp:new Date().toLocaleString(),
+    userAgent:navigator.userAgent
   };
   sendToGoogleSheet(d);
 }
 
-function loginStudent(rollVal, nameVal) {
-  const roll = (rollVal || "").trim().toUpperCase();
-  const name = (nameVal || "").trim();
-  if (!/^[A-Z0-9\/-]{3,25}$/.test(roll)) {
+function loginStudent(rollVal,nameVal){
+  const roll=(rollVal||"").trim().toUpperCase();
+  const name=(nameVal||"").trim();
+  if(!/^[A-Z0-9\/-]{3,25}$/.test(roll)){
     alert("Please enter a valid Enrollment Number (3 to 25 characters, e.g. 21IT001).");
     return false;
   }
-  if (!name || name.length < 2) {
-    alert("Please enter the Student Name.");
+  if(!name||name.length<2){
+    alert("Please enter your Full Name.");
     return false;
   }
-  
-  cloud.d.roll = roll;
-  cloud.d.name = name;
-  
-  // Load data for this student (restores if existing user, resets to zero if new user)
-  const isExisting = loadStudentData(roll, name);
-  
-  try {
-    localStorage.setItem("cl_user_roll", roll);
-    localStorage.setItem("cl_user_name", name);
-    localStorage.setItem("cl_last_active", new Date().toISOString());
-  } catch(e){}
-  
-  const loginPayload = {
-    action: isExisting ? "STUDENT_LOGIN_RESUME" : "STUDENT_LOGIN_NEW",
-    enrollmentNo: roll,
-    name: name,
-    topicsCompleted: done.size,
-    bestScore: cloud.d.best || lb(),
-    totalTopics: T.length,
-    lastTopicIndex: cur,
-    lastTopicName: (cur >= 0 && cur < T.length) ? T[cur].n : "Topic 1",
-    weakTopics: Object.keys(weak).join(", ") || "None",
-    timestamp: new Date().toLocaleString(),
-    userAgent: navigator.userAgent
+  cloud.d.roll=roll;
+  cloud.d.name=name;
+  const isExisting=loadStudentData(roll,name);
+  try{
+    localStorage.setItem("cl_user_roll",roll);
+    localStorage.setItem("cl_user_name",name);
+    localStorage.setItem("cl_last_active",new Date().toISOString());
+  }catch(e){}
+  const topicTitle=(cur>=0&&cur<T.length)?T[cur].n:"Topic 1";
+  const loginPayload={
+    action:isExisting?"STUDENT_LOGIN_RESUME":"STUDENT_LOGIN_NEW",
+    enrollmentNo:roll,
+    name:name,
+    topicsCompleted:done.size,
+    bestScore:cloud.d.best||lb(),
+    totalTopics:T.length,
+    lastTopicIndex:cur,
+    lastTopicName:topicTitle,
+    weakTopics:Object.keys(weak).join(", ")||"None",
+    xp:XP.xp,
+    streak:XP.streak,
+    badges:XP.b.length,
+    timestamp:new Date().toLocaleString(),
+    userAgent:navigator.userAgent
   };
   sendToGoogleSheet(loginPayload);
-  
   acct();
   build();
   draw();
   return true;
 }
 
-function openSheetConfigModal() {
-  const ex = document.getElementById("sheetConfigModal");
-  if (ex) ex.remove();
-  const ov = el("div", "modal-overlay");
-  ov.id = "sheetConfigModal";
-  const box = el("div", "modal-box");
-  box.innerHTML = `
-    <h3>Google Sheet Integration Setup</h3>
-    <p>Target Account: <strong>${TEACHER_EMAIL}</strong></p>
-    <p style="font-size:0.85rem">All student logins (Enrollment No, Name, Timestamp) and quiz progress are automatically logged to your Google Sheet via Google Apps Script.</p>
-    <div class="modal-field">
-      <label for="cfgSheetUrl">Google Apps Script Web App URL:</label>
-      <input id="cfgSheetUrl" placeholder="https://script.google.com/macros/s/.../exec" value="${getSheetUrl()}">
-    </div>
-    <div style="font-size:0.8rem;color:var(--mute);margin-bottom:12px">
-      📌 Need to create the Web App? See <code>INSTRUCTIONS_GOOGLE_SHEET_SETUP.md</code> or <code>GoogleAppsScript_CodeLens.js</code>.
-    </div>
-    <div class="modal-actions">
-      <button id="cfgTestBtn" type="button">⚡ Send Test Row</button>
-      <button id="cfgCloseBtn" type="button">Close</button>
-      <button id="cfgSaveBtn" type="button" class="primary">Save URL</button>
-    </div>
-  `;
-  ov.append(box);
-  document.body.append(ov);
-  
-  document.getElementById("cfgCloseBtn").onclick = () => ov.remove();
-  document.getElementById("cfgSaveBtn").onclick = () => {
-    const val = document.getElementById("cfgSheetUrl").value.trim();
-    localStorage.setItem("cl_sheet_url", val);
-    GOOGLE_SHEET_URL = val;
-    ov.remove();
-    st(val ? "Google Sheet Web App URL saved." : "Google Sheet URL cleared.");
-    acct();
-  };
-  document.getElementById("cfgTestBtn").onclick = async () => {
-    const val = document.getElementById("cfgSheetUrl").value.trim();
-    if (!val) {
-      alert("Please enter your Web App URL first.");
-      return;
-    }
-    localStorage.setItem("cl_sheet_url", val);
-    GOOGLE_SHEET_URL = val;
-    const testPayload = {
-      action: "TEST_CONNECTION",
-      enrollmentNo: cloud.d.roll || "TEST-01",
-      name: cloud.d.name || "Test Student",
-      topicsCompleted: done.size,
-      bestScore: lb(),
-      totalTopics: T.length,
-      weakTopics: "None",
-      timestamp: new Date().toLocaleString(),
-      userAgent: navigator.userAgent
-    };
-    st("Sending test row to Google Sheet...");
-    await sendToGoogleSheet(testPayload);
-    alert("Test row sent! Check your Google Sheet under archanamagare.cse@charusat.ac.in.");
-  };
-}
-
-function checkLoginPrompt() {
-  if (cloud.d.roll && cloud.d.name) return;
-  const ex = document.getElementById("studentLoginModal");
-  if (ex) ex.remove();
-  const ov = el("div", "modal-overlay");
-  ov.id = "studentLoginModal";
-  const box = el("div", "modal-box");
-  box.innerHTML = `
+function checkLoginPrompt(){
+  if(cloud.d.roll&&cloud.d.name)return;
+  const ex=document.getElementById("studentLoginModal");
+  if(ex)ex.remove();
+  const ov=el("div","modal-overlay");
+  ov.id="studentLoginModal";
+  const box=el("div","modal-box");
+  box.innerHTML=`
     <h3>Welcome to CodeLens C++ Studio</h3>
-    <p>Please enter your <strong>Enrollment Number</strong> and <strong>Full Name</strong>. Your login and learning progress will be saved to Dr. Archana Magare's class sheet (<code>${TEACHER_EMAIL}</code>).</p>
+    <p>Please enter your <strong>Enrollment Number</strong> and <strong>Full Name</strong> to track your learning progress and generate your Certificate of Merit.</p>
     <div class="modal-field">
       <label for="promptRoll">Enrollment Number <span style="color:var(--bad)">*</span></label>
       <input id="promptRoll" placeholder="e.g. 21IT001 or 22CE050" value="${cloud.d.roll||''}">
@@ -1103,220 +1291,144 @@ function checkLoginPrompt() {
     </div>
     <div class="modal-actions">
       <button id="promptGuestBtn" type="button">Explore as Guest</button>
-      <button id="promptSubmitBtn" type="button" class="primary">Login & Start</button>
+      <button id="promptSubmitBtn" type="button" class="primary">Login &amp; Start</button>
     </div>
   `;
   ov.append(box);
   document.body.append(ov);
-  
-  document.getElementById("promptGuestBtn").onclick = () => ov.remove();
-  document.getElementById("promptSubmitBtn").onclick = () => {
-    const r = document.getElementById("promptRoll").value;
-    const n = document.getElementById("promptName").value;
-    if (loginStudent(r, n)) {
-      ov.remove();
+  document.getElementById("promptGuestBtn").onclick=()=>ov.remove();
+  document.getElementById("promptSubmitBtn").onclick=()=>{
+    const r=document.getElementById("promptRoll").value;
+    const n=document.getElementById("promptName").value;
+    if(loginStudent(r,n))ov.remove();
+  };
+}
+
+function promptEditUser(){
+  const curRoll=cloud.d.roll||"";
+  const curName=cloud.d.name||"";
+  const newRoll=prompt("Enter Enrollment Number:",curRoll);
+  if(newRoll===null)return;
+  const newName=prompt("Enter Student Full Name:",curName);
+  if(newName===null)return;
+  loginStudent(newRoll,newName);
+}
+
+function acct(){
+  const a=document.getElementById("acct");
+  if(!a)return;
+  a.innerHTML="";
+  if(cloud.d.roll&&cloud.d.name){
+    const row=el("div","acct-row");
+    const info=el("span","","");
+    info.innerHTML=`👤 Student: <strong>${fesc(cloud.d.name)}</strong> (<code style="background:rgba(255,255,255,0.18);padding:2px 6px;border-radius:4px">${fesc(cloud.d.roll)}</code>)`;
+    const btnSwitch=el("button","","Switch Student");
+    btnSwitch.onclick=promptEditUser;
+    const stat=el("span","acct-status","");
+    stat.id="acs";
+    row.append(info,btnSwitch,stat);
+    a.append(row);
+  }else{
+    const row=el("div","acct-row");
+    const btnLogin=el("button","","👤 Student Sign In");
+    btnLogin.onclick=checkLoginPrompt;
+    const stat=el("span","acct-status","");
+    stat.id="acs";
+    row.append(btnLogin,stat);
+    a.append(row);
+  }
+}
+
+function setupTeacherAccess(){
+  const byEl=document.querySelector("p.by");
+  if(!byEl)return;
+  let clicks=0;
+  byEl.onclick=()=>{
+    clicks++;
+    if(clicks>=3){
+      clicks=0;
+      const pin=prompt("Teacher Access PIN:");
+      if(pin==="1234"||pin==="archana"||pin==="admin"){
+        openTeacherPortal();
+      }else if(pin!==null){
+        alert("Invalid PIN.");
+      }
     }
   };
 }
 
-function promptEditUser() {
-  const newRoll = prompt("Enter Enrollment Number:", cloud.d.roll || "");
-  if (newRoll === null) return;
-  const newName = prompt("Enter Student Full Name:", cloud.d.name || "");
-  if (newName === null) return;
-  loginStudent(newRoll, newName);
-}
-
-function acct() {
-  const a = document.getElementById("acct");
-  if (!a) return;
-  a.innerHTML = "";
-  
-  if (cloud.d.roll && cloud.d.name) {
-    const row = el("div", "acct-row");
-    const info = el("span", "", "");
-    info.innerHTML = `👤 Signed in: <strong>${cloud.d.name}</strong> (<code style="background:rgba(255,255,255,0.18);padding:2px 6px;border-radius:4px">${cloud.d.roll}</code>)`;
-    
-    const btnSwitch = el("button", "", "Switch / Edit");
-    btnSwitch.onclick = promptEditUser;
-    
-    const btnCfg = el("button", "", "⚙️ Sheet Config");
-    btnCfg.onclick = openSheetConfigModal;
-    
-    const stat = el("span", "acct-status", "");
-    stat.id = "acs";
-    
-    row.append(info, btnSwitch, btnCfg, stat);
-    a.append(row);
-    st(getSheetUrl() ? "✓ Google Sheet Connected" : "Local mode (Click 'Sheet Config' to connect Google Sheet)");
-  } else {
-    const row = el("div", "acct-row");
-    row.append(el("span", "", "Student Sign-In: "));
-    
-    const inRoll = el("input", "");
-    inRoll.placeholder = "Enrollment No.";
-    inRoll.value = cloud.d.roll || "";
-    
-    const inName = el("input", "");
-    inName.placeholder = "Full Name";
-    inName.value = cloud.d.name || "";
-    
-    const btnSave = el("button", "btn-pri", "Login & Save");
-    btnSave.onclick = () => {
-      loginStudent(inRoll.value, inName.value);
-    };
-    
-    const btnCfg = el("button", "", "⚙️ Sheet Config");
-    btnCfg.onclick = openSheetConfigModal;
-    
-    const stat = el("span", "acct-status", "Enter Enrollment No & Name to save progress");
-    stat.id = "acs";
-    
-    row.append(inRoll, inName, btnSave, btnCfg, stat);
-    a.append(row);
-  }
-}
-
-function initCloud() {
-  const savedRoll = localStorage.getItem("cl_user_roll");
-  const savedName = localStorage.getItem("cl_user_name");
-  if (savedRoll) {
-    loadStudentData(savedRoll, savedName);
-  } else {
-    done.clear();
-    cur = 0;
-    step = 0;
-  }
-  build();
-  draw();
-  acct();
-  checkLoginPrompt();
-  if (cloud.d.roll && cloud.d.name) {
-    const sessionData = {
-      action: "SESSION_ACTIVE",
-      enrollmentNo: cloud.d.roll,
-      name: cloud.d.name,
-      topicsCompleted: done.size,
-      bestScore: cloud.d.best || lb(),
-      totalTopics: T.length,
-      lastTopicIndex: cur,
-      lastTopicName: (cur >= 0 && cur < T.length) ? T[cur].n : "Topic 1",
-      weakTopics: Object.keys(weak).join(", ") || "None",
-      timestamp: new Date().toLocaleString(),
-      userAgent: navigator.userAgent
-    };
-    sendToGoogleSheet(sessionData);
-  }
-}
-
-async function dash() {
-  const c = el("div", "card");
-  c.append(
-    el("h2", "", "Teacher Dashboard & Progress Management"),
-    el("p", "", "Student logins and progress tracking connected to Dr. Archana Magare's Google Sheet (" + TEACHER_EMAIL + ").")
-  );
-  main.append(c);
-  
-  const setupCard = el("div", "card");
-  setupCard.innerHTML = `
-    <h3>Google Sheet Integration</h3>
-    <p>All student logins (Enrollment No, Name, Timestamp) and quiz progress are recorded directly in Dr. Archana Magare's Google Sheet.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0">
-      <button class="opt" style="width:auto;background:var(--acc);color:#fff" id="dashOpenSheetBtn">📊 Open Google Sheets</button>
-      <button class="opt" style="width:auto" id="dashCfgBtn">⚙️ Configure Web App URL</button>
-      <button class="opt" style="width:auto" id="dashTestPingBtn">⚡ Test Google Sheet Ping</button>
+function openTeacherPortal(){
+  const ex=document.getElementById("teacherPortalModal");
+  if(ex)ex.remove();
+  const ov=el("div","modal-overlay");
+  ov.id="teacherPortalModal";
+  const box=el("div","modal-box");
+  box.innerHTML=`
+    <h3>Teacher Control Portal</h3>
+    <p>Faculty: <strong>Dr. Archana Chandrashekhar Magare</strong> (<code>${TEACHER_EMAIL}</code>)</p>
+    <div style="margin-bottom:12px;font-size:0.85rem">
+      <p>Student progress is automatically synchronized in the background to your Google Spreadsheet.</p>
     </div>
-    <div id="dashSheetStatus" style="font-size:0.9rem;color:var(--mute)">
-      Status: ${getSheetUrl() ? "<strong>Connected</strong> (" + getSheetUrl() + ")" : "<em>Not connected yet. Click 'Configure Web App URL' to paste your deployed Google Apps Script URL.</em>"}
+    <div class="modal-field">
+      <label for="cfgSheetUrl">Google Apps Script Web App URL:</label>
+      <input id="cfgSheetUrl" value="${getSheetUrl()}">
+    </div>
+    <div class="modal-actions" style="flex-wrap:wrap">
+      <button id="tpOpenSheetBtn" type="button">📊 Open Google Sheet</button>
+      <button id="tpTestBtn" type="button">⚡ Send Test Row</button>
+      <button id="tpCloseBtn" type="button">Close</button>
+      <button id="tpSaveBtn" type="button" class="primary">Save URL</button>
     </div>
   `;
-  main.append(setupCard);
-  
-  document.getElementById("dashOpenSheetBtn").onclick = () => {
-    window.open("https://docs.google.com/spreadsheets/d/1SsQm1YplU8fJulrBbsU-70p5q8J4SwpW0vW-5u_2nDY/edit?gid=1988170360#gid=1988170360", "_blank");
+  ov.append(box);
+  document.body.append(ov);
+  document.getElementById("tpOpenSheetBtn").onclick=()=>{
+    window.open("https://docs.google.com/spreadsheets/d/1SsQm1YplU8fJulrBbsU-70p5q8J4SwpW0vW-5u_2nDY/edit","_blank");
   };
-  document.getElementById("dashCfgBtn").onclick = openSheetConfigModal;
-  document.getElementById("dashTestPingBtn").onclick = () => {
-    openSheetConfigModal();
-    const btn = document.getElementById("cfgTestBtn");
-    if (btn) btn.click();
+  document.getElementById("tpCloseBtn").onclick=()=>ov.remove();
+  document.getElementById("tpSaveBtn").onclick=()=>{
+    const val=document.getElementById("cfgSheetUrl").value.trim();
+    localStorage.setItem("cl_sheet_url",val);
+    ov.remove();
+    alert("Google Sheet Web App URL updated.");
   };
-  
-  const studentCard = el("div", "card");
-  studentCard.append(el("h3", "", "Students on this Device"));
-  const tb = el("table");
-  tb.innerHTML = "<tr><th>Enrollment No.</th><th>Student Name</th><th>Topics Done</th><th>Last Topic</th><th>Best Test</th><th>Weak Topics</th></tr>";
-  const stuList = [];
-  for (let k = 0; k < localStorage.length; k++) {
-    const key = localStorage.key(k);
-    if (key && key.startsWith("cl_stu_")) {
-      try { stuList.push(JSON.parse(localStorage.getItem(key))); } catch(e){}
-    }
-  }
-  if (!stuList.length && cloud.d.roll) {
-    stuList.push({
-      roll: cloud.d.roll,
-      name: cloud.d.name,
-      done: [...done].map(i => T[i].n),
-      cur: cur,
-      best: lb(),
-      weak: weak
-    });
-  }
-  stuList.sort((a,b) => (a.roll||"").localeCompare(b.roll||""));
-  
-  if (stuList.length) {
-    stuList.forEach(s => {
-      const tr = el("tr");
-      const sDone = (s.done || []).length;
-      const sLast = (typeof s.cur === "number" && s.cur >= 0 && s.cur < T.length) ? ((s.cur+1) + ". " + dn(T[s.cur].n)) : (s.cur == -1 ? "Mixed Test" : s.cur == -2 ? "Spot the Bug" : "Topic 1");
-      const sWeak = Object.entries(s.weak || {}).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>dn(e[0])+" ("+e[1]+")").join(", ") || "None";
-      [
-        (s.roll || "-") + (s.roll === cloud.d.roll ? " (Active)" : ""),
-        s.name || "Student",
-        sDone + " / " + T.length + " (" + Math.round(100 * sDone / T.length) + "%)",
-        sLast,
-        (s.best || 0) + " / 10",
-        sWeak
-      ].forEach(v => tr.append(el("td", "", v)));
-      tb.append(tr);
-    });
-  } else {
-    const tr = el("tr");
-    tr.append(el("td", "", "No students recorded yet"));
-    tb.append(tr);
-  }
-  const wr = el("div");
-  wr.style.overflowX = "auto";
-  wr.append(tb);
-  studentCard.append(wr);
-  
-  const dl = el("button", "p", "Download Local CSV");
-  dl.style.marginTop = "14px";
-  dl.onclick = () => {
-    const q2 = v => '"' + String(v).replace(/"/g, '""') + '"';
-    const csv = "Enrollment,Name,TopicsDone,Total,BestTest,WeakTopics,LastActive\n" +
-      stuList.map(s => [
-        s.roll||"-",
-        s.name||"-",
-        (s.done||[]).length,
-        T.length,
-        s.best||0,
-        Object.keys(s.weak||{}).join("; "),
-        s.lastUpdated ? new Date(s.lastUpdated).toISOString() : new Date().toISOString()
-      ].map(q2).join(",")).join("\n");
-    try {
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `codelens-students-progress.csv`;
-      link.click();
-    } catch(e) {
-      alert("CSV export error: " + e.message);
-    }
+  document.getElementById("tpTestBtn").onclick=async()=>{
+    const val=document.getElementById("cfgSheetUrl").value.trim();
+    if(!val){alert("Enter URL first.");return}
+    localStorage.setItem("cl_sheet_url",val);
+    const testPayload={
+      action:"TEST_CONNECTION",
+      enrollmentNo:cloud.d.roll||"TEST-01",
+      name:cloud.d.name||"Test Student",
+      topicsCompleted:done.size,
+      bestScore:lb(),
+      totalTopics:T.length,
+      weakTopics:"None",
+      timestamp:new Date().toLocaleString(),
+      userAgent:navigator.userAgent
+    };
+    await sendToGoogleSheet(testPayload);
+    alert("Test row sent! Check your Google Sheet.");
   };
-  studentCard.append(dl);
-  main.append(studentCard);
+}
+
+function initCloud(){
+  setupTeacherAccess();
+  const savedRoll=localStorage.getItem("cl_user_roll");
+  const savedName=localStorage.getItem("cl_user_name");
+  if(savedRoll){
+    cloud.d.roll=savedRoll;
+    cloud.d.name=savedName||"";
+    loadStudentData(savedRoll,savedName);
+    acct();
+    build();
+    draw();
+  }else{
+    acct();
+    build();
+    draw();
+    setTimeout(checkLoginPrompt,400);
+  }
 }
 
 const dn=n=>n.replace(/^\d+\.\s*/,"");
@@ -1329,33 +1441,54 @@ function build(){
     nav.append(b);
   });
   nav.append(el("div","sep","Tests & practice"));
-  [[-1,"Mixed Test","all topics"],[-2,"Spot the Bug","find and fix"],[-3,"Teacher Dashboard & Setup","sync & records"]].forEach(([v,n,sb])=>{
+  [[-9,"Daily Challenge","3 puzzles a day"],
+   [-6,"Code Puzzles","arrange the lines"],
+   [-7,"Mini Projects","build step by step"],
+   [-8,"Memory View","stack and heap"],
+   [-4,"Flash Cards","quick revision"],
+   [-1,"Mixed Test","10 timed questions"],
+   [-2,"Spot the Bug","find and fix"],
+   [-5,"My Progress","XP, badges, certificate"]
+  ].forEach(([v,n,sb])=>{
     const x=el("button",v==cur?"on":"",n);
     x.append(el("small","",sb));
     x.onclick=()=>{cur=v;step=0;saveStudentData();build();draw()};
     nav.append(x);
   });
-  document.getElementById("pg").style.width=(done.size/T.length*100)+"%";
-  document.getElementById("pgt").textContent="Progress: "+done.size+" of "+T.length+" topics completed ("+Math.round(done.size/T.length*100)+"%)";
+  const pct=Math.round(done.size/T.length*100);
+  document.getElementById("pg").style.width=pct+"%";
+  document.getElementById("pgt").textContent="Progress: "+done.size+" of "+T.length+" topics completed ("+pct+"%)";
 }
-function draw(){if(unsub){unsub();unsub=null}main.innerHTML="";if(cur<0)return cur==-1?mixed():cur==-3?dash():bugs();const t=T[cur];
-const a=el("div","card");a.append(el("span","tag","Topic "+(cur+1)+" of "+T.length));a.append(el("h2","",dn(t.n)));a.append(el("p","",t.i));main.append(a);
-const b=el("div","card");b.append(el("h3","","Step through the code"));const sp=el("div","split");
-const code=el("div","code");t.c.forEach(l=>code.append(el("div","",l)));
+function draw(){
+  clearInterval(tmr);
+  if(unsub){unsub();unsub=null}
+  main.innerHTML="";
+  if(cur<0)return ({"-1":mixed,"-2":bugs,"-4":flashAll,"-5":myprog,"-6":puzzles,"-7":projects,"-8":memPage,"-9":daily})[cur]();
+  if(!T[cur])cur=0;
+  const t=T[cur];
+const a=el("div","card");a.append(el("span","tag","Topic "+(cur+1)+" of "+T.length));a.append(el("h2","",dn(t.n)));a.append(el("p","",t.i));main.append(a);const th=TH[t.n];if(th){const w=el("div","card");w.append(el("h3","","Theory notes"),el("p","",th[0]));const sx=el("div","code");sx.append(el("div","",th[1]));w.append(sx);const u=el("ul");th[2].split(";").forEach(x=>u.append(el("li","",x)));w.append(u);main.append(w)}
+const b=el("div","card");let X={c:t.c,st:t.st},base=X;const er=el("div","ctl");b.append(el("h3","","Step through the code"));if(EX[t.n]){const tb2=el("div","ctl"),sets=[["Simple",{c:t.c,st:t.st}],["Medium",{c:EX[t.n][0][0],st:EX[t.n][0][1]}],["Complex",{c:EX[t.n][1][0],st:EX[t.n][1][1]}]];sets.forEach(([n,e2],j)=>{const bt=el("button",j==0?"sel":"",n+" example");bt.onclick=()=>{X=base=e2;step=0;fill();show();renderEdit();setV(curV);[...tb2.children].forEach(x=>x.classList.remove("sel"));bt.classList.add("sel")};tb2.append(bt)});b.append(tb2)}b.append(er);const sp=el("div","split");
+const code=el("div","code");const fill=()=>{code.innerHTML="";X.c.forEach(l=>code.append(el("div","",l)))};fill();
+const renderEdit=()=>{er.innerHTML="";const ed=editable(base.c);if(!ed||!ed.length)return;er.append(el("span","","Edit the values, then the trace is recalculated:"));const vals=ed.map(e=>e.val),tg=el("span","","");
+ed.forEach((e,i)=>{const inp=el("input","bgi");inp.type="number";inp.value=e.val;inp.style.maxWidth="80px";inp.onchange=()=>{vals[i]=+inp.value||0;const c2=patch(base.c,ed,vals),s2=interp(c2);if(s2){X={c:c2,st:s2};step=0;fill();show();tg.textContent=" Auto-traced with your values."}};er.append(el("span","",e.name+" ="),inp)});
+const o=el("button","","Original example");o.onclick=()=>{X=base;step=0;fill();show();renderEdit()};er.append(o,tg)};renderEdit();
 const right=el("div");const tb=el("table");right.append(tb);sp.append(code,right);b.append(sp);
 const note=el("div","note");b.append(note);
 const ctl=el("div","ctl");const pv=el("button","","◀ Back"),nx=el("button","p","Next ▶"),rs=el("button","","Reset"),ct=el("span");ctl.append(pv,nx,rs,ct);b.append(ctl);main.append(b);
-function show(){const s=t.st[step];[...code.children].forEach((d,i)=>d.className=i==s[0]?"on":"");
+const vr=el("div","ctl"),alg=el("div"),flo=el("div");b.append(alg,flo);let curV="t";
+const setV=m=>{curV=m;[sp,note,ctl,er].forEach(x=>{x.style.display=m=="t"?"":"none"});alg.style.display=m=="a"?"":"none";flo.style.display=m=="f"?"":"none";if(m=="a")alg.replaceChildren(algoView(X.c,t));if(m=="f")flo.replaceChildren(flowView(X.c,t));[...vr.children].forEach(x=>x.classList.remove("sel"));vr.children[{t:0,a:1,f:2}[m]].classList.add("sel")};
+[["t","Step-through"],["a","Algorithm"],["f","Flowchart"]].forEach(([m,n])=>{const bt=el("button","",n);bt.onclick=()=>setV(m);vr.append(bt)});b.insertBefore(vr,b.children[1]);setV("t");
+function show(){const s=X.st[step];[...code.children].forEach((d,i)=>d.className=i==s[0]?"on":"");
 tb.innerHTML="<tr><th>Name</th><th>Value</th>"+(s[2][0].length>2?"<th>Address</th>":"")+"</tr>";
 s[2].forEach(r=>{const tr=el("tr","new");r.forEach(c=>tr.append(el("td","",c)));tb.append(tr)});
-note.textContent=s[1];ct.textContent="Step "+(step+1)+" / "+t.st.length;pv.disabled=step==0;nx.disabled=step==t.st.length-1}
+note.textContent=s[1];ct.textContent="Step "+(step+1)+" / "+X.st.length;pv.disabled=step==0;nx.disabled=step==X.st.length-1}
 pv.onclick=()=>{step--;show()};nx.onclick=()=>{step++;show()};rs.onclick=()=>{step=0;show()};show();
-const k=el("div","card");k.append(el("h3","","Key points"));const u=el("ul");t.k.forEach(x=>u.append(el("li","",x)));k.append(u);main.append(k);
-const Qs=P[t.n]||[t.q],pr=!!P[t.n],lab=["Simple","Moderate","Difficult"];
+if(LAB[t.n])main.append(labCard(LAB[t.n]));const k=el("div","card");k.append(el("h3","","Key points"));const u=el("ul");t.k.forEach(x=>u.append(el("li","",x)));k.append(u);main.append(k);
+main.append(deck(cards(t),"Flashcards: quick questions and answers"));const Qs=P[t.n]||[t.q],pr=!!P[t.n],lab=["Simple","Moderate","Difficult"];
 const q=el("div","card");q.append(el("h3","",pr?"Practice questions: answer all 3 to complete this topic":"Check yourself (answer to complete this topic)"));let ans=0;
 Qs.forEach((Q,n)=>{const bx=el("div");bx.style.marginTop="12px";if(pr)bx.append(el("span","tag lv"+n,lab[n]));
 bx.append(el("p","",(n+1)+". "+Q[0]));const why=el("div","why");
-for(let i=1;i<=3;i++){const o=el("button","opt",Q[i]);o.onclick=()=>{const ok=i-1==Q[4];[...bx.querySelectorAll(".opt")].forEach((x,j)=>{x.disabled=true;if(j==Q[4])x.classList.add("ok")});if(!ok){o.classList.add("no");wrong(t.n)}why.textContent=(ok?"Correct. ":"Not quite. ")+Q[5];if(++ans==Qs.length){done.add(cur);sv();build()}};bx.append(o)}
+for(let i=1;i<=3;i++){const o=el("button","opt",Q[i]);o.onclick=()=>{const ok=i-1==Q[4];[...bx.querySelectorAll(".opt")].forEach((x,j)=>{x.disabled=true;if(j==Q[4])x.classList.add("ok")});if(!ok){o.classList.add("no");wrong(t.n)}else award(5,"q:"+t.n+":"+n);why.textContent=(ok?"Correct. ":"Not quite. ")+Q[5];if(++ans==Qs.length){done.add(cur);award(20,"topic:"+T[cur].n);sv();build()}};bx.append(o)}
 bx.append(why);q.append(bx)});main.append(q);(FB[t.n]||[]).forEach((fb,fi)=>{const c=el("div","card");c.append(el("h3","","Scenario "+(fi+1)+" of "+FB[t.n].length+": fill in the blanks"));c.append(el("p","",fb.s));
 const pk=fb.b.map(()=>null);let chk=false;const cd=el("div","code");const res=el("div","why");
 const paint=()=>{cd.innerHTML="";fb.c.forEach(l=>{const d=el("div");d.append(" ");l.split(/(@\d@)/).forEach(p=>{const m=p.match(/^@(\d)@$/);if(m){const i=m[1]-1,v=pk[i];d.append(el("span","blank"+(v==null?"":chk?(v==fb.b[i][1]?" okb":" nob"):" fil"),v==null?"_____":fb.b[i][0][v]))}else d.append(p)});cd.append(d)})};
@@ -1373,7 +1506,7 @@ b.onclick=()=>{if(!inp.value.trim()){o.textContent="Type your answer first.";ret
 h.onclick=()=>{o.textContent="Answer: "+x[1]+". "+x[2]};
 const row=el("div","ctl");row.append(inp,b,h);r.append(row,o);c.append(r)});main.append(c)}
 const sb=SB[t.n];if(sb){const w=el("div","card");w.append(el("h3","","Spot the Bug: 3 questions (syntax and logical errors)"),el("p","","Tap the faulty line, then choose the correct fix."));main.append(w);sb.forEach((B,n)=>main.append(bugCard(B,(n+1)+". "+(B.t=="S"?"Syntax error":"Logical error"),t.n)))}
-const tc=TC[t.n];if(tc){const c=el("div","card");c.append(el("h3","","Test cases: run each one"));const runs=[];
+autoLabs(t).forEach(c=>main.append(c));const tc=TC[t.n];if(tc){const c=el("div","card");c.append(el("h3","","Test cases: run each one"));const runs=[];
 tc.forEach((x,i)=>{const r=el("div","tc");r.append(el("code","",x[0]),el("div","","Input: "+x[1]),el("div","","Expected: "+x[2]));
 const o=el("div","tcout");const b=el("button","","Run test "+(i+1));
 const run=()=>{o.textContent="Running...";setTimeout(()=>{o.textContent="";const v=el("b","pass","PASS ");o.append(v,"Output: "+x[2]+" | Trace: "+x[3])},400)};
@@ -1381,5 +1514,5 @@ b.onclick=run;runs.push(run);r.append(b,o);c.append(r)});
 const ra=el("button","p","Run all tests");ra.onclick=()=>runs.forEach((f,i)=>setTimeout(f,i*600));
 const ctl2=el("div","ctl");ctl2.append(ra,el("span","","Pre-traced results, not a live compiler."));c.append(ctl2);main.append(c)}
 }
-build();draw();initCloud();
+build();draw();chips();initCloud();
 </script></body></html>
